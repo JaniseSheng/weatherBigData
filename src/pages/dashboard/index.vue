@@ -1,51 +1,145 @@
 <template>
-  <div class="w-contaioner">
-    <Row>
-      <Col span="8">
-        <Menu theme="dark" :open-names="['1']" accordion>
-                  <Submenu name="1">
-                      <template slot="title">
+<div class="w-contaioner">
+  <div class="header-wrapper">
+    <p class='header-title'>
+      <Icon type="stats-bars" size='36' style="vertical-align: middle"></Icon>
+      气象服务大数据洞察平台
+    </p>
+    <p style="float: right">
+      欢迎{{userName}}登陆!
+      <Button type="warning" icon="log-out" size='small' style="margin-left: 6px;">登出</Button>
+    </p>
+  </div>
+  <div class="main-wrapper">
+    <div :class="$style['menu-wrapper']">
+      <Menu theme="dark" :open-names="['0']" accordion>
+        <Submenu name="0">
+          <template slot="title">
                           <Icon type="ios-paper"></Icon>
                           整体分布
                       </template>
-                      <MenuItem name="1-1">文章管理</MenuItem>
-                      <MenuItem name="1-2">评论管理</MenuItem>
-                      <MenuItem name="1-3">举报管理</MenuItem>
-                  </Submenu>
-                  <Submenu name="2">
-                      <template slot="title">
+          <MenuItem name="0-1">分终端</MenuItem>
+          <MenuItem name="0-2">分场景</MenuItem>
+        </Submenu>
+        <Submenu name="1">
+          <template slot="title">
                           <Icon type="ios-people"></Icon>
                           行为洞察
                       </template>
-                      <MenuItem name="2-1">新增用户</MenuItem>
-                      <MenuItem name="2-2">活跃用户</MenuItem>
-                  </Submenu>
-                  <Submenu name="3">
-                      <template slot="title">
-                          <Icon type="stats-bars"></Icon>
-                          统计分析
+          <MenuItem name="1-1">家庭类人群分类</MenuItem>
+          <MenuItem name="1-2">个人类人群分类</MenuItem>
+          <MenuItem name="1-3">用户聚类分类</MenuItem>
+        </Submenu>
+        <Submenu name="2">
+          <template slot="title">
+                          <Icon type="ios-people"></Icon>
+                          服务监控
                       </template>
-                      <MenuGroup title="使用">
-                          <MenuItem name="3-1">新增和启动</MenuItem>
-                          <MenuItem name="3-2">活跃分析</MenuItem>
-                          <MenuItem name="3-3">时段分析</MenuItem>
-                      </MenuGroup>
-                      <MenuGroup title="留存">
-                          <MenuItem name="3-4">用户留存</MenuItem>
-                          <MenuItem name="3-5">流失用户</MenuItem>
-                      </MenuGroup>
-                  </Submenu>
-              </Menu>
-      </COl>
-      <Col span="16">
-          <router-view/>
-      </COl>
-    </Row>
+          <MenuItem name="2-1">网站流量监测</MenuItem>
+          <MenuItem name="2-2">APP流量监测</MenuItem>
+          <MenuItem name="2-3">气象局自有栏目浏览监测</MenuItem>
+        </Submenu>
+        <Submenu name="3">
+          <template slot="title">
+                          <Icon type="ios-people"></Icon>
+                          舆情分析
+                      </template>
+          <MenuItem name="3-1">舆情流量</MenuItem>
+        </Submenu>
+        <Submenu name="4">
+          <template slot="title">
+                          <Icon type="ios-people"></Icon>
+                          热点展示
+                      </template>
+          <MenuItem name="4-1">热点热词</MenuItem>
+        </Submenu>
+      </Menu>
+    </div>
+    <div class="content-wrapper">
+      <div class="router-content">
+        <p>123123123</p>
+        <router-view/>
+      </div>
+    </div>
   </div>
+
+</div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      userName: 'admin'
+    }
+  }
 
 }
 </script>
+
+<style lang="less" scoped>
+@import "../../style/mythemes.less";
+.w-contaioner {
+    position: relative;
+    background-color: @content-bg-color;
+    border: 1px solid @border-color;
+    border-radius: 2px;
+    min-height: 100vh;
+}
+.header-wrapper {
+    background-color: @menu-dark-title;
+    color: white;
+    padding: 0 12px;
+    line-height: 64px;
+    height: 64px;
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+.header-title {
+    display: inline-block;
+    margin-top: 1px;
+    float: left;
+    font-size: 24px;
+}
+.main-wrapper {
+  margin-top: 1px;
+    position: relative;
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+.content-wrapper {
+    padding: 12px 12px 0px 252px;
+    position: relative;
+}
+.router-content {
+    background-color: white;
+}
+</style>
+<style lang="less" module>
+@import "../../style/mythemes.less";
+.menu-wrapper {
+    width: 240px;
+    float: left;
+    :global(.ivu-menu) {
+        height: 100%;
+    }
+    :global(.ivu-menu-item) {
+        padding-left: 24px !important;
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 240px;
+        background-color: @menu-dark-title;
+    }
+}
+</style>
