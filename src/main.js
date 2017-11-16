@@ -5,11 +5,13 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 import storage from '@/lib/storagejs'
+import {searchWrapper} from '@/components/global'
 
 import '@/style/global.less'
 import '@/style/themes.less'
 
 Vue.use(iView)
+Vue.component('searchWrapper', searchWrapper)
 Vue.config.productionTip = false
 
 // router.beforeEach((to, from, next) => {

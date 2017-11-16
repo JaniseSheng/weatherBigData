@@ -7,12 +7,12 @@
     </p>
     <p style="float: right">
       欢迎{{userName}}登陆!
-      <Button type="warning" icon="log-out" size='small' style="margin-left: 6px;">登出</Button>
+      <Button type="warning" icon="log-out" size='small' style="margin-left: 6px;" @click="$router.push('/login')">登出</Button>
     </p>
   </div>
   <div class="main-wrapper">
     <div :class="$style['menu-wrapper']">
-      <Menu theme="dark" :open-names="['0']" accordion>
+      <Menu theme="dark" :open-names="['0']" :active-name="$route.name" accordion @on-select='handleSelectRoute'>
         <Submenu name="0">
           <template slot="title">
                           <Icon type="ios-paper"></Icon>
@@ -57,7 +57,6 @@
     </div>
     <div class="content-wrapper">
       <div class="router-content">
-        <p>123123123</p>
         <router-view/>
       </div>
     </div>
@@ -72,8 +71,14 @@ export default {
     return {
       userName: 'admin'
     }
+  },
+  methods: {
+    handleSelectRoute(name){
+      this.$router.push({
+          name: name
+        })
+    }
   }
-
 }
 </script>
 
@@ -84,7 +89,6 @@ export default {
     background-color: @content-bg-color;
     border: 1px solid @border-color;
     border-radius: 2px;
-    min-height: 100vh;
 }
 .header-wrapper {
     background-color: @menu-dark-title;
@@ -107,6 +111,7 @@ export default {
 .main-wrapper {
   margin-top: 1px;
     position: relative;
+        min-height: 86vh;
     &:after {
         content: '';
         display: table;
