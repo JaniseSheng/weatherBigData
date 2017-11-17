@@ -30,7 +30,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot>
+    <slot :month='month' :dataRange='dataRange' :areaName='areaName' :areaId='areaId' >
     </slot>
   </div>
 </div>
@@ -40,13 +40,14 @@
 import {
   areas
 } from '@/lib/enum.js'
+import {currMonth} from '@/lib/date'
 
 export default {
   data() {
     return {
-      areaName: '', //选择的区域
-      areaId: '', //选择的区域
-      month: '',
+      areaName: '长寿路', //选择的区域
+      areaId: '001_0', //选择的区域
+      month: currMonth(),
       dataRange: '',
       areas,
       modal1: false, //是否选择区域
@@ -101,7 +102,6 @@ export default {
     },
     handleChangeDataRange(val) {
       this.dataRange = val
-
     }
   }
 }

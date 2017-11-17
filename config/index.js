@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-    // //proxy all requests starting with /api to jsonplaceholder
-    // '/api': {
-    //   target: 'http://192.168.101.100:82', //http://192.168.101.74:8080
-    //   changeOrigin: true,
-    //   pathRewrite: { //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
-    //     '^/api': '/api'
-    //   }
-    // }
+    //proxy all requests starting with /api to jsonplaceholder
+    '/api': {
+      target: 'http://127.0.0.1:8080', //http://192.168.101.74:8080
+      changeOrigin: true,
+      pathRewrite: { //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
+        '^/api': '/api'
+      }
+    }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

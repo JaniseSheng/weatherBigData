@@ -1,11 +1,8 @@
 <template>
   <div class="">
     <search-wrapper>
-      <div class="search-button">
-        <Button type='success'>全部</Button>
-        <Button type='info'>PC</Button>
-        <Button type='info'>Mobile</Button>
-        <Button type='info'>IPTV</Button>
+      <div class="search-button" slot-scope="props">
+        <Button :type="item.id == 0 ? 'success' : 'info'" v-for='(item , index) in total_terminal' :key="'total_terminal' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -16,6 +13,8 @@
 </template>
 
 <script>
+import {api_total_terminal} from '@/api'
+import {total_terminal} from '@/lib/enum'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -23,14 +22,20 @@ require('echarts/lib/chart/bar')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/dataZoom')
+
 export default {
+  data(){
+    return {
+      total_terminal
+    }
+  },
   methods: {
     chartInit(data, refName) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
       // 指定图表的配置项和数据
-      const legendData = ['unique']
+      const legendData = ['unique view']
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
       data.forEach((item, index)=> {
@@ -67,7 +72,7 @@ export default {
           }
         },
         series: [{
-          name: 'unique',
+          name: 'unique view',
           type: 'bar',
           barWidth: '16',
           barMinHeight: '8',
@@ -82,92 +87,16 @@ export default {
       };
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
+    },
+
+    handleClickSearchType(props, id){
+      const params = Object.assign({}, props, {type : id})
+      api_total_terminal(params).then(res=> {
+        console.log(res);
+      }).catch(err=> {
+        console.log(err);
+      })
     }
-  },
-  mounted(){
-    const data1 = [
-      {
-        val: 400,
-        data: '2017-01-01',
-      },
-      {
-        val: 500,
-        data: '2017-01-02',
-      },
-      {
-        val: 300,
-        data: '2017-01-03',
-      },
-      {
-        val: 600,
-        data: '2017-01-04',
-      },
-      {
-        val: 420,
-        data: '2017-01-05',
-      },
-      {
-        val: 930,
-        data: '2017-01-06',
-      },
-      {
-        val: 730,
-        data: '2017-01-07',
-      },
-      {
-        val: 680,
-        data: '2017-01-08',
-      },
-      {
-        val: 610,
-        data: '2017-01-09',
-      },
-      {
-        val: 560,
-        data: '2017-01-10',
-      },
-      {
-        val: 630,
-        data: '2017-01-11',
-      },
-      {
-        val: 680,
-        data: '2017-01-12',
-      },
-      {
-        val: 530,
-        data: '2017-01-13',
-      },
-      {
-        val: 480,
-        data: '2017-01-14',
-      },
-      {
-        val: 530,
-        data: '2017-01-15',
-      },
-      {
-        val: 230,
-        data: '2017-01-16',
-      },
-      {
-        val: 440,
-        data: '2017-01-17',
-      },
-      {
-        val: 630,
-        data: '2017-01-18',
-      },
-      {
-        val: 460,
-        data: '2017-01-19',
-      },
-      {
-        val: 180,
-        data: '2017-01-20',
-      }
-    ]
-    this.chartInit(data1, 'echart1')
   }
 }
 </script>
@@ -175,5 +104,8 @@ export default {
 <style lang="less" scoped>
   .search-button {
     padding: 12px 0;
+    & button {
+      margin-right: 6px;
+    }
   }
 </style>
