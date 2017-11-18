@@ -13,10 +13,10 @@ module.exports = {
     proxyTable: {
     //proxy all requests starting with /api to jsonplaceholder
     '/api': {
-      target: 'http://127.0.0.1:8080', //http://192.168.101.74:8080
+      target: 'http://127.0.0.1:8009', //http://192.168.101.74:8080
       changeOrigin: true,
       pathRewrite: { //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
-        '^/api': '/api'
+        '^/api': ''
       }
     }
     },

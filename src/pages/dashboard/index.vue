@@ -57,7 +57,9 @@
     </div>
     <div class="content-wrapper">
       <div class="router-content">
-        <router-view/>
+        <keep-alive>
+          <router-view/>
+        </keep-alive>
       </div>
     </div>
   </div>

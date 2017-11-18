@@ -8,8 +8,8 @@
         </span>
       </Col>
       <Col span='12' >
-      <DatePicker :value='month' @on-change='handleChangeMonth' type="month" placeholder="选择月份" style="width: 200px"></DatePicker>
-      <DatePicker :value='dataRange' @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+      <DatePicker :value='month' :clearable=false @on-change='handleChangeMonth' type="month" placeholder="选择月份" style="width: 200px"></DatePicker>
+      <DatePicker :value='dataRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </Col>
       <Col span='6' style="text-align: right">
       <Button type='success'>导出excel</Button>
@@ -85,6 +85,14 @@ export default {
         }
       }
     }
+  },
+  created(){
+    this.$emit('searchInit', {
+      areaName: this.areaName,
+      areaId: this.areaId,
+      month: this.month,
+      dataRange: this.dataRange
+    })
   },
   methods: {
     handleClickArea(val) {

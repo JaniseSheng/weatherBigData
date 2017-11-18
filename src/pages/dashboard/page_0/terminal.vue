@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <search-wrapper>
+    <search-wrapper @searchInit='searchInit'>
       <div class="search-button" slot-scope="props">
-        <Button :type="item.id == 0 ? 'success' : 'info'" v-for='(item , index) in total_terminal' :key="'total_terminal' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
+        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -26,21 +26,22 @@ require('echarts/lib/component/dataZoom')
 export default {
   data(){
     return {
-      total_terminal
+      searchButtons: total_terminal,
+      type: 0
     }
   },
   methods: {
-    chartInit(data, refName) {
+    chartInit(data, refName, barColor = '#2d8cf0', seriesName = 'unique view') {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
       // 指定图表的配置项和数据
-      const legendData = ['unique view']
+      const legendData = [seriesName]
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
       data.forEach((item, index)=> {
-        xAxisData[index] = item.data
-        yAxisData[index] = item.val
+        xAxisData[index] = item.date
+        yAxisData[index] = item.value
       })
       var option = {
         xAxis: {
@@ -58,28 +59,28 @@ export default {
           }
         },
         dataZoom: {
-          show: !!data.length && data.length > 18,
+          show: !!data.length && data.length > 10,
           realtime: true,
           start: 0,
-          end: 18 * 100 / data.length,
+          end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#19be6b'
+            color: '#ff9900'
           },
           dataBackground: {
             areaStyle: {
-              color: '#19be6b'
+              color: '#ff9900'
             }
           }
         },
         series: [{
-          name: 'unique view',
+          name: seriesName,
           type: 'bar',
           barWidth: '16',
           barMinHeight: '8',
           itemStyle: {
             normal: {
               barBorderRadius: 6,
-              color: '#2d8cf0'
+              color: barColor
             }
           },
           data: yAxisData
@@ -88,16 +89,27 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-
+    api_search_date(params){
+      api_total_terminal(params).then(res=> {
+        this.type = params.type
+        this.chartInit(res.data.uv, 'echart1')
+        this.chartInit(res.data.pv, 'echart2', '#19be6b', 'page_view')
+      })
+    },
+    searchInit(item){
+      const params = Object.assign({}, item, {type : 0})
+      this.api_search_date(params)
+    },
     handleClickSearchType(props, id){
       const params = Object.assign({}, props, {type : id})
-      api_total_terminal(params).then(res=> {
-        console.log(res);
-      }).catch(err=> {
-        console.log(err);
-      })
+      this.api_search_date(params)
     }
   }
+  // mounted(){
+  //   console.log(this.$refs.searchWrapper);
+  //     // const params = Object.assign({}, props, {type : 0})
+  //     // this.api_search_date(params)
+  // }
 }
 </script>
 

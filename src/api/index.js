@@ -1,138 +1,31 @@
-import {axiosPost} from '@/lib/ajax'
+import {axiosPost, axiosGet} from '@/lib/ajax'
 /**
-* 整体分布
+* -------------------------- 整体分布 ------------------------------
 **/
 
-// -------------------------- 订单维护 ------------------------------
-//查询历史订单列表
+// 分终端
 export const api_total_terminal = (params) => {
-  return axiosPost('total/terminal', params).then(res => {
-    return [
-      {
-        val: 400,
-        data: '2017-01-01'
-      }, {
-        val: 500,
-        data: '2017-01-02'
-      }, {
-        val: 300,
-        data: '2017-01-03'
-      }, {
-        val: 600,
-        data: '2017-01-04'
-      }, {
-        val: 420,
-        data: '2017-01-05'
-      }, {
-        val: 930,
-        data: '2017-01-06'
-      }, {
-        val: 730,
-        data: '2017-01-07'
-      }, {
-        val: 680,
-        data: '2017-01-08'
-      }, {
-        val: 610,
-        data: '2017-01-09'
-      }, {
-        val: 560,
-        data: '2017-01-10'
-      }, {
-        val: 630,
-        data: '2017-01-11'
-      }, {
-        val: 680,
-        data: '2017-01-12'
-      }, {
-        val: 530,
-        data: '2017-01-13'
-      }, {
-        val: 480,
-        data: '2017-01-14'
-      }, {
-        val: 530,
-        data: '2017-01-15'
-      }, {
-        val: 230,
-        data: '2017-01-16'
-      }, {
-        val: 440,
-        data: '2017-01-17'
-      }, {
-        val: 630,
-        data: '2017-01-18'
-      }, {
-        val: 460,
-        data: '2017-01-19'
-      }, {
-        val: 180,
-        data: '2017-01-20'
-      }
-    ]
-  }).catch(() => {
-    return [
-      {
-        val: 400,
-        data: '2017-01-01'
-      }, {
-        val: 500,
-        data: '2017-01-02'
-      }, {
-        val: 300,
-        data: '2017-01-03'
-      }, {
-        val: 600,
-        data: '2017-01-04'
-      }, {
-        val: 420,
-        data: '2017-01-05'
-      }, {
-        val: 930,
-        data: '2017-01-06'
-      }, {
-        val: 730,
-        data: '2017-01-07'
-      }, {
-        val: 680,
-        data: '2017-01-08'
-      }, {
-        val: 610,
-        data: '2017-01-09'
-      }, {
-        val: 560,
-        data: '2017-01-10'
-      }, {
-        val: 630,
-        data: '2017-01-11'
-      }, {
-        val: 680,
-        data: '2017-01-12'
-      }, {
-        val: 530,
-        data: '2017-01-13'
-      }, {
-        val: 480,
-        data: '2017-01-14'
-      }, {
-        val: 530,
-        data: '2017-01-15'
-      }, {
-        val: 230,
-        data: '2017-01-16'
-      }, {
-        val: 440,
-        data: '2017-01-17'
-      }, {
-        val: 630,
-        data: '2017-01-18'
-      }, {
-        val: 460,
-        data: '2017-01-19'
-      }, {
-        val: 180,
-        data: '2017-01-20'
-      }
-    ]
-  })
+  return axiosPost('query_date', params)
+}
+// 分场景
+export const api_total_scene = (params) => {
+  return axiosPost('query_date', params)
+}
+
+
+/**
+* -------------------------- 行为洞察 ------------------------------
+**/
+
+// 家庭类人群属性
+export const api_action_family = (params) => {
+  return axiosPost('query_date', params)
+}
+// 个人类人群
+export const api_action_personal = (params) => {
+  return axiosPost('query_date', params)
+}
+// 用户类人群
+export const api_action_user = (params) => {
+  return axiosPost('query_date', params)
 }

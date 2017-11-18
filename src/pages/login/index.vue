@@ -52,17 +52,23 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          login(this.forms).then((res) => {
-            this.$Message.success('您好！欢迎来到华晚集团客户关系管理系统!');
-            storage.set('userInfo', res.user)
-            storage.set('resource', res.resource)
-            storage.set('address', res.defaultAddr)
-            this.rememberforms(this.isRemember);
-            storage.set('islogin', true);
-            this.$router.push({
-              name: '0'
-            })
+          this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
+          this.$router.push({
+            name: '0-1'
           })
+          // login(this.forms).then((res) => {
+          //   this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
+          //   storage.set('userInfo', res.user)
+          //   storage.set('resource', res.resource)
+          //   storage.set('address', res.defaultAddr)
+          //   this.rememberforms(this.isRemember);
+          //   storage.set('islogin', true);
+          //   this.$router.push({
+          //     name: '0-1'
+          //   })
+          // })
+        } else {
+          this.$Message.error('请填写正确的账号或密码');
         }
       })
     }
@@ -118,9 +124,9 @@ export default {
 
 <style lang="less" module>
 .login-contaioner {
-  height: 100vh;
-  position: relative;
-  max-width: 1200px;
-  margin: auto;
+    height: 100vh;
+    position: relative;
+    max-width: 1200px;
+    margin: auto;
 }
 </style>
