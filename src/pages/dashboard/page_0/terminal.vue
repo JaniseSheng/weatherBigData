@@ -105,11 +105,6 @@ export default {
       this.api_search_date(params)
     }
   }
-  // mounted(){
-  //   console.log(this.$refs.searchWrapper);
-  //     // const params = Object.assign({}, props, {type : 0})
-  //     // this.api_search_date(params)
-  // }
 }
 </script>
 

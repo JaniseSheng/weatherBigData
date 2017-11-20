@@ -7,8 +7,8 @@
             <p style='float: left; font-size: 18px'>气象服务大数据洞察平台</p>
           </div>
           <Form ref="forms" :model="forms" :rules="ruleforms">
-            <Form-item prop="mobile">
-              <Input type="text" v-model="forms.mobile" placeholder="请输入用户名" size='large'>
+            <Form-item prop="userName">
+              <Input type="text" v-model="forms.userName" placeholder="请输入用户名" size='large'>
               <Icon type="ios-person-outline" slot="prepend" style='padding-right: 8px; padding-left: 8px' />
               </Input>
             </Form-item>
@@ -34,16 +34,17 @@
 import {
   empty
 } from '@/lib/validator'
+import {api_login} from '@/api'
 export default {
   data() {
     return {
       isRemember: false, //是否记住账号
       forms: {
-        mobile: '',
+        userName: '',
         passWord: ''
       },
       ruleforms: {
-        mobile: empty('账号不能为空'),
+        userName: empty('账号不能为空'),
         passWord: empty('密码不能为空')
       }
     }
@@ -52,21 +53,16 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
-          this.$router.push({
-            name: '0-1'
+          api_login(this.forms).then(res=> {
+            if (res.success) {
+              this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
+              this.$router.push({
+                name: '0-1'
+              })
+            } else {
+              this.$Message.error('账号密码错误！');
+            }
           })
-          // login(this.forms).then((res) => {
-          //   this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
-          //   storage.set('userInfo', res.user)
-          //   storage.set('resource', res.resource)
-          //   storage.set('address', res.defaultAddr)
-          //   this.rememberforms(this.isRemember);
-          //   storage.set('islogin', true);
-          //   this.$router.push({
-          //     name: '0-1'
-          //   })
-          // })
         } else {
           this.$Message.error('请填写正确的账号或密码');
         }

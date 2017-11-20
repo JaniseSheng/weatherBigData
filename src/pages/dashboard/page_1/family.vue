@@ -2,23 +2,14 @@
 <div>
   <search-wrapper @searchInit='searchInit'>
     <div class="search-button" :class="$style['search-btns']" slot-scope="props">
-      <waterfall :line-gap="200" :watch="searchButtons">
-  <!-- each component is wrapped by a waterfall slot -->
-  <waterfall-slot
-    v-for="(item, index) in searchButtons"
-    :width="item.width"
-    :height="item.height"
-    :order="index"
-    :key="'family' + index"
-  >
-    <div class='button-item' @click="handleClickSearchType(props, item.id)">
-      <p :style="item.position">{{item.name}}</p>
-    </div>
-  </waterfall-slot>
-</waterfall>
-
-
-      <!-- <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button> -->
+      <div class="masonry-wrapper" id='masonry_wrapper' :class="$style['masonry-wrapper']">
+        <div class="grid-item" :data-item="'item-' + index" v-for="(item, index) in searchButtons" :key="'masonry' + index">
+          <div class="grid-one">
+            <p>{{item.value}}</p>
+            <p>{{item.name}}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
@@ -28,8 +19,6 @@
 </template>
 
 <script>
-import Waterfall from 'vue-waterfall/lib/waterfall'
-import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
 import {
   api_action_family
 } from '@/api'
@@ -112,8 +101,7 @@ export default {
     },
     api_search_date(params) {
       api_action_family(params).then(res => {
-        this.type = params.type
-        this.chartInit(res.data.uv, 'echart1')
+        this.searchButtons = res.data
       })
     },
     searchInit(item) {
@@ -122,16 +110,12 @@ export default {
       })
       this.api_search_date(params)
     },
-    handleClickSearchType(props, id) {
-      const params = Object.assign({}, props, {
-        type: id
-      })
-      this.api_search_date(params)
-    }
-  },
-  components: {
-    Waterfall,
-    WaterfallSlot
+    // handleClickSearchType(props, id) {
+    //   const params = Object.assign({}, props, {
+    //     type: id
+    //   })
+    //   this.api_search_date(params)
+    // }
   }
 }
 </script>
@@ -162,6 +146,80 @@ export default {
   .search-btns {
     & :global(.vue-waterfall-slot) {
       background-color: @content-bg-color;
+    }
+  }
+  .masonry-wrapper {
+    border-radius: 2px;
+    background-color: @content-bg-color;
+    position: relative;
+    & :global(.grid-item) {
+      position: absolute;
+      }
+    & :global(.grid-one) {
+      position: absolute;
+      top:2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      background-color: red;
+      }
+    & [data-item = 'item-0'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-1'] {
+      width: 20%;
+      left: 20%;
+      top: 0;
+      height: 200px;
+    }
+    & [data-item = 'item-2'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-3'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-4'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-5'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-6'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-7'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-8'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-9'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-10'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-11'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-12'] {
+      width: 20%;
+      height: 200px;
+    }
+    & [data-item = 'item-13'] {
+      width: 20%;
+      height: 200px;
     }
   }
 </style>

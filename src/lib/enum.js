@@ -908,172 +908,46 @@ export const total_scene = [
 export const action_family = [
   {
     name: '人口数量',
-    id: 0,
-    width: 300,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 0
   }, {
     name: '电信端消费能力',
-    id: 1,
-    width: 150,
-    height: 300,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 1
   }, {
     name: '银联消费能力',
-    id: 2,
-    width: 240,
-    height: 180,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 2
   }, {
     name: '气象类服务消费能力',
-    id: 3,
-    width: 200,
-    height: 160,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 3
   }, {
     name: '车辆情况',
-    id: 4,
-    width: 260,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 4
   }, {
     name: '住宅情况',
-    id: 5,
-    width: 210,
-    height: 160,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 5
   }, {
     name: '互联网行为分布',
-    id: 6,
-    width: 320,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 6
   }, {
     name: '人口数量',
-    id: 7,
-    width: 240,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 7
   }, {
     name: '电信端消费能力',
-    id: 8,
-    width: 180,
-    height: 240,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 8
   }, {
     name: '银联消费能力',
-    id: 9,
-    width: 300,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 9
   }, {
     name: '气象类服务消费能力',
-    id: 10,
-    width: 180,
-    height: 240,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 10
   }, {
     name: '车辆情况',
-    id: 11,
-    width: 160,
-    height: 320,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 11
   }, {
     name: '住宅情况',
-    id: 12,
-    width: 200,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 12
   }, {
     name: '互联网行为分布',
-    id: 13,
-    width: 300,
-    height: 200,
-    position: {
-      position: 'absolute',
-      'text-align': 'center',
-      bottom: '24px',
-      left: '0px',
-      right: '0px'
-    }
+    id: 13
   }
 ]
 
@@ -1081,59 +955,37 @@ export const action_family = [
 export const action_personal = [
   {
     name: '性别',
-    id: 0,
-    width: 300,
-    height: 200,
+    id: 0
   }, {
     name: '年龄',
-    id: 1,
-    width: 300,
-    height: 200,
+    id: 1
   }, {
     name: '住宅区',
-    id: 2,
-    width: 300,
-    height: 200,
+    id: 2
   }, {
     name: '工作区',
-    id: 3,
-    width: 300,
-    height: 200,
+    id: 3
   }, {
     name: '娱乐区',
-    id: 4,
-    width: 300,
-    height: 200,
+    id: 4
   }, {
     name: '电信端消费能力',
-    id: 5,
-    width: 300,
-    height: 200,
+    id: 5
   }, {
     name: '银联消费能力',
-    id: 6,
-    width: 300,
-    height: 200,
+    id: 6
   }, {
     name: '气象类服务消费能力',
-    id: 7,
-    width: 300,
-    height: 200,
+    id: 7
   }, {
     name: '车辆情况',
-    id: 8,
-    width: 300,
-    height: 200,
+    id: 8
   }, {
     name: '住宅情况',
-    id: 9,
-    width: 300,
-    height: 200,
+    id: 9
   }, {
     name: '互联网行为分布',
-    id: 10,
-    width: 300,
-    height: 200,
+    id: 10
   }
 ]
 
@@ -1141,19 +993,13 @@ export const action_personal = [
 export const action_user = [
   {
     name: '特征值a1，特征值b1…',
-    id: 0,
-    width: 300,
-    height: 200,
+    id: 0
   }, {
     name: '特征值a2，特征值b2…',
-    id: 1,
-    width: 300,
-    height: 200,
+    id: 1
   }, {
     name: '特征值a3，特征值b3…',
-    id: 2,
-    width: 300,
-    height: 500,
+    id: 2
   }
 ]
 
