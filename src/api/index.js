@@ -31,6 +31,10 @@ export const api_total_scene = (params) => {
 export const api_action_family = (params) => {
   return axiosPost('action_family', params)
 }
+// 家庭类人群属性
+export const api_action_family_echart = (params) => {
+  return axiosPost('action_family_echart', params)
+}
 // 个人类人群
 export const api_action_personal = (params) => {
   return axiosPost('query_date', params)
