@@ -43,3 +43,20 @@ export const api_action_personal = (params) => {
 export const api_action_user = (params) => {
   return axiosPost('query_date', params)
 }
+
+/**
+* -------------------------- 服务监控 ------------------------------
+**/
+
+// 网站监控
+export const api_service_web = (params) => {
+  return axiosPost('service_web', params)
+}
+// app监控
+export const api_service_app = (params) => {
+  return axiosPost('service_app', params)
+}
+// 气象局自有栏目监控
+export const api_service_weather = (params) => {
+  return axiosPost('service_weather', params)
+}

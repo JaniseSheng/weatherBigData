@@ -31,17 +31,19 @@ export default {
     }
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = 'unique view') {
+    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view变化率']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
       // 指定图表的配置项和数据
-      const legendData = [seriesName]
+      const legendData = seriesName
       let xAxisData = [] // X轴用户名
-      let yAxisData = [] // y轴数据
+      let yAxisDataBar = [] // y轴数据
+      let yAxisDataLine = [] // y轴数据
       data.forEach((item, index)=> {
         xAxisData[index] = item.date
-        yAxisData[index] = item.value
+        yAxisDataBar[index] = item.value
+        yAxisDataLine[index] = item.changeValue
       })
       var option = {
         xAxis: {
@@ -73,7 +75,7 @@ export default {
           }
         },
         series: [{
-          name: seriesName,
+          name: seriesName[0],
           type: 'bar',
           barWidth: '16',
           barMinHeight: '8',
@@ -83,7 +85,19 @@ export default {
               color: barColor
             }
           },
-          data: yAxisData
+          data: yAxisDataBar
+        }, {
+          name: seriesName[1],
+          type: 'line',
+          barWidth: '16',
+          barMinHeight: '8',
+          itemStyle: {
+            normal: {
+              barBorderRadius: 6,
+              color: barColor
+            }
+          },
+          data: yAxisDataLine
         }]
       };
       // 使用刚指定的配置项和数据显示图表。
@@ -93,7 +107,7 @@ export default {
       api_total_scene(params).then(res=> {
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', '#19be6b', 'page_view')
+        this.chartInit(res.data.pv, 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
       })
     },
     searchInit(item){
