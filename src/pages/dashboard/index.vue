@@ -45,13 +45,7 @@
                           舆情分析
                       </template>
           <MenuItem name="3-1">舆情流量</MenuItem>
-        </Submenu>
-        <Submenu name="4">
-          <template slot="title">
-                          <Icon type="ios-people"></Icon>
-                          热点展示
-                      </template>
-          <MenuItem name="4-1">热点热词</MenuItem>
+          <MenuItem name="3-2">热点热词</MenuItem>
         </Submenu>
       </Menu>
     </div>

@@ -11,7 +11,7 @@ import webtraffic from '@/pages/dashboard/page_2/webtraffic'
 import apptraffic from '@/pages/dashboard/page_2/apptraffic'
 import meteortraffic from '@/pages/dashboard/page_2/meteortraffic'
 import sentiment from '@/pages/dashboard/page_3/sentiment'
-import hotsearch from '@/pages/dashboard/page_4/hotsearch'
+import hotsearch from '@/pages/dashboard/page_3/hotsearch'
 
 Vue.use(Router)
 
@@ -72,7 +72,7 @@ export default new Router({
         },
         {
           path: '/hotsearch',
-          name: '4-1',
+          name: '3-2',
           component: hotsearch
         }
       ]

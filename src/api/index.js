@@ -60,3 +60,16 @@ export const api_service_app = (params) => {
 export const api_service_weather = (params) => {
   return axiosPost('service_weather', params)
 }
+
+/**
+* -------------------------- 舆情分析 ------------------------------
+**/
+
+// 舆情流量
+export const api_public_flow = (params) => {
+  return axiosPost('public_flow', params)
+}
+// 热点热词
+export const api_public_hot = (params) => {
+  return axiosPost('public_hot', params)
+}
