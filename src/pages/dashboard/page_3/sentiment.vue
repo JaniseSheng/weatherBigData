@@ -38,18 +38,18 @@ export default {
   },
   methods: {
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'page view']) {
-      console.log(this.$refs[refName]);
-      debugger
-      this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '420px'
+      this.myChart = echarts.init(this.$refs[refName][0], '', {
+        height: '240px'
       });
       // 指定图表的配置项和数据
       const legendData = seriesName
       let xAxisData = [] // X轴用户名
-      let yAxisDataLine = [] // y轴数据
+      let yAxisDataLineUv = [] // y轴数据
+      let yAxisDataLinePv = [] // y轴数据
       data.forEach((item, index)=> {
         xAxisData[index] = item.date
-        yAxisDataLine[index] = item.changeValue
+        yAxisDataLineUv[index] = item.value_uv
+        yAxisDataLinePv[index] = item.value_pv
       })
       var option = {
         xAxis: {
@@ -81,6 +81,18 @@ export default {
           }
         },
         series: [{
+          name: seriesName[0],
+          type: 'line',
+          barWidth: '16',
+          barMinHeight: '8',
+          itemStyle: {
+            normal: {
+              barBorderRadius: 6,
+              color: barColor
+            }
+          },
+          data: yAxisDataLineUv
+        }, {
           name: seriesName[1],
           type: 'line',
           barWidth: '16',
@@ -91,7 +103,7 @@ export default {
               color: barColor
             }
           },
-          data: yAxisDataLine
+          data: yAxisDataLinePv
         }]
       };
       // 使用刚指定的配置项和数据显示图表。
@@ -104,7 +116,7 @@ export default {
         this.echartNum = _datas.length
         this.$nextTick(() => {
           _datas.forEach((item, index)=> {
-            this.chartInit(_datas.values, `echart${index + 1}`)
+            this.chartInit(item.values, `echart${index + 1}`)
           })
         })
         // res.data[0].length > 0 && is.chartInit(res.data[0], 'echart1')
