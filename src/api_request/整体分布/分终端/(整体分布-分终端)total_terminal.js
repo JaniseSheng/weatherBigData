@@ -10,29 +10,13 @@
     ‘2017 - 01 - 01 ’,
     ‘2017 - 01 - 31 ’
   ]
-  type : 0;
+  type : 0; // 根据  接口(total_terminal_getTypeNames)返回的type
 }
 
-type枚举：
-type : [
-  {
-    name: '全部',
-    id: '0'
-  }, {
-    name: 'PC',
-    id: '1'
-  }, {
-    name: 'Mobile',
-    id: '2'
-  }, {
-    name: 'Iptv',
-    id: '3'
-  }
-]
 
 返回数据：
 {
-  "code" : 0,
+  "code" : 1,
   "data" : {
     "uv": {
       // uv值

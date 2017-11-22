@@ -10,23 +10,12 @@
     ‘2017 - 01 - 01 ’,
     ‘2017 - 01 - 31 ’
   ]
-  type : 0;
+  type : 0; // 根据  接口(total_scene_getTypeNames)返回的type
 }
-
-type枚举：
-type : [
-  {
-    name: '室内',
-    id: '0'
-  }, {
-    name: '室外',
-    id: '1'
-  }
-]
 
 返回数据：
 {
-  "code" : 0,
+  "code" : 1,
   "data" : {
     "uv": [
       {

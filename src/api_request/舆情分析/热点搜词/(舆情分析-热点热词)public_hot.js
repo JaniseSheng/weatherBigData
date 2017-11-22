@@ -1,5 +1,5 @@
 /**
-*  -------------------  整体分布-分场景 -------------------
+*  -------------------  舆情分析-热点热词 -------------------
 **/
 请求地址 ： http : // 127.0.0.1:8080/public_hot
 请求数据：
@@ -15,30 +15,30 @@
 
 返回数据：
 {
-  "code" : 0,
+  "code" : 1,
   "data" : [
     {
       name: '全部',
       id: 0,
       values: [
         {
-          value: '40%', // 注意: 数字是百分比
+          value: '300',
           name: '股票'
         },
         {
-          value: '30%',
+          value: '130',
           name: '教育'
         },
         {
-          value: '20%',
+          value: '130',
           name: '医疗'
         },
         {
-          value: '5%',
+          value: '130',
           name: '明星'
         },
         {
-          value: '5%',
+          value: '130',
           name: '游戏'
         }
       ]
@@ -47,24 +47,24 @@
       id: 1,
       values: [
         {
-          value: '40%', // 注意: 数字是百分比
-          name: '股票'
+          value: '130',
+          name: '新闻1'
         },
         {
-          value: '30%',
-          name: '教育'
+          value: '130',
+          name: '新闻2'
         },
         {
-          value: '20%',
-          name: '医疗'
+          value: '130',
+          name: '新闻3'
         },
         {
-          value: '5%',
-          name: '明星'
+          value: '130',
+          name: '新闻4'
         },
         {
-          value: '5%',
-          name: '游戏'
+          value: '130',
+          name: '新闻5'
         }
       ]
     }, {
@@ -72,24 +72,24 @@
       id: 2,
       values: [
         {
-          value: '40%', // 注意: 数字是百分比
-          name: '股票'
+          value: '130',
+          name: '微博1'
         },
         {
-          value: '30%',
-          name: '教育'
+          value: '130',
+          name: '微博2'
         },
         {
-          value: '20%',
-          name: '医疗'
+          value: '130',
+          name: '微博3'
         },
         {
-          value: '5%',
-          name: '明星'
+          value: '130',
+          name: '微博4'
         },
         {
-          value: '5%',
-          name: '游戏'
+          value: '130',
+          name: '微博5'
         }
       ]
     }, {
@@ -97,24 +97,24 @@
       id: 3,
       values: [
         {
-          value: '40%', // 注意: 数字是百分比
-          name: '股票'
+          value: '130',
+          name: '公众号1'
         },
         {
-          value: '30%',
-          name: '教育'
+          value: '130',
+          name: '公众号3'
         },
         {
-          value: '20%',
-          name: '医疗'
+          value: '130',
+          name: '公众号3'
         },
         {
-          value: '5%',
-          name: '明星'
+          value: '130',
+          name: '公众号4'
         },
         {
-          value: '5%',
-          name: '游戏'
+          value: '130',
+          name: '公众号5'
         }
       ]
     }
