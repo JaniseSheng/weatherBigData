@@ -14,8 +14,7 @@
 </template>
 
 <script>
-import {api_service_web} from '@/api'
-import {service_web} from '@/lib/enum'
+import {api_service_web, api_service_web_getTypeNames} from '@/api'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -28,9 +27,16 @@ require('echarts/lib/component/dataZoom')
 export default {
   data(){
     return {
-      searchButtons: service_web,
+      searchButtons: null,
       type: 0
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    api_service_web_getTypeNames().then(res => {
+      next(vm => {
+        vm.searchButtons = res.data
+      })
+    })
   },
   methods: {
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view占比']) {

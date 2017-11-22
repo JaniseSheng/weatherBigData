@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {hostUrl} from './config';
 
-export const axiosPost = (url, params) => {
+export const axiosPost = (url, params = {}) => {
   const _url = hostUrl + url;
   return axios.post(_url, params).then(function(response) {
     const res = response.data;

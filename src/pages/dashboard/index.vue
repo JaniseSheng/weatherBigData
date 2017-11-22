@@ -12,7 +12,7 @@
   </div>
   <div class="main-wrapper">
     <div :class="$style['menu-wrapper']">
-      <Menu theme="dark" :open-names="['0']" :active-name="$route.name" accordion @on-select='handleSelectRoute'>
+      <Menu theme="dark" :open-names="[$route.name.split('-')[0]]" :active-name="$route.name" accordion @on-select='handleSelectRoute'>
         <Submenu name="0">
           <template slot="title">
                           <Icon type="ios-paper"></Icon>
@@ -51,9 +51,7 @@
     </div>
     <div class="content-wrapper">
       <div class="router-content">
-        <keep-alive>
-          <router-view/>
-        </keep-alive>
+        <router-view/>
       </div>
     </div>
   </div>

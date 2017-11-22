@@ -6,16 +6,13 @@
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
-      <div ref='echart1' />
-      <div ref='echart2' />
-      <div ref='echart3' />
+      <div :ref="'echart' + item" :class="'echart' + item" v-for='item in echartNum'/>
     </div>
   </div>
 </template>
 
 <script>
-import {api_public_flow} from '@/api'
-import {sentiment_flow} from '@/lib/enum'
+import {api_public_flow, api_public_flow_getTypeNames} from '@/api'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -27,23 +24,31 @@ require('echarts/lib/component/dataZoom')
 export default {
   data(){
     return {
-      searchButtons: sentiment_flow,
+      searchButtons: null,
+      echartNum: 0,
       type: 0
     }
   },
+  beforeRouteEnter(to, from, next) {
+    api_public_flow_getTypeNames().then(res => {
+      next(vm => {
+        vm.searchButtons = res.data
+      })
+    })
+  },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view变化率']) {
+    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'page view']) {
+      console.log(this.$refs[refName]);
+      debugger
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
       // 指定图表的配置项和数据
       const legendData = seriesName
       let xAxisData = [] // X轴用户名
-      let yAxisDataBar = [] // y轴数据
       let yAxisDataLine = [] // y轴数据
       data.forEach((item, index)=> {
         xAxisData[index] = item.date
-        yAxisDataBar[index] = item.value
         yAxisDataLine[index] = item.changeValue
       })
       var option = {
@@ -76,18 +81,6 @@ export default {
           }
         },
         series: [{
-          name: seriesName[0],
-          type: 'bar',
-          barWidth: '16',
-          barMinHeight: '8',
-          itemStyle: {
-            normal: {
-              barBorderRadius: 6,
-              color: barColor
-            }
-          },
-          data: yAxisDataBar
-        }, {
           name: seriesName[1],
           type: 'line',
           barWidth: '16',
@@ -107,9 +100,16 @@ export default {
     api_search_date(params){
       api_public_flow(params).then(res=> {
         this.type = params.type
-        res.data[0].length > 0 && is.chartInit(res.data[0], 'echart1')
-        res.data[1].length > 0 && this.chartInit(res.data[1], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
-        res.data[2].length > 0 && this.chartInit(res.data[2], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
+        const _datas = res.data
+        this.echartNum = _datas.length
+        this.$nextTick(() => {
+          _datas.forEach((item, index)=> {
+            this.chartInit(_datas.values, `echart${index + 1}`)
+          })
+        })
+        // res.data[0].length > 0 && is.chartInit(res.data[0], 'echart1')
+        // res.data[1].length > 0 && this.chartInit(res.data[1], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
+        // res.data[2].length > 0 && this.chartInit(res.data[2], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
       })
     },
     searchInit(item){

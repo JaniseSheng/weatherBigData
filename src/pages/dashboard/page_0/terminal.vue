@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {api_total_terminal} from '@/api'
+import {api_total_terminal, api_total_terminal_getTypeNames} from '@/api'
 import {total_terminal} from '@/lib/enum'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
@@ -27,9 +27,16 @@ require('echarts/lib/component/dataZoom')
 export default {
   data(){
     return {
-      searchButtons: total_terminal,
+      searchButtons: null,
       type: 0
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    api_total_terminal_getTypeNames().then(res => {
+      next(vm => {
+        vm.searchButtons = res.data
+      })
+    })
   },
   methods: {
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view变化率']) {
