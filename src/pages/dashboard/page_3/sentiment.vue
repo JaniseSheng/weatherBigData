@@ -119,9 +119,6 @@ export default {
             this.chartInit(item.values, `echart${index + 1}`)
           })
         })
-        // res.data[0].length > 0 && is.chartInit(res.data[0], 'echart1')
-        // res.data[1].length > 0 && this.chartInit(res.data[1], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
-        // res.data[2].length > 0 && this.chartInit(res.data[2], 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
       })
     },
     searchInit(item){

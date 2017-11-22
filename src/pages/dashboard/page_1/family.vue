@@ -1,15 +1,37 @@
 <template>
 <div>
-  <search-wrapper @searchInit='searchInit'>
+  <search-wrapper>
     <div class="search-button" :class="$style['search-btns']" slot-scope="props">
-      <waterfall :line-gap="200" :watch="searchButtons">
-        <waterfall-slot v-for="(item, index) in searchButtons" :width='item.width' :height="item.height" :order="index" :key="'family' + index">
-          <div class='button-item' :class="$style['buttonItem-' + index]" @click="handleClickSearchType(props, item.id)">
-            <label>{{item.value}}</label>
-            <p>{{item.name}}</p>
+      <Tabs :class='$style.tabsWrapper'>
+        <TabPane label="PC" name="name1">
+          <div class="swiper-container swiper-container-pc">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" @click="handleClickSearchType(props, {type: 'pc', id: item.id})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+                <p>{{item.name}}</p>
+                <label>{{item.data.value}}</label>
+                <p>{{item.data.name}}</p>
+              </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
           </div>
-        </waterfall-slot>
-      </waterfall>
+
+
+        </TabPane>
+        <TabPane label="IPTV" name="name2">
+          <div class="swiper-container swiper-container-iptv">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" @click="handleClickSearchType(props, {type: 'iptv', id: item.id})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+                <p>{{item.name}}</p>
+                <label>{{item.data.value}}</label>
+                <p>{{item.data.name}}</p>
+              </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </TabPane>
+      </Tabs>
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
@@ -19,14 +41,11 @@
 </template>
 
 <script>
-import Waterfall from 'vue-waterfall/lib/waterfall'
-import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
 import {
-  api_action_family, api_action_family_echart
+  api_action_family,
+  api_action_family_echart
 } from '@/api'
-import {
-  action_family
-} from '@/lib/enum'
+import swiper from 'Swiper'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -38,12 +57,53 @@ require('echarts/lib/component/dataZoom')
 export default {
   data() {
     return {
-      searchButtons: action_family,
+      searchButtonsIptv: [],
+      searchButtonsPc: [],
       type: 0
     }
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = 'unique view') {
+    get_family_swiper() {
+      api_action_family().then(res => {
+        this.searchButtonsIptv = res.data.iptv
+        this.searchButtonsPc = res.data.pc
+        this.$nextTick(() => {
+          this.swiperPc = new swiper('.swiper-container-pc', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            },
+            pagination: {
+              el: '.swiper-pagination',
+            }
+          });
+          this.swiperIptv = new swiper('.swiper-container-iptv', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            },
+            pagination: {
+              el: '.swiper-pagination',
+            }
+          });
+        })
+      })
+    },
+    chartInit(data, refName, barColor = '#2d8cf0', seriesName = '') {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
@@ -52,7 +112,7 @@ export default {
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
       data.forEach((item, index) => {
-        xAxisData[index] = item.date
+        xAxisData[index] = item.name
         yAxisData[index] = item.value
       })
       var option = {
@@ -101,31 +161,19 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-    searchInit(item) {
-      let _searchDatas = []
-      api_action_family(item).then(res => {
-        res.data.forEach((_item, index) => {
-          _searchDatas[index] = Object.assign({}, action_family[index], _item)
-        })
-        this.searchButtons = _searchDatas
-      })
-    },
 
-    api_search_date(params){
-      api_action_family_echart(params).then(res=> {
-        this.type = params.type
+    api_search_date(params) {
+      api_action_family_echart(params).then(res => {
         this.chartInit(res.data, 'echart1')
       })
     },
-
-    handleClickSearchType(props, id) {
-      const params = Object.assign({}, props, {type : id})
+    handleClickSearchType(props, params) {
+      const _params = Object.assign({}, props, params)
       this.api_search_date(params)
     }
   },
-  components: {
-    Waterfall,
-    WaterfallSlot
+  mounted() {
+    this.get_family_swiper()
   }
 }
 </script>
@@ -155,5 +203,11 @@ export default {
 @import "../../../style/mythemes.less";
 .buttonItem-0 {
     color: red;
+}
+.tabsWrapper {
+    :global(.swiper-slide) {
+        width: 300px;
+        height: 300px;
+    }
 }
 </style>

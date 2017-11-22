@@ -4,6 +4,9 @@
 
 const path = require('path')
 
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
 module.exports = {
   dev: {
 
@@ -85,5 +88,10 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
+  },
+
+  preLoadAssets: [
+    resolve('node_modules/swiper/dist/css/swiper.min.css')
+  ]
+
 }
