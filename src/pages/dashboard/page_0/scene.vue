@@ -1,6 +1,6 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit'>
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
     <div class="search-button" slot-scope="props">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
     </div>
@@ -126,6 +126,12 @@ export default {
       this.api_search_date(params)
     },
     handleClickSearchType(props, id) {
+      const params = Object.assign({}, props, {
+        type: id
+      })
+      this.api_search_date(params)
+    },
+    changeSearch(items) {
       const params = Object.assign({}, props, {
         type: id
       })

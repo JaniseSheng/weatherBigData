@@ -6,29 +6,28 @@
         <TabPane label="PC" name="name1">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" @click="handleClickSearchType(props, {type: 'pc', id: item.id})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
-                <p>{{item.name}}</p>
-                <label>{{item.data.value}}</label>
+              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'pc', id: item.id})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+                <ui-icon size='96' :icon="'family' + index" />
+                <p style="font-size: 18px">{{item.name}}</p>
+                <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
                 <p>{{item.data.name}}</p>
               </div>
             </div>
             <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
+            <div class="swiper-pagination swiper-pagination-pc"></div>
           </div>
-
-
         </TabPane>
         <TabPane label="IPTV" name="name2">
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" @click="handleClickSearchType(props, {type: 'iptv', id: item.id})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'iptv', id: item.id})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
                 <p>{{item.data.name}}</p>
               </div>
             </div>
             <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
+            <div class="swiper-pagination swiper-pagination-iptv"></div>
           </div>
         </TabPane>
       </Tabs>
@@ -37,6 +36,7 @@
   <div class="echart-wrapper">
     <div ref='echart1' />
   </div>
+  <svg-icon-family />
 </div>
 </template>
 
@@ -46,6 +46,8 @@ import {
   api_action_family_echart
 } from '@/api'
 import swiper from 'Swiper'
+import svgIconFamily from '@/components/svg-icon-family'
+import uiIcon from '@/components/ui-icon'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -59,7 +61,8 @@ export default {
     return {
       searchButtonsIptv: [],
       searchButtonsPc: [],
-      type: 0
+      type: '',
+      id: ''
     }
   },
   methods: {
@@ -78,10 +81,10 @@ export default {
               stretch: 0,
               depth: 100,
               modifier: 1,
-              slideShadows: true,
+              slideShadows: true
             },
             pagination: {
-              el: '.swiper-pagination',
+              el: '.swiper-pagination-pc'
             }
           });
           this.swiperIptv = new swiper('.swiper-container-iptv', {
@@ -94,10 +97,10 @@ export default {
               stretch: 0,
               depth: 100,
               modifier: 1,
-              slideShadows: true,
+              slideShadows: true
             },
             pagination: {
-              el: '.swiper-pagination',
+              el: '.swiper-pagination-iptv'
             }
           });
         })
@@ -163,17 +166,23 @@ export default {
     },
 
     api_search_date(params) {
+      this.type = params.type
+      this.id = params.id
       api_action_family_echart(params).then(res => {
         this.chartInit(res.data, 'echart1')
       })
     },
     handleClickSearchType(props, params) {
       const _params = Object.assign({}, props, params)
-      this.api_search_date(params)
+      this.api_search_date(_params)
     }
   },
   mounted() {
     this.get_family_swiper()
+  },
+  components: {
+    uiIcon,
+    svgIconFamily
   }
 }
 </script>
@@ -206,8 +215,22 @@ export default {
 }
 .tabsWrapper {
     :global(.swiper-slide) {
+        padding: 12px;
         width: 300px;
         height: 300px;
+        background-color: @warning-color;
+        color: white;
     }
+    & svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+}
+.swiper_active {
+  background-color: @success-color !important;
 }
 </style>

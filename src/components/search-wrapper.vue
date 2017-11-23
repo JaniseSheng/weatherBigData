@@ -8,8 +8,8 @@
         </span>
       </Col>
       <Col span='12' >
-      <DatePicker :value='month' :clearable=false @on-change='handleChangeMonth' type="month" placeholder="选择月份" style="width: 200px"></DatePicker>
-      <DatePicker :value='dataRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+      <DatePicker :value='month' :clearable=false @on-change='handleChangeMonth' type="month" :options="monthOptions" placeholder="选择月份" style="width: 200px"></DatePicker>
+      <DatePicker :value='dataRange' ref='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </Col>
       <Col span='6' style="text-align: right">
       <Button type='success'>导出excel</Button>
@@ -19,10 +19,10 @@
       <ul style='max-height: 500px; overflow: scroll'>
         <li v-for='(area, index) in areas' :key="'area' + index" style="margin-bottom: 6px">
           <p>
-            <Button type="success" size='small' @click="handleClickArea(area)">{{area.name}}</Button>
+            <Button type="success" @click="handleClickArea(area)">{{area.name}}</Button>
           </p>
           <p :class="$style['item-button']">
-            <Button type="text" v-for="(item, index) in area.childrens" @click="handleClickAreaItem(item)" :key="'button' + index">{{item.name}}</Button>
+            <Button type="text" v-for="(item, index) in area.childrens" :style="item.id == areaId ? buttonActiveStyle : ''"  @click="handleClickAreaItem(item)" :key="'button' + index">{{item.name}}</Button>
           </p>
         </li>
       </ul>
@@ -30,7 +30,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot :month='month' :dataRange='dataRange' :areaName='areaName' :areaId='areaId' >
+    <slot :dataRange='dataRange' :areaName='areaName' :areaId='areaId' >
     </slot>
   </div>
 </div>
@@ -40,17 +40,26 @@
 import {
   areas
 } from '@/lib/enum.js'
-import {currMonth} from '@/lib/date'
+import {currMonth_dataRange, currMonthDatas, getCurMonth, dateDiff} from '@/lib/date'
 
 export default {
   data() {
     return {
-      areaName: '长寿路', //选择的区域
-      areaId: '001_0', //选择的区域
-      month: currMonth(),
-      dataRange: '',
+      buttonActiveStyle: {
+        color: '#19be6b'
+      },
+      areaName: '普陀区', //选择的区域
+      areaId: '001', //选择的区域
+      dataRange: currMonth_dataRange(),
+      month: getCurMonth(),
+      currMonthDatas: 30,
       areas,
       modal1: false, //是否选择区域
+      monthOptions: {
+        disabledDate(date) {
+          return date && ( date.valueOf() > Date.now());
+        }
+      },
       dateRangeOptions: {
         shortcuts: [{
             text: '一个星期',
@@ -81,7 +90,7 @@ export default {
           }
         ],
         disabledDate(date) {
-          return date && ( date.valueOf() > Date.now() || date.valueOf() < (Date.now() - 86400000 * 30));
+          return date && ( date.valueOf() > Date.now());
         }
       }
     }
@@ -90,26 +99,41 @@ export default {
     this.$emit('searchInit', {
       areaName: this.areaName,
       areaId: this.areaId,
-      month: this.month,
       dataRange: this.dataRange
     })
   },
   methods: {
+    handleChangeSearch() {
+      this.$emit('changeSearch', {
+        areaName: this.areaName,
+        areaId: this.areaId,
+        dataRange: this.dataRange
+      })
+    },
     handleClickArea(val) {
       this.areaName = val.name
       this.areaId = val.id
       this.modal1 = false
+      this.handleChangeSearch()
     },
     handleClickAreaItem(val) {
       this.areaName = val.name
       this.areaId = val.id
       this.modal1 = false
+      this.handleChangeSearch()
     },
     handleChangeMonth(val) {
-      this.month = val
+      this.dataRange = currMonth_dataRange(val)
+      this.handleChangeSearch()
     },
     handleChangeDataRange(val) {
+      const selectDatas = dateDiff(val[0], val[1])
+      if (selectDatas > 31) {
+        this.$Message.error('最大查询天数为31天')
+        return false
+      }
       this.dataRange = val
+      this.handleChangeSearch()
     }
   }
 }
