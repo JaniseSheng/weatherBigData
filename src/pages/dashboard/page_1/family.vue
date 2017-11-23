@@ -1,13 +1,13 @@
 <template>
 <div>
-  <search-wrapper>
+  <search-wrapper @changeSearch='changeSearch'>
     <div class="search-button" :class="$style['search-btns']" slot-scope="props">
       <Tabs :class='$style.tabsWrapper'>
         <TabPane label="PC" name="name1">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
               <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'pc', id: item.id})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
-                <ui-icon size='96' :icon="'family' + index" />
+                <ui-icon size='96' :icon="'family' + item.id" />
                 <p style="font-size: 18px">{{item.name}}</p>
                 <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
                 <p>{{item.data.name}}</p>
@@ -21,6 +21,7 @@
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
               <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'iptv', id: item.id})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+                <ui-icon size='96' :icon="'family' + item.id" />
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
                 <p>{{item.data.name}}</p>
@@ -72,6 +73,7 @@ export default {
         this.searchButtonsPc = res.data.pc
         this.$nextTick(() => {
           this.swiperPc = new swiper('.swiper-container-pc', {
+            initialSlide: 2,
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
@@ -88,6 +90,7 @@ export default {
             }
           });
           this.swiperIptv = new swiper('.swiper-container-iptv', {
+            initialSlide: 2,
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
@@ -108,7 +111,7 @@ export default {
     },
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = '') {
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '420px'
+        height: '380px'
       });
       // 指定图表的配置项和数据
       const legendData = [seriesName]
@@ -175,10 +178,22 @@ export default {
     handleClickSearchType(props, params) {
       const _params = Object.assign({}, props, params)
       this.api_search_date(_params)
+    },
+    changeSearch(items) {
+      if(!this.type) return
+      const params = Object.assign({}, items, {
+        type: this.type,
+        id: this.id
+      })
+      this.api_search_date(params)
     }
   },
   mounted() {
     this.get_family_swiper()
+  },
+  beforeDestroy() {
+    this.swiperPc.destroy(true)
+    this.swiperIptv.destroy(true)
   },
   components: {
     uiIcon,

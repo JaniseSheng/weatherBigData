@@ -35,26 +35,28 @@ module.exports = {
   },
   module: {
     rules: [
-      ...(config.dev.useEslint
-        ? [
-          {
-            test: /\.(js|vue)$/,
-            loader: 'eslint-loader',
-            enforce: 'pre',
-            include: [
-              resolve('src'), resolve('test')
-            ],
-            options: {
-              formatter: require('eslint-friendly-formatter'),
-              emitWarning: !config.dev.showEslintErrorsInOverlay
-            }
-          }
-        ]
-        : []), {
+      // ...(config.dev.useEslint
+      //   ? [
+      //     {
+      //       test: /\.(js|vue)$/,
+      //       loader: 'eslint-loader',
+      //       enforce: 'pre',
+      //       include: [
+      //         resolve('src'), resolve('test')
+      //       ],
+      //       options: {
+      //         formatter: require('eslint-friendly-formatter'),
+      //         emitWarning: !config.dev.showEslintErrorsInOverlay
+      //       }
+      //     }
+      //   ]
+      //: []),
+        {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
-      }, {
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('node_modules/iview')]

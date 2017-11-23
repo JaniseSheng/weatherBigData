@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <search-wrapper @searchInit='searchInit'>
+    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
       <div class="search-button" slot-scope="props">
         <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
       </div>
@@ -41,7 +41,7 @@ export default {
   methods: {
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view占比']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '420px'
+        height: '380px'
       });
       // 指定图表的配置项和数据
       const legendData = seriesName
@@ -113,7 +113,7 @@ export default {
     },
     chartInitLine(data, refName, barColor = '#2d8cf0', seriesName = '预报准确率') {
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '420px'
+        height: '380px'
       });
       // 指定图表的配置项和数据
       const legendData = [seriesName]
@@ -185,6 +185,12 @@ export default {
     },
     handleClickSearchType(props, id){
       const params = Object.assign({}, props, {type : id})
+      this.api_search_date(params)
+    },
+    changeSearch(items) {
+      const params = Object.assign({}, items, {
+        type: this.type
+      })
       this.api_search_date(params)
     }
   }

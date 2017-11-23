@@ -36,21 +36,29 @@ export const api_total_scene = (params) => {
 * -------------------------- 行为洞察 ------------------------------
 **/
 
-// 家庭类人群属性
+// 家庭
 export const api_action_family = (params) => {
   return axiosPost('action_family', params)
 }
-// 家庭类人群属性
+// 家庭-echart
 export const api_action_family_echart = (params) => {
   return axiosPost('action_family_echart', params)
 }
-// 个人类人群
-export const api_action_personal = (params) => {
-  return axiosPost('query_date', params)
+// 个人
+export const api_action_personal= (params) => {
+  return axiosPost('action_personal', params)
 }
-// 用户类人群
-export const api_action_user = (params) => {
-  return axiosPost('query_date', params)
+// 个人-echart
+export const api_action_personal_echart = (params) => {
+  return axiosPost('action_personal_echart', params)
+}
+// 个人
+export const api_action_user= (params) => {
+  return axiosPost('action_user', params)
+}
+// 个人-echart
+export const api_action_user_echart = (params) => {
+  return axiosPost('action_user_echart', params)
 }
 
 /**

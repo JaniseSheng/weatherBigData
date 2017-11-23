@@ -42,7 +42,7 @@ export default {
   methods: {
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view变化率']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '420px'
+        height: '380px'
       });
       // 指定图表的配置项和数据
       const legendData = seriesName
@@ -132,8 +132,8 @@ export default {
       this.api_search_date(params)
     },
     changeSearch(items) {
-      const params = Object.assign({}, props, {
-        type: id
+      const params = Object.assign({}, items, {
+        type: this.type
       })
       this.api_search_date(params)
     }

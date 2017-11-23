@@ -1,6 +1,6 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit'>
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
   </search-wrapper>
   <div class="echart-wrapper">
     <div :ref="'echart' + item" v-for='item in echartNum' :class='$style.echartItem' />
@@ -100,6 +100,9 @@ export default {
     },
     searchInit(item) {
       this.api_search_date(item)
+    },
+    changeSearch(items) {
+      this.api_search_date(items)
     }
   }
 }
