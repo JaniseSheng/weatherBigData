@@ -17,6 +17,8 @@ import {
   api_total_scene,
   api_total_scene_getTypeNames
 } from '@/api'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -40,7 +42,7 @@ export default {
     })
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view变化率']) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'unique view变化率']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -75,18 +77,18 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: barColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: barColor
             }
           }
         },
         series: [{
           name: seriesName[0],
           type: 'bar',
-          barWidth: '16',
+          barWidth: echartConfig.barWidth,
           barMinHeight: '8',
           itemStyle: {
             normal: {
@@ -98,12 +100,17 @@ export default {
         }, {
           name: seriesName[1],
           type: 'line',
-          barWidth: '16',
-          barMinHeight: '8',
           itemStyle: {
             normal: {
-              barBorderRadius: 6,
-              color: barColor
+              borderWidth: 6,
+              color: lineColor,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10
+            }
+          },
+          lineStyle: {
+            normal: {
+              width: echartConfig.lineWidth
             }
           },
           data: yAxisDataLine
@@ -116,7 +123,7 @@ export default {
       api_total_scene(params).then(res => {
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', '#19be6b', ['unique view', 'unique view变化率'])
+        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['unique view', 'unique view变化率'])
       })
     },
     searchInit(item) {

@@ -15,6 +15,8 @@
 
 <script>
 import {api_service_web, api_service_web_getTypeNames} from '@/api'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -39,7 +41,7 @@ export default {
     })
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'unique view占比']) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'unique view占比']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -74,18 +76,18 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: barColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: barColor
             }
           }
         },
         series: [{
           name: seriesName[0],
           type: 'bar',
-          barWidth: '16',
+          barWidth: echartConfig.barWidth,
           barMinHeight: '8',
           itemStyle: {
             normal: {
@@ -97,12 +99,17 @@ export default {
         }, {
           name: seriesName[1],
           type: 'line',
-          barWidth: '16',
-          barMinHeight: '8',
           itemStyle: {
             normal: {
-              barBorderRadius: 6,
-              color: barColor
+              borderWidth: 6,
+              color: lineColor,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10
+            }
+          },
+          lineStyle: {
+            normal: {
+              width: echartConfig.lineWidth
             }
           },
           data: yAxisDataLine
@@ -111,9 +118,9 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-    chartInitLine(data, refName, barColor = '#2d8cf0', seriesName = '预报准确率') {
+    chartInitLine(data, refName, lineColor = color.color1, seriesName = '预报准确率') {
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '380px'
+        height: '300px'
       });
       // 指定图表的配置项和数据
       const legendData = [seriesName]
@@ -145,26 +152,31 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: lineColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: lineColor
             }
           }
         },
         series: [{
           name: seriesName,
           type: 'line',
-          barWidth: '16',
-          barMinHeight: '8',
           itemStyle: {
             normal: {
               barBorderRadius: 6,
-              color: barColor
+              color: lineColor
             }
           },
-          areaStyle: {normal: {}},
+          areaStyle: {normal: {
+            opacity: .5
+          }},
+          lineStyle: {
+            normal: {
+              width: echartConfig.lineWidth
+            }
+          },
           data: yAxisDataLine
         }]
       };
@@ -175,7 +187,7 @@ export default {
       api_service_web(params).then(res=> {
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', '#19be6b', ['page view', 'page view占比'])
+        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
         this.chartInitLine(res.data.percentage, 'echart3')
       })
     },

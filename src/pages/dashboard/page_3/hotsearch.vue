@@ -12,6 +12,8 @@
 import {
   api_public_hot
 } from '@/api'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -27,7 +29,7 @@ export default {
     }
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0') {
+    chartInit(data, refName, barColor = color.infoColor) {
       const _data = data.values
       const seriesName = data.name
       this.myChart = echarts.init(this.$refs[refName][0], '', {
@@ -62,18 +64,18 @@ export default {
           start: 0,
           end: 10 * 100 / _data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: barColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: barColor
             }
           }
         },
         series: [{
           name: seriesName,
           type: 'bar',
-          barWidth: '16',
+          barWidth: echartConfig.barWidth,
           barMinHeight: '8',
           itemStyle: {
             normal: {
@@ -93,7 +95,7 @@ export default {
         this.echartNum = _datas.length
         this.$nextTick(() => {
           _datas.forEach((item, index) => {
-            this.chartInit(item, `echart${index + 1}`)
+            this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index])
           })
         })
       })

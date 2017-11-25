@@ -13,6 +13,8 @@
 
 <script>
 import {api_public_flow, api_public_flow_getTypeNames} from '@/api'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -37,9 +39,9 @@ export default {
     })
   },
   methods: {
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = ['unique view', 'page view']) {
+    chartInit(data, refName, lineColor1 = color.infoColor, lineColor2 = color.warningColor, seriesName = ['unique view', 'page view']) {
       this.myChart = echarts.init(this.$refs[refName][0], '', {
-        height: '240px'
+        height: '280px'
       });
       // 指定图表的配置项和数据
       const legendData = seriesName
@@ -72,39 +74,50 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: color.color1
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: color.color1
             }
           }
         },
-        series: [{
-          name: seriesName[0],
-          type: 'line',
-          barWidth: '16',
-          barMinHeight: '8',
-          itemStyle: {
-            normal: {
-              barBorderRadius: 6,
-              color: barColor
-            }
-          },
-          data: yAxisDataLineUv
-        }, {
-          name: seriesName[1],
-          type: 'line',
-          barWidth: '16',
-          barMinHeight: '8',
-          itemStyle: {
-            normal: {
-              barBorderRadius: 6,
-              color: barColor
-            }
-          },
-          data: yAxisDataLinePv
-        }]
+        series: [
+          {
+            name: seriesName[0],
+            type: 'line',
+            itemStyle: {
+              normal: {
+                borderWidth: 6,
+                color: lineColor1,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                shadowBlur: 10
+              }
+            },
+            lineStyle: {
+              normal: {
+                width: echartConfig.lineWidth
+              }
+            },
+            data: yAxisDataLineUv
+          }, {
+            name: seriesName[1],
+            type: 'line',
+            itemStyle: {
+              normal: {
+                borderWidth: 6,
+                color: lineColor2,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                shadowBlur: 10
+              }
+            },
+            lineStyle: {
+              normal: {
+                width: echartConfig.lineWidth
+              }
+            },
+            data: yAxisDataLinePv
+          }]
       };
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
@@ -116,7 +129,7 @@ export default {
         this.echartNum = _datas.length
         this.$nextTick(() => {
           _datas.forEach((item, index)=> {
-            this.chartInit(item.values, `echart${index + 1}`)
+            this.chartInit(item.values, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
           })
         })
       })

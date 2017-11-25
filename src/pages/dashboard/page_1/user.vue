@@ -33,6 +33,8 @@ import {
 import swiper from 'Swiper'
 import svgIconFamily from '@/components/svg-icon-family'
 import uiIcon from '@/components/ui-icon'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -74,6 +76,10 @@ export default {
       })
     },
     chartInit(data, refName, barColor = '#2d8cf0', seriesName = '') {
+      if (this.myChart) {
+        this.myChart.clear()
+        this.myChart.dispose()
+      }
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -117,7 +123,7 @@ export default {
         series: [{
           name: seriesName,
           type: 'bar',
-          barWidth: '16',
+          barWidth: echartConfig.barWidth,
           barMinHeight: '8',
           itemStyle: {
             normal: {

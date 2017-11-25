@@ -6,7 +6,7 @@
         <TabPane label="PC" name="name1">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'pc', id: item.id})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p style="font-size: 18px">{{item.name}}</p>
                 <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -20,7 +20,7 @@
         <TabPane label="IPTV" name="name2">
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'iptv', id: item.id})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
@@ -49,9 +49,12 @@ import {
 import swiper from 'Swiper'
 import svgIconFamily from '@/components/svg-icon-family'
 import uiIcon from '@/components/ui-icon'
+import color from '@/lib/color'
+import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
+require('echarts/lib/chart/pie')
 // 引入提示框和title组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
@@ -63,7 +66,8 @@ export default {
       searchButtonsIptv: [],
       searchButtonsPc: [],
       type: '',
-      id: ''
+      id: '',
+      typeName: ''
     }
   },
   methods: {
@@ -109,7 +113,11 @@ export default {
         })
       })
     },
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = '') {
+    chartInit(data, refName, barColor = color.infoColor, seriesName = '') {
+      if (this.myChart) {
+        this.myChart.clear()
+        this.myChart.dispose()
+      }
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -121,7 +129,7 @@ export default {
         xAxisData[index] = item.name
         yAxisData[index] = item.value
       })
-      var option = {
+      var optionBar = {
         xAxis: {
           data: xAxisData
         },
@@ -153,7 +161,7 @@ export default {
         series: [{
           name: seriesName,
           type: 'bar',
-          barWidth: '16',
+          barWidth: echartConfig.barWidth,
           barMinHeight: '8',
           itemStyle: {
             normal: {
@@ -164,6 +172,57 @@ export default {
           data: yAxisData
         }]
       };
+      var optionPie = {
+        legend: {
+          data: legendData
+        },
+        tooltip: {
+          boundaryGap: '50%',
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        series: [{
+            name: this.typeName,
+              type:'pie',
+              radius: ['40%', '55%'],
+              label: {
+                  normal: {
+                      formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                      backgroundColor: '#eee',
+                      borderColor: '#aaa',
+                      borderWidth: 1,
+                      borderRadius: 4,
+                      rich: {
+                          a: {
+                              color: '#999',
+                              lineHeight: 22,
+                              align: 'center'
+                          },
+                          hr: {
+                              borderColor: '#aaa',
+                              width: '100%',
+                              borderWidth: 0.5,
+                              height: 0
+                          },
+                          b: {
+                              fontSize: 16,
+                              lineHeight: 33
+                          },
+                          per: {
+                              color: '#eee',
+                              backgroundColor: '#334455',
+                              padding: [2, 4],
+                              borderRadius: 2
+                          }
+                      }
+                  }
+              },
+              data
+          }]
+      };
+      const option = data.length <= 6 ? optionPie : optionBar
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
@@ -176,6 +235,7 @@ export default {
       })
     },
     handleClickSearchType(props, params) {
+      this.typeName = params.typeName
       const _params = Object.assign({}, props, params)
       this.api_search_date(_params)
     },
