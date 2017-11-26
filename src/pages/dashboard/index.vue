@@ -3,7 +3,7 @@
   <div class="header-wrapper">
     <p class='header-title'>
       <Icon type="stats-bars" size='36' style="vertical-align: middle"></Icon>
-      <!-- 气象服务大数据洞察平台 -->
+      气象服务大数据洞察平台
     </p>
     <p style="float: right">
       欢迎{{userName}}登陆!

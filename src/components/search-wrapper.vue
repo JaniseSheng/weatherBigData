@@ -7,12 +7,12 @@
           <Input :value="areaName" readonly icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
         </span>
       </Col>
-      <Col span='12' >
+      <Col span='12'>
       <DatePicker :value='month' :clearable=false @on-change='handleChangeMonth' type="month" :options="monthOptions" placeholder="选择月份" style="width: 200px"></DatePicker>
       <DatePicker :value='dataRange' ref='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </Col>
       <Col span='6' style="text-align: right">
-      <Button type='success'>导出excel</Button>
+      <Button type='success' @click='handleClickExport'>导出excel</Button>
       </Col>
     </Row>
     <Modal v-model="modal1" width="1200" title="区域选择">
@@ -22,7 +22,7 @@
             <Button type="success" @click="handleClickArea(area)">{{area.name}}</Button>
           </p>
           <p :class="$style['item-button']">
-            <Button type="text" v-for="(item, index) in area.childrens" :style="item.id == areaId ? buttonActiveStyle : ''"  @click="handleClickAreaItem(item)" :key="'button' + index">{{item.name}}</Button>
+            <Button type="text" v-for="(item, index) in area.childrens" :style="item.id == areaId ? buttonActiveStyle : ''" @click="handleClickAreaItem(item)" :key="'button' + index">{{item.name}}</Button>
           </p>
         </li>
       </ul>
@@ -30,7 +30,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot :dataRange='dataRange' :areaName='areaName' :areaId='areaId' >
+    <slot :dataRange='dataRange' :areaName='areaName' :areaId='areaId'>
     </slot>
   </div>
 </div>
@@ -40,7 +40,12 @@
 import {
   areas
 } from '@/lib/enum.js'
-import {currMonth_dataRange, currMonthDatas, getCurMonth, dateDiff} from '@/lib/date'
+import {
+  currMonth_dataRange,
+  currMonthDatas,
+  getCurMonth,
+  dateDiff
+} from '@/lib/date'
 
 export default {
   data() {
@@ -57,7 +62,7 @@ export default {
       modal1: false, //是否选择区域
       monthOptions: {
         disabledDate(date) {
-          return date && ( date.valueOf() > Date.now());
+          return date && (date.valueOf() > Date.now());
         }
       },
       dateRangeOptions: {
@@ -90,12 +95,12 @@ export default {
           }
         ],
         disabledDate(date) {
-          return date && ( date.valueOf() > Date.now());
+          return date && (date.valueOf() > Date.now());
         }
       }
     }
   },
-  created(){
+  created() {
     this.$emit('searchInit', {
       areaName: this.areaName,
       areaId: this.areaId,
@@ -134,6 +139,9 @@ export default {
       }
       this.dataRange = val
       this.handleChangeSearch()
+    },
+    handleClickExport() {
+      console.log('导出表格')
     }
   }
 }
@@ -142,7 +150,7 @@ export default {
 <style lang="less" module>
 @import "../style/mythemes.less";
 .search-wrapper {
-  padding: 12px;
+    padding: 12px;
 }
 .item-button {
     & button {
