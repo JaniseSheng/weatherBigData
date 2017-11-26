@@ -30,7 +30,7 @@ import {
   api_action_personal,
   api_action_personal_echart
 } from '@/api'
-import swiper from 'Swiper'
+import swiper from 'Swiper/dist/js/swiper.min.js'
 import svgIconFamily from '@/components/svg-icon-family'
 import uiIcon from '@/components/ui-icon'
 import color from '@/lib/color'
