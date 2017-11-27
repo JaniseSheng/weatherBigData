@@ -28,7 +28,7 @@
                       </template>
           <MenuItem name="1-1">家庭类人群分类</MenuItem>
           <MenuItem name="1-2">个人类人群分类</MenuItem>
-          <MenuItem name="1-3">用户聚类分类</MenuItem>
+          <!-- <MenuItem name="1-3">用户聚类分类</MenuItem> -->
         </Submenu>
         <Submenu name="2">
           <template slot="title">

@@ -1,5 +1,6 @@
 <template>
 <div :class="$style['search-wrapper']">
+  <Table ref='table' style="display: none" />
   <div class="search_geader">
     <Row style="display: inline-block;width: 100%;">
       <Col span='6' style="text-align: left">
@@ -100,6 +101,7 @@ export default {
       }
     }
   },
+  props: ['tableColums', 'tableData', 'tableName'],
   created() {
     this.$emit('searchInit', {
       areaName: this.areaName,
@@ -141,7 +143,11 @@ export default {
       this.handleChangeSearch()
     },
     handleClickExport() {
-      console.log('导出表格')
+      this.$refs.table.exportCsv({
+        filename: this.tableName,
+        columns: this.tableColums,
+        data: this.tableData
+      });
     }
   }
 }

@@ -187,6 +187,7 @@ export default {
             name: this.typeName,
               type:'pie',
               radius: ['40%', '55%'],
+              color:['#2d8cf0', '#19be6b','#ff9900','#ed3f14', '#E406AD', '#4918EE'],
               label: {
                   normal: {
                       formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',

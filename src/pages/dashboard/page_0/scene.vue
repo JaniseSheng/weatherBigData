@@ -1,8 +1,8 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
     <div class="search-button" slot-scope="props">
-      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
+      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
@@ -31,7 +31,10 @@ export default {
   data() {
     return {
       searchButtons: null,
-      type: 0
+      type: 0,
+      tableColums: [],
+      tableData: [],
+      tableName: '分场景(室内)'
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -120,7 +123,30 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
+      this.tableColums = []
+      this.tableData = []
       api_total_scene(params).then(res => {
+        this.tableColums[0] = {
+          title: '类型',
+          key: 'type'
+        }
+        let dataUv = {type: 'UV'}
+        let changeUv = {type: 'UV-变化率'}
+        let dataPv = {type: 'PV'}
+        let changePv = {type: 'PV-变化率'}
+        res.data.uv.forEach((item, index)=> {
+          this.tableColums[index + 1] = {
+            "title": item.date,
+            "key": "date" + index
+          }
+          dataUv["date" + index] = item.value
+          changeUv["date" + index] = item.changeValue
+        })
+        res.data.pv.forEach((item, index)=> {
+          dataPv["date" + index] = item.value
+          changePv["date" + index] = item.changeValue
+        })
+        this.tableData= [dataUv,changeUv,dataPv,changePv]
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['unique view', 'unique view变化率'])
@@ -132,9 +158,10 @@ export default {
       })
       this.api_search_date(params)
     },
-    handleClickSearchType(props, id) {
+    handleClickSearchType(props, item) {
+      this.tableName = `分场景(${item.name})`
       const params = Object.assign({}, props, {
-        type: id
+        type: item.id
       })
       this.api_search_date(params)
     },

@@ -5,7 +5,7 @@
       <div :class='$style.tabsWrapper'>
         <div class="swiper-container swiper-container-mobile">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" :class="id === item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'mobile', id: item.id})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
+            <div class="swiper-slide" :class="id === item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'mobile', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
               <ui-icon size='96' :icon="'personal' + index" />
               <p style="font-size: 18px">{{item.name}}</p>
               <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -21,7 +21,7 @@
   <div class="echart-wrapper">
     <div ref='echart1' />
   </div>
-  <svg-icon-family />
+  <svg-icon-personal />
 </div>
 </template>
 
@@ -31,13 +31,14 @@ import {
   api_action_personal_echart
 } from '@/api'
 import swiper from 'Swiper/dist/js/swiper.min.js'
-import svgIconFamily from '@/components/svg-icon-family'
+import svgIconPersonal from '@/components/svg-icon-personal'
 import uiIcon from '@/components/ui-icon'
 import color from '@/lib/color'
 import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
+require('echarts/lib/chart/pie')
 // 引入提示框和title组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
@@ -48,7 +49,8 @@ export default {
     return {
       searchButtonsMobile: [],
       type: '',
-      id: ''
+      id: '',
+      typeName: ''
     }
   },
   methods: {
@@ -92,7 +94,7 @@ export default {
         xAxisData[index] = item.name
         yAxisData[index] = item.value
       })
-      var option = {
+      var optionBar = {
         xAxis: {
           data: xAxisData
         },
@@ -135,6 +137,58 @@ export default {
           data: yAxisData
         }]
       };
+      var optionPie = {
+        legend: {
+          data: legendData
+        },
+        tooltip: {
+          boundaryGap: '50%',
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        series: [{
+            name: this.typeName,
+              type:'pie',
+              radius: ['40%', '55%'],
+              color:['#2d8cf0', '#19be6b','#ff9900','#ed3f14', '#E406AD', '#4918EE'],
+              label: {
+                  normal: {
+                      formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                      backgroundColor: '#eee',
+                      borderColor: '#aaa',
+                      borderWidth: 1,
+                      borderRadius: 4,
+                      rich: {
+                          a: {
+                              color: '#999',
+                              lineHeight: 22,
+                              align: 'center'
+                          },
+                          hr: {
+                              borderColor: '#aaa',
+                              width: '100%',
+                              borderWidth: 0.5,
+                              height: 0
+                          },
+                          b: {
+                              fontSize: 16,
+                              lineHeight: 33
+                          },
+                          per: {
+                              color: '#eee',
+                              backgroundColor: '#334455',
+                              padding: [2, 4],
+                              borderRadius: 2
+                          }
+                      }
+                  }
+              },
+              data
+          }]
+      };
+      const option = data.length <= 6 ? optionPie : optionBar
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
@@ -147,6 +201,7 @@ export default {
       })
     },
     handleClickSearchType(props, params) {
+      this.typeName = params.typeName
       const _params = Object.assign({}, props, params)
       this.api_search_date(_params)
     },
@@ -168,7 +223,7 @@ export default {
   },
   components: {
     uiIcon,
-    svgIconFamily
+    svgIconPersonal
   }
 }
 </script>
