@@ -1,6 +1,6 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
   </search-wrapper>
   <div class="echart-wrapper">
     <div :ref="'echart' + item" v-for='item in echartNum' :class='$style.echartItem' />
@@ -25,7 +25,10 @@ require('echarts/lib/component/dataZoom')
 export default {
   data() {
     return {
-      echartNum: 0
+      echartNum: 0,
+      tableColums: [],
+      tableData: [],
+      tableName: '热点搜词'
     }
   },
   methods: {
@@ -90,7 +93,22 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
+      let _tableColums = []
+      let _tableData = [{}]
       api_public_hot(params).then(res => {
+        res.data.forEach((item, index)=> {
+          const tempIndex = index * 2 + 1
+          _tableColums[tempIndex - 1] = {title: item.name, key: `name${index}`}
+          _tableColums[tempIndex] = {title: `${item.name} - 数值`, key: `value${index}`}
+          item.values.forEach((_item, _index)=> {
+            let _obj = {}
+            _obj[`value${index}`] = _item.value
+            _obj[`name${index}`] = _item.name
+            _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+          })
+        })
+        this.tableColums = _tableColums
+        this.tableData = _tableData
         const _datas = res.data
         this.echartNum = _datas.length
         this.$nextTick(() => {

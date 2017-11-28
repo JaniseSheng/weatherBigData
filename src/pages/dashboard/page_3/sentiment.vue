@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
+    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
       <div class="search-button" slot-scope="props">
-        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
+        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -28,7 +28,10 @@ export default {
     return {
       searchButtons: null,
       echartNum: 0,
-      type: 0
+      type: 0,
+      tableColums: [{title: '日期', key: 'date'}],
+      tableData: [],
+      tableName: '舆情流量(全部)'
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -123,7 +126,20 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params){
+      let _tableColums = []
+      let _tableData = [{}]
       api_public_flow(params).then(res=> {
+        res.data.forEach((item, index)=> {
+          _tableColums[index] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
+          item.values.forEach((_item, _index)=> {
+            let _obj = {}
+            _obj.date = _item.date
+            _obj[`value${index}`] = `${_item.value_uv}/${_item.value_pv}`
+            _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+          })
+        })
+        this.tableColums = _tableColums
+        this.tableData = _tableData
         this.type = params.type
         const _datas = res.data
         this.echartNum = _datas.length
@@ -138,8 +154,10 @@ export default {
       const params = Object.assign({}, item, {type : 0})
       this.api_search_date(params)
     },
-    handleClickSearchType(props, id){
-      const params = Object.assign({}, props, {type : id})
+    handleClickSearchType(props, item){
+      this.tableName = `舆情流量(${item.name})`
+      console.log(this.tableName);
+      const params = Object.assign({}, props, {type : item.id})
       this.api_search_date(params)
     },
     changeSearch(items) {

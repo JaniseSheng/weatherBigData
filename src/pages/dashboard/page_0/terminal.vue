@@ -1,8 +1,8 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
     <div class="search-button" slot-scope="props">
-      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
+      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
@@ -35,7 +35,10 @@ export default {
   data() {
     return {
       searchButtons: null,
-      type: 0
+      type: 0,
+      tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv变化率', key: 'changeUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv变化率', key: 'changePvValue'}],
+      tableData: [],
+      tableName: '分终端(全部)'
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -124,7 +127,23 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
+      let _tableData = []
       api_total_terminal(params).then(res => {
+        res.data.uv.forEach((item, index)=> {
+          _tableData[index] = {
+            "date": item.date,
+            "uvValue": item.value,
+            "changeUvValue": item.changeValue
+          }
+        })
+        res.data.pv.forEach((item, index)=> {
+          _tableData[index] = Object.assign({}, _tableData[index], {
+            "date": item.date,
+            "pvValue": item.value,
+            "changePvValue": item.changeValue
+          })
+        })
+        this.tableData = _tableData
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
@@ -136,9 +155,10 @@ export default {
       })
       this.api_search_date(params)
     },
-    handleClickSearchType(props, id) {
+    handleClickSearchType(props, item) {
+      this.tableName = `分场景(${item.name})`
       const params = Object.assign({}, props, {
-        type: id
+        type: item.id
       })
       this.api_search_date(params)
     },

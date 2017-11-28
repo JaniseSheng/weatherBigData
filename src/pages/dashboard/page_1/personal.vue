@@ -1,6 +1,6 @@
 <template>
 <div>
-  <search-wrapper @changeSearch='changeSearch'>
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
     <div class="search-button" :class="$style['search-btns']" slot-scope="props">
       <div :class='$style.tabsWrapper'>
         <div class="swiper-container swiper-container-mobile">
@@ -50,7 +50,10 @@ export default {
       searchButtonsMobile: [],
       type: '',
       id: '',
-      typeName: ''
+      typeName: '',
+      tableColums: [],
+      tableData: [],
+      tableName: ''
     }
   },
   methods: {
@@ -197,11 +200,23 @@ export default {
       this.type = params.type
       this.id = params.id
       api_action_personal_echart(params).then(res => {
+        let _tableColums = []
+        let _tableData = {}
+        res.data.forEach((item, index)=> {
+          _tableColums[index] = {
+            title: item.name,
+            key: 'value' + index
+          }
+          _tableData[`value${index}`] = item.value
+        })
+        this.tableColums = _tableColums
+        this.tableData = [_tableData]
         this.chartInit(res.data, 'echart1')
       })
     },
     handleClickSearchType(props, params) {
       this.typeName = params.typeName
+      this.tableName = params.typeName //设置execl的文件名
       const _params = Object.assign({}, props, params)
       this.api_search_date(_params)
     },
