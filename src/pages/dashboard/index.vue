@@ -37,7 +37,7 @@
                       </template>
           <MenuItem name="2-1">网站流量监测</MenuItem>
           <MenuItem name="2-2">APP流量监测</MenuItem>
-          <MenuItem name="2-3">气象局自有栏目浏览监测</MenuItem>
+          <MenuItem name="2-3">气象局自有栏目流量监测</MenuItem>
         </Submenu>
         <Submenu name="3">
           <template slot="title">

@@ -143,6 +143,10 @@ export default {
       this.handleChangeSearch()
     },
     handleClickExport() {
+      if(!this.tableData) {
+        this.$Message.error('没有数据可以导出！')
+        return
+      }
       this.$refs.table.exportCsv({
         filename: this.tableName,
         columns: this.tableColums,

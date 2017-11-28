@@ -1,6 +1,6 @@
 <template>
 <div>
-  <search-wrapper @changeSearch='changeSearch'>
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
     <div class="search-button" :class="$style['search-btns']" slot-scope="props">
       <Tabs :class='$style.tabsWrapper'>
         <TabPane label="PC" name="name1">
@@ -67,7 +67,10 @@ export default {
       searchButtonsPc: [],
       type: '',
       id: '',
-      typeName: ''
+      typeName: '',
+      tableColums: [],
+      tableData: [],
+      tableName: ''
     }
   },
   methods: {
@@ -231,7 +234,19 @@ export default {
     api_search_date(params) {
       this.type = params.type
       this.id = params.id
+      this.tableName = `${params.typeName}(${params.type})` //设置execl的文件名
       api_action_family_echart(params).then(res => {
+        let _tableColums = []
+        let _tableData = {}
+        res.data.forEach((item, index)=> {
+          _tableColums[index] = {
+            title: item.name,
+            key: 'value' + index
+          }
+          _tableData[`value${index}`] = item.value
+        })
+        this.tableColums = _tableColums
+        this.tableData = [_tableData]
         this.chartInit(res.data, 'echart1')
       })
     },

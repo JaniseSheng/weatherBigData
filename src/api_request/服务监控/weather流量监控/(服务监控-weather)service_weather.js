@@ -32,24 +32,24 @@
       {
         "date": "2017-01-00",
         "value": 132, // uv值
-        "valueChange": 140 // uv变化率
+        "perValue": 140 //占比
       },
       .......{
         "date": "2017-01-06",
         "value": 404, // uv值
-        "valueChange": 140 // uv变化率
+        "perValue": 140 //占比
       }
     ],
     "pv": [
       {
         "date": "2017-01-00",
         "value": 132, // uv值
-        "valueChange": 140 // uv变化率
+        "perValue": 140 //占比
       },
       .......{
         "date": "2017-01-06",
         "value": 404, // uv值
-        "valueChange": 140 // uv变化率
+        "perValue": 140 //占比
       }
     ]
   },

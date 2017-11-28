@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch'>
+    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
       <div class="search-button" slot-scope="props">
-        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item.id)">{{item.name}}</Button>
+        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -30,13 +30,17 @@ export default {
   data(){
     return {
       searchButtons: null,
-      type: 0
+      type: 0,
+      tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}],
+      tableData: [],
+      tableName: ''
     }
   },
   beforeRouteEnter(to, from, next) {
     api_service_web_getTypeNames().then(res => {
       next(vm => {
         vm.searchButtons = res.data
+        vm.tableName = res.data && `网站流量监控(${res.data[0].name})`
       })
     })
   },
@@ -53,7 +57,7 @@ export default {
       data.forEach((item, index)=> {
         xAxisData[index] = item.date
         yAxisDataBar[index] = item.value
-        yAxisDataLine[index] = item.changeValue
+        yAxisDataLine[index] = item.perValue
       })
       var option = {
         xAxis: {
@@ -184,7 +188,29 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params){
+      let _tableData = []
       api_service_web(params).then(res=> {
+        res.data.uv.forEach((item, index)=> {
+          _tableData[index] = {
+            "date": item.date,
+            "uvValue": item.value,
+            "perUvValue": item.perValue
+          }
+        })
+        res.data.pv.forEach((item, index)=> {
+          _tableData[index] = Object.assign({}, _tableData[index], {
+            "date": item.date,
+            "pvValue": item.value,
+            "perPvValue": item.perValue
+          })
+        })
+        res.data.percentage.forEach((item, index)=> {
+          _tableData[index] = Object.assign({}, _tableData[index], {
+            "date": item.date,
+            "percentage": item.value
+          })
+        })
+        this.tableData = _tableData
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
@@ -195,8 +221,9 @@ export default {
       const params = Object.assign({}, item, {type : 0})
       this.api_search_date(params)
     },
-    handleClickSearchType(props, id){
-      const params = Object.assign({}, props, {type : id})
+    handleClickSearchType(props, item){
+      this.tableName = `网站流量监控(${item.name})`
+      const params = Object.assign({}, props, {type : item.id})
       this.api_search_date(params)
     },
     changeSearch(items) {

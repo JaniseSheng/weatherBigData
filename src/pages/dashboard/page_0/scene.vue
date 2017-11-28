@@ -32,7 +32,7 @@ export default {
     return {
       searchButtons: null,
       type: 0,
-      tableColums: [],
+      tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv变化率', key: 'changeUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv变化率', key: 'changePvValue'}],
       tableData: [],
       tableName: '分场景(室内)'
     }
@@ -123,30 +123,23 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
-      this.tableColums = []
-      this.tableData = []
+      let _tableData = []
       api_total_scene(params).then(res => {
-        this.tableColums[0] = {
-          title: '类型',
-          key: 'type'
-        }
-        let dataUv = {type: 'UV'}
-        let changeUv = {type: 'UV-变化率'}
-        let dataPv = {type: 'PV'}
-        let changePv = {type: 'PV-变化率'}
         res.data.uv.forEach((item, index)=> {
-          this.tableColums[index + 1] = {
-            "title": item.date,
-            "key": "date" + index
+          _tableData[index] = {
+            "date": item.date,
+            "uvValue": item.value,
+            "changeUvValue": item.changeValue
           }
-          dataUv["date" + index] = item.value
-          changeUv["date" + index] = item.changeValue
         })
         res.data.pv.forEach((item, index)=> {
-          dataPv["date" + index] = item.value
-          changePv["date" + index] = item.changeValue
+          _tableData[index] = Object.assign({}, _tableData[index], {
+            "date": item.date,
+            "pvValue": item.value,
+            "changePvValue": item.changeValue
+          })
         })
-        this.tableData= [dataUv,changeUv,dataPv,changePv]
+        this.tableData = _tableData
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['unique view', 'unique view变化率'])
