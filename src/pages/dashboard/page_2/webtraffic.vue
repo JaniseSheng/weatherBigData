@@ -63,7 +63,42 @@ export default {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: [{
+            type: 'value',
+            name: seriesName[0],
+            splitLine: {
+              lineStyle: {
+                color: barColor,
+                opacity: 1
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: barColor
+              }
+            },
+          },
+          {
+            type: 'value',
+            name: seriesName[1],
+            position: 'right',
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: lineColor,
+                opacity: 0.6
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: lineColor
+              }
+            },
+            axisLabel: {
+              formatter: '{value} %'
+            }
+          }
+        ],
         legend: {
           data: legendData
         },
@@ -71,8 +106,9 @@ export default {
           boundaryGap: '50%',
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: 'cross' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
@@ -103,6 +139,7 @@ export default {
         }, {
           name: seriesName[1],
           type: 'line',
+          yAxisIndex: 1,
           itemStyle: {
             normal: {
               borderWidth: 6,
@@ -139,7 +176,19 @@ export default {
           boundaryGap : false,
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: {
+          splitLine: {
+            lineStyle: {
+              color: lineColor,
+              opacity: .3
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: lineColor
+            }
+          },
+        },
         legend: {
           data: legendData
         },

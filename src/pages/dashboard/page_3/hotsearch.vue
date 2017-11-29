@@ -1,3 +1,4 @@
+
 <template>
 <div class="">
   <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >

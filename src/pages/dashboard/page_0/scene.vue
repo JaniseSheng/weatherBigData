@@ -1,6 +1,6 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
+  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
     <div class="search-button" slot-scope="props">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
     </div>
@@ -32,7 +32,22 @@ export default {
     return {
       searchButtons: null,
       type: 0,
-      tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv变化率', key: 'changeUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv变化率', key: 'changePvValue'}],
+      tableColums: [{
+        title: '日期',
+        key: 'date'
+      }, {
+        title: 'uv',
+        key: 'uvValue'
+      }, {
+        title: 'uv变化率',
+        key: 'changeUvValue'
+      }, {
+        title: 'pv',
+        key: 'pvValue'
+      }, {
+        title: 'pv变化率',
+        key: 'changePvValue'
+      }],
       tableData: [],
       tableName: '分场景(室内)'
     }
@@ -63,7 +78,42 @@ export default {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: [{
+            type: 'value',
+            name: seriesName[0],
+            splitLine: {
+              lineStyle: {
+                color: barColor,
+                opacity: 1
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: barColor
+              }
+            },
+          },
+          {
+            type: 'value',
+            name: seriesName[1],
+            position: 'right',
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: lineColor,
+                opacity: 0.6
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: lineColor
+              }
+            },
+            axisLabel: {
+              formatter: '{value} %'
+            }
+          }
+        ],
         legend: {
           data: legendData
         },
@@ -71,8 +121,9 @@ export default {
           boundaryGap: '50%',
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: 'cross' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
@@ -103,6 +154,7 @@ export default {
         }, {
           name: seriesName[1],
           type: 'line',
+          yAxisIndex: 1,
           itemStyle: {
             normal: {
               borderWidth: 6,
@@ -125,14 +177,14 @@ export default {
     api_search_date(params) {
       let _tableData = []
       api_total_scene(params).then(res => {
-        res.data.uv.forEach((item, index)=> {
+        res.data.uv.forEach((item, index) => {
           _tableData[index] = {
             "date": item.date,
             "uvValue": item.value,
             "changeUvValue": item.changeValue
           }
         })
-        res.data.pv.forEach((item, index)=> {
+        res.data.pv.forEach((item, index) => {
           _tableData[index] = Object.assign({}, _tableData[index], {
             "date": item.date,
             "pvValue": item.value,

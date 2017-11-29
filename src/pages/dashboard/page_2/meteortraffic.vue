@@ -63,7 +63,42 @@ export default {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: [{
+            type: 'value',
+            name: seriesName[0],
+            splitLine: {
+              lineStyle: {
+                color: barColor,
+                opacity: 1
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: barColor
+              }
+            },
+          },
+          {
+            type: 'value',
+            name: seriesName[1],
+            position: 'right',
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: lineColor,
+                opacity: 0.6
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: lineColor
+              }
+            },
+            axisLabel: {
+              formatter: '{value} %'
+            }
+          }
+        ],
         legend: {
           data: legendData
         },
@@ -103,6 +138,7 @@ export default {
         }, {
           name: seriesName[1],
           type: 'line',
+          yAxisIndex: 1,
           itemStyle: {
             normal: {
               borderWidth: 6,
@@ -139,7 +175,19 @@ export default {
           boundaryGap : false,
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: {
+          splitLine: {
+            lineStyle: {
+              color: lineColor,
+              opacity: .3
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: lineColor
+            }
+          },
+        },
         legend: {
           data: legendData
         },

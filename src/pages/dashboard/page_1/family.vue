@@ -116,7 +116,7 @@ export default {
         })
       })
     },
-    chartInit(data, refName, barColor = color.infoColor, seriesName = '') {
+    chartInit(data, refName, barColor = color.infoColor, seriesName = this.typeName) {
       if (this.myChart) {
         this.myChart.clear()
         this.myChart.dispose()
@@ -136,7 +136,20 @@ export default {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: {
+            type: 'value',
+            name: seriesName + '(户数)',
+            splitLine: {
+              lineStyle: {
+                color: barColor
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: barColor
+              }
+            }
+          },
         legend: {
           data: legendData
         },
