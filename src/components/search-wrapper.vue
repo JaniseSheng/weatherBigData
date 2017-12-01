@@ -2,20 +2,18 @@
 <div :class="$style['search-wrapper']">
   <Table ref='table' style="display: none" />
   <div class="search_geader">
-    <Row style="display: inline-block;width: 100%;">
-      <Col span='6' style="text-align: left">
-      <span style="display: inline-block" @click='modal1 = true'>
-          <Input :value="areaName" readonly icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
+    <div style="display: inline-block;width: 100%; text-align: left">
+      <div class="search-wrapper" style="display: inline-block; text-align: left">
+        <span style="display: inline-block" @click='modal1 = true'>
+            <Input :value="areaName" readonly icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
         </span>
-      </Col>
-      <Col span='12'>
-      <DatePicker :value='month' :clearable=false @on-change='handleChangeMonth' type="month" :options="monthOptions" placeholder="选择月份" style="width: 200px"></DatePicker>
-      <DatePicker :value='dataRange' ref='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
-      </Col>
-      <Col span='6' style="text-align: right">
-      <Button type='success' @click='handleClickExport'>导出excel</Button>
-      </Col>
-    </Row>
+        <DatePicker :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
+        至
+        <DatePicker :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
+        <DatePicker :value='dataRange' ref='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+      </div>
+      <Button type='success' @click='handleClickExport' style="float: right" >导出excel</Button>
+    </div>
     <Modal v-model="modal1" width="1200" title="区域选择">
       <ul style='max-height: 500px; overflow: scroll'>
         <li v-for='(area, index) in areas' :key="'area' + index" style="margin-bottom: 6px">
@@ -45,7 +43,8 @@ import {
   currMonth_dataRange,
   currMonthDatas,
   getCurMonth,
-  dateDiff
+  dateDiff,
+  getMct
 } from '@/lib/date'
 
 export default {
@@ -56,12 +55,18 @@ export default {
       },
       areaName: '普陀区', //选择的区域
       areaId: '001', //选择的区域
+      monthRange: ['',''], // 月范围
       dataRange: currMonth_dataRange(),
       month: getCurMonth(),
       currMonthDatas: 30,
       areas,
       modal1: false, //是否选择区域
-      monthOptions: {
+      monthOptionStart: {
+        disabledDate(date) {
+          return date && (date.valueOf() > Date.now());
+        }
+      },
+      monthOptionEnd: {
         disabledDate(date) {
           return date && (date.valueOf() > Date.now());
         }
@@ -101,7 +106,24 @@ export default {
       }
     }
   },
-  props: ['tableColums', 'tableData', 'tableName'],
+  props: {
+    tableColums: {
+      default: [],
+      type: Array
+    },
+    tableData: {
+      default: [],
+      type: Array
+    },
+    tableName: {
+      default: '',
+      type: String
+    },
+    monthRangePromise: {
+      default: 5,
+      type: [String, Number]
+    }
+  },
   created() {
     this.$emit('searchInit', {
       areaName: this.areaName,
@@ -129,9 +151,17 @@ export default {
       this.modal1 = false
       this.handleChangeSearch()
     },
-    handleChangeMonth(val) {
-      this.dataRange = currMonth_dataRange(val)
-      this.handleChangeSearch()
+    handleChangeMonthStart(val) {
+      this.monthRange[0] = val
+      if (this.monthRange[1] && this.monthRange[0]) {
+        this.dataRange = []
+        getMct(this.monthRange[0], this.monthRange[1])
+      }
+    },
+    handleChangeMonthEnd(val) {
+      console.log(this.monthRangePromise);
+      this.monthRange[1] = val
+      this.monthRange[1] && this.monthRange[0] && (this.dataRange = [])
     },
     handleChangeDataRange(val) {
       const selectDatas = dateDiff(val[0], val[1])
@@ -140,7 +170,7 @@ export default {
         return false
       }
       this.dataRange = val
-      this.handleChangeSearch()
+      this.monthRange = []
     },
     handleClickExport() {
       if(!this.tableData) {
