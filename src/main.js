@@ -14,14 +14,15 @@ Vue.use(iView)
 Vue.component('searchWrapper', searchWrapper)
 Vue.config.productionTip = false
 
-// router.beforeEach((to, from, next) => {
-//   if ((to.name !== 'login') && !storage.get('islogin')) {
-//     next({path: 'login'});
-//   } else {
-//     next();
-//   }
-// })
-/* eslint-disable no-new */
+router.beforeEach((to, from, next) => {
+  console.log(storage.get('weatherIsLogin'));
+  if ((to.name !== 'login') && !storage.get('weatherIsLogin')) {
+    next({path: 'login'});
+  } else {
+    next();
+  }
+})
+
 new Vue({
   el: '#app',
   router,

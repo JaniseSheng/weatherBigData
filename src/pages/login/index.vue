@@ -34,7 +34,7 @@
 import {
   empty
 } from '@/lib/validator'
-import {api_login} from '@/api'
+import storage from '@/lib/storagejs'
 export default {
   data() {
     return {
@@ -43,28 +43,66 @@ export default {
         userName: '',
         passWord: ''
       },
+      userMenus: [{
+          userName: 'admin001',
+          passWord: '1234561'
+        },
+        {
+          userName: 'admin002',
+          passWord: '1234562'
+        },
+        {
+          userName: 'admin003',
+          passWord: '1234563'
+        },
+        {
+          userName: 'admin004',
+          passWord: '1234564'
+        },
+        {
+          userName: 'admin005',
+          passWord: '1234565'
+        }
+      ],
       ruleforms: {
         userName: empty('账号不能为空'),
         passWord: empty('密码不能为空')
       }
     }
   },
+  created(){
+  //判断是否自动登录
+  this.forms.userName = storage.get('mobile')
+  this.forms.passWord = storage.get('passWord')
+  if (this.forms.userName) {
+    this.isRemember = true;
+  }
+},
   methods: {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          api_login(this.forms).then(res=> {
-            if (res.success) {
-              this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
-              this.$router.push({
-                name: '0-1'
-              })
-            } else {
-              this.$Message.error('账号密码错误！');
-            }
+          const _filterObj = this.userMenus.find(item => {
+            return item.userName == this.forms.userName && item.passWord == this.forms.passWord
           })
+          if (_filterObj) {
+            storage.set('weatherIsLogin', true);
+            this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
+            if (this.isRemember) {
+              storage.set('mobile', this.forms.userName);
+              storage.set('passWord', this.forms.passWord);
+            } else {
+              storage.remove('mobile');
+              storage.remove('passWord');
+            }
+            this.$router.push({
+              name: '0-1'
+            })
+          } else {
+            this.$Message.error('账号密码错误');
+          }
         } else {
-          this.$Message.error('请填写正确的账号或密码');
+          this.$Message.error('请输入账号或密码');
         }
       })
     }
