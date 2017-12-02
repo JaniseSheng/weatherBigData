@@ -7,12 +7,17 @@
         <span style="display: inline-block" @click='modal1 = true'>
             <Input :value="areaName" readonly icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
         </span>
-        <DatePicker :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
+        <DatePicker ref='monthPickerStart' :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
         至
-        <DatePicker :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
-        <DatePicker :value='dataRange' ref='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+        <DatePicker ref='monthPickerEnd' :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
+        /
+        <DatePicker :value='dataRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </div>
-      <Button type='success' @click='handleClickExport' style="float: right" >导出excel</Button>
+      <div style="float: right; text-align: right">
+        <Button type='success' icon='search' style="width: 120px">搜索</Button>
+        <Button type='info' @click='handleClickExport' >导出excel</Button>
+      </div>
+
     </div>
     <Modal v-model="modal1" width="1200" title="区域选择">
       <ul style='max-height: 500px; overflow: scroll'>
@@ -56,7 +61,7 @@ export default {
       areaName: '普陀区', //选择的区域
       areaId: '001', //选择的区域
       monthRange: ['',''], // 月范围
-      dataRange: currMonth_dataRange(),
+      dataRange: [],
       month: getCurMonth(),
       currMonthDatas: 30,
       areas,
@@ -155,18 +160,37 @@ export default {
       this.monthRange[0] = val
       if (this.monthRange[1] && this.monthRange[0]) {
         this.dataRange = []
-        getMct(this.monthRange[0], this.monthRange[1])
+        const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
+        if (monthIndex > this.monthRangePromise) {
+          this.$Message.error('最多查询5个月的是数据')
+          this.monthRange[0] = ''
+          this.monthRange[1] = ''
+          this.$refs.monthPickerStart.currentValue = ''
+          this.$refs.monthPickerEnd.currentValue = ''
+        }
       }
     },
     handleChangeMonthEnd(val) {
-      console.log(this.monthRangePromise);
       this.monthRange[1] = val
+      if (this.monthRange[1] && this.monthRange[0]) {
+        this.dataRange = []
+        const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
+        if (monthIndex > this.monthRangePromise) {
+          this.$Message.error('最多查询5个月的是数据')
+          this.monthRange[0] = ''
+          this.monthRange[1] = ''
+          this.$refs.monthPickerStart.currentValue = ''
+          this.$refs.monthPickerEnd.currentValue = ''
+        }
+      }
+
       this.monthRange[1] && this.monthRange[0] && (this.dataRange = [])
     },
     handleChangeDataRange(val) {
       const selectDatas = dateDiff(val[0], val[1])
       if (selectDatas > 31) {
         this.$Message.error('最大查询天数为31天')
+        this.dataRange = []
         return false
       }
       this.dataRange = val
