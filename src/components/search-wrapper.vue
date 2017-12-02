@@ -4,8 +4,8 @@
   <div class="search_geader">
     <div style="display: inline-block;width: 100%; text-align: left">
       <div class="search-wrapper" style="display: inline-block; text-align: left">
-        <span style="display: inline-block" @click='modal1 = true'>
-            <Input :value="areaName" readonly icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
+        <span style="display: inline-block" @click='handleOpenArea'>
+            <Input :value="areaName" readonly :disabled='!isArea' icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
         </span>
         <DatePicker ref='monthPickerStart' :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
         至
@@ -23,10 +23,10 @@
       <ul style='max-height: 500px; overflow: scroll'>
         <li v-for='(area, index) in areas' :key="'area' + index" style="margin-bottom: 6px">
           <p>
-            <Button type="success" @click="handleClickArea(area)">{{area.name}}</Button>
+            <Button type="success" @click="handleClickArea(area.name)">{{area.name}}</Button>
           </p>
           <p :class="$style['item-button']">
-            <Button type="text" v-for="(item, index) in area.childrens" :style="item.id == areaId ? buttonActiveStyle : ''" @click="handleClickAreaItem(item)" :key="'button' + index">{{item.name}}</Button>
+            <Button type="text" v-for="(item, index) in area.childrens" :style="(area.name + '/' + item) == areaName ? buttonActiveStyle : ''" @click="handleClickAreaItem(area.name + '/' + item)" :key="'button' + index">{{item}}</Button>
           </p>
         </li>
       </ul>
@@ -34,7 +34,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot :dataRange='dataRange' :areaName='areaName' :areaId='areaId'>
+    <slot :dataRange='dataRange' :areaName='areaName'>
     </slot>
   </div>
 </div>
@@ -59,7 +59,6 @@ export default {
         color: '#19be6b'
       },
       areaName: '普陀区', //选择的区域
-      areaId: '001', //选择的区域
       monthRange: ['',''], // 月范围
       dataRange: [],
       month: getCurMonth(),
@@ -127,34 +126,30 @@ export default {
     monthRangePromise: {
       default: 5,
       type: [String, Number]
+    },
+    isArea: {
+      default: true,
+      type: Boolean
     }
-  },
-  created() {
-    this.$emit('searchInit', {
-      areaName: this.areaName,
-      areaId: this.areaId,
-      dataRange: this.dataRange
-    })
   },
   methods: {
     handleChangeSearch() {
       this.$emit('changeSearch', {
         areaName: this.areaName,
-        areaId: this.areaId,
         dataRange: this.dataRange
       })
     },
+    handleOpenArea(){
+      if (!this.isArea) return
+      this.modal1 = true
+    },
     handleClickArea(val) {
-      this.areaName = val.name
-      this.areaId = val.id
+      this.areaName = val
       this.modal1 = false
-      this.handleChangeSearch()
     },
     handleClickAreaItem(val) {
-      this.areaName = val.name
-      this.areaId = val.id
+      this.areaName = val
       this.modal1 = false
-      this.handleChangeSearch()
     },
     handleChangeMonthStart(val) {
       this.monthRange[0] = val

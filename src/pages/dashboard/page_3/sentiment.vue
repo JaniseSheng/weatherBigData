@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
+    <search-wrapper ref='searchWrapper' @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false >
       <div class="search-button" slot-scope="props">
         <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
       </div>
@@ -40,6 +40,9 @@ export default {
         vm.searchButtons = res.data
       })
     })
+  },
+  mounted(){
+    this.$refs.searchWrapper.areaName = ''
   },
   methods: {
     chartInit(data, refName, lineColor1 = color.infoColor, lineColor2 = color.warningColor, seriesName = ['unique view', 'page view']) {
