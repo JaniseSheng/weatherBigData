@@ -35,7 +35,9 @@
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
-    <div ref='echart1' />
+    <div class="echart-content">
+      <div ref='echart1' />
+    </div>
   </div>
   <svg-icon-family />
 </div>

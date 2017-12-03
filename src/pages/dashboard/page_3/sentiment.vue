@@ -6,7 +6,9 @@
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
-      <div :ref="'echart' + item" :class="'echart' + item" v-for='item in echartNum'/>
+      <div class="echart-content">
+        <div :ref="'echart' + item" :class="'echart' + item" v-for='item in echartNum'/>
+      </div>
     </div>
   </div>
 </template>

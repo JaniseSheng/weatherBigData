@@ -4,7 +4,9 @@
   <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
   </search-wrapper>
   <div class="echart-wrapper">
-    <div :ref="'echart' + item" v-for='item in echartNum' :class='$style.echartItem' />
+    <div class="echart-content">
+      <div :ref="'echart' + item" v-for='item in echartNum' :class='$style.echartItem' />
+    </div>
   </div>
 </div>
 </template>

@@ -6,8 +6,10 @@
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
-    <div ref='echart1' />
-    <div ref='echart2' />
+    <div class="echart-content">
+      <div ref='echart1' />
+      <div ref='echart2' />
+    </div>
   </div>
 </div>
 </template>

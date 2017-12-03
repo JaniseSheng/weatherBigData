@@ -14,13 +14,16 @@
         <DatePicker :value='dataRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </div>
       <div style="float: right; text-align: right">
-        <Button type='success' icon='search' style="width: 120px">搜索</Button>
-        <Button type='info' @click='handleClickExport' >导出excel</Button>
+        <Button type='success' icon='search' style="width: 120px" @click='handleClickSearch'>搜索</Button>
+        <Button type='info' @click='handleClickExport'>导出excel</Button>
       </div>
 
     </div>
     <Modal v-model="modal1" width="1200" title="区域选择">
       <ul style='max-height: 500px; overflow: scroll'>
+        <p>
+          <Button type="info" style="margin-bottom: 24px; width: 180px" @click="handleSelectShangHai('上海')">上海</Button>
+        </p>
         <li v-for='(area, index) in areas' :key="'area' + index" style="margin-bottom: 6px">
           <p>
             <Button type="success" @click="handleClickArea(area.name)">{{area.name}}</Button>
@@ -34,7 +37,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot :dataRange='dataRange' :areaName='areaName'>
+    <slot :dataRange='dataRange' :areaName='areaName' :monthRange='monthRange'>
     </slot>
   </div>
 </div>
@@ -46,7 +49,6 @@ import {
 } from '@/lib/enum.js'
 import {
   currMonth_dataRange,
-  currMonthDatas,
   getCurMonth,
   dateDiff,
   getMct
@@ -58,11 +60,9 @@ export default {
       buttonActiveStyle: {
         color: '#19be6b'
       },
-      areaName: '普陀区', //选择的区域
-      monthRange: ['',''], // 月范围
-      dataRange: [],
-      month: getCurMonth(),
-      currMonthDatas: 30,
+      areaName: '', //选择的区域
+      monthRange: [], // 月范围
+      dataRange: [], // 天范围
       areas,
       modal1: false, //是否选择区域
       monthOptionStart: {
@@ -133,15 +133,20 @@ export default {
     }
   },
   methods: {
-    handleChangeSearch() {
+    handleClickSearch() {
       this.$emit('changeSearch', {
         areaName: this.areaName,
-        dataRange: this.dataRange
+        dataRange: this.dataRange,
+        monthRange: this.monthRange
       })
     },
-    handleOpenArea(){
+    handleOpenArea() {
       if (!this.isArea) return
       this.modal1 = true
+    },
+    handleSelectShangHai(val) {
+      this.areaName = val
+      this.modal1 = false
     },
     handleClickArea(val) {
       this.areaName = val
@@ -192,7 +197,7 @@ export default {
       this.monthRange = []
     },
     handleClickExport() {
-      if(!this.tableData) {
+      if (!this.tableData) {
         this.$Message.error('没有数据可以导出！')
         return
       }
