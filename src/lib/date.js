@@ -1,7 +1,7 @@
 /**
 * 返回月份的时间段
 **/
-export const currMonth_dataRange = (_curDate = '') => {
+export const currMonth_dateRange = (_curDate = '') => {
   const now = new Date();
   const _year = now.getFullYear();
   const _month = now.getMonth() + 1;

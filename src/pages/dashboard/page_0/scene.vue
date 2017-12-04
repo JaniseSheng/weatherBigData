@@ -196,7 +196,7 @@ export default {
         this.tableData = _tableData
         this.type = params.type
         this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['unique view', 'unique view变化率'])
+        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
       })
     },
     searchInit(item) {

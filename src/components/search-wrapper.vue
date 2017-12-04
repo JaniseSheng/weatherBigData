@@ -11,7 +11,7 @@
         至
         <DatePicker ref='monthPickerEnd' :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
         /
-        <DatePicker :value='dataRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangeDataRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+        <DatePicker :value='dateRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangedateRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </div>
       <div style="float: right; text-align: right">
         <Button type='success' icon='search' style="width: 120px" @click='handleClickSearch'>搜索</Button>
@@ -37,7 +37,7 @@
     </Modal>
   </div>
   <div style="text-align: left;">
-    <slot :dataRange='dataRange' :areaName='areaName' :monthRange='monthRange'>
+    <slot>
     </slot>
   </div>
 </div>
@@ -48,21 +48,21 @@ import {
   areas
 } from '@/lib/enum.js'
 import {
-  currMonth_dataRange,
   getCurMonth,
   dateDiff,
   getMct
 } from '@/lib/date'
-
+import _Array from 'lodash/Array'
 export default {
   data() {
     return {
+      _Array,
       buttonActiveStyle: {
         color: '#19be6b'
       },
       areaName: '', //选择的区域
       monthRange: [], // 月范围
-      dataRange: [], // 天范围
+      dateRange: [], // 天范围
       areas,
       modal1: false, //是否选择区域
       monthOptionStart: {
@@ -134,10 +134,18 @@ export default {
   },
   methods: {
     handleClickSearch() {
+      if (!this.areaName) {
+        this.$Message.error('您还没有选择行政区域')
+        return
+      }
+      if (!((this.monthRange[0] && this.monthRange[1]) || (this.dateRange[0] && this.dateRange[1]))) {
+        this.$Message.error('您还没有选择日期范围')
+        return
+      }
       this.$emit('changeSearch', {
         areaName: this.areaName,
-        dataRange: this.dataRange,
-        monthRange: this.monthRange
+        dateRange: _Array.compact(this.dateRange),
+        monthRange: _Array.compact(this.monthRange)
       })
     },
     handleOpenArea() {
@@ -159,41 +167,41 @@ export default {
     handleChangeMonthStart(val) {
       this.monthRange[0] = val
       if (this.monthRange[1] && this.monthRange[0]) {
-        this.dataRange = []
         const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
         if (monthIndex > this.monthRangePromise) {
           this.$Message.error('最多查询5个月的是数据')
-          this.monthRange[0] = ''
-          this.monthRange[1] = ''
           this.$refs.monthPickerStart.currentValue = ''
           this.$refs.monthPickerEnd.currentValue = ''
+          this.monthRange = []
+          return
         }
+        this.dateRange = []
       }
     },
     handleChangeMonthEnd(val) {
       this.monthRange[1] = val
       if (this.monthRange[1] && this.monthRange[0]) {
-        this.dataRange = []
         const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
         if (monthIndex > this.monthRangePromise) {
           this.$Message.error('最多查询5个月的是数据')
-          this.monthRange[0] = ''
-          this.monthRange[1] = ''
           this.$refs.monthPickerStart.currentValue = ''
           this.$refs.monthPickerEnd.currentValue = ''
+          this.monthRange = []
+          return
         }
+        this.dateRange = []
       }
-
-      this.monthRange[1] && this.monthRange[0] && (this.dataRange = [])
     },
-    handleChangeDataRange(val) {
+    handleChangedateRange(val) {
       const selectDatas = dateDiff(val[0], val[1])
       if (selectDatas > 31) {
         this.$Message.error('最大查询天数为31天')
-        this.dataRange = []
+        this.dateRange = []
         return false
       }
-      this.dataRange = val
+      this.dateRange = val
+      this.$refs.monthPickerStart.currentValue = ''
+      this.$refs.monthPickerEnd.currentValue = ''
       this.monthRange = []
     },
     handleClickExport() {

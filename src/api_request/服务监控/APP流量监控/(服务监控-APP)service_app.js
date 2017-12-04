@@ -6,10 +6,11 @@
 {
   areaId : '001_0' (查看枚举表)
   areaName : '长寿路' （查看枚举表）
-  dataRange : [
+  dateRange : [
     ‘2017 - 01 - 01 ’,
     ‘2017 - 01 - 31 ’
-  ]
+  ],
+  monthRange: ["2017-01", "2017-03"],
   type : 0; // 根据  接口(service_app_getTypeNames)返回的type
 }
 

@@ -6,10 +6,11 @@
 {
   areaId : '001_0' (查看枚举表)
   areaName : '长寿路' （查看枚举表）
-  dataRange : [
+  dateRange : [
     ‘2017 - 01 - 01 ’,
     ‘2017 - 01 - 31 ’
-  ]
+  ],
+  monthRange: ["2017-01", "2017-03"],
 }
 
 请求地址 ： http : //127.0.0.1:8080/action_personal
