@@ -189,7 +189,7 @@ export default {
       })
     },
     handleClickSearchType(item) {
-      this.tableName = `分场景(${item.name})`
+      this.tableName = `分终端(${item.name})`
       this.type = item.id
     },
     changeSearch(items) {

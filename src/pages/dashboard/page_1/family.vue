@@ -34,8 +34,8 @@
       </Tabs>
     </div>
   </search-wrapper>
-  <div class="echart-wrapper">
-    <div class="echart-content">
+  <div class="echart-wrapper-s">
+    <div class="echart-content-s">
       <div ref='echart1' />
     </div>
   </div>

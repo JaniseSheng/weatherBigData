@@ -199,18 +199,9 @@ export default {
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
       })
     },
-    searchInit(item) {
-      const params = Object.assign({}, item, {
-        type: 0
-      })
-      this.api_search_date(params)
-    },
     handleClickSearchType(props, item) {
       this.tableName = `分场景(${item.name})`
-      const params = Object.assign({}, props, {
-        type: item.id
-      })
-      this.api_search_date(params)
+      this.type = item.id
     },
     changeSearch(items) {
       const params = Object.assign({}, items, {
