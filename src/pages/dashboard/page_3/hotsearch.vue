@@ -4,7 +4,7 @@
   <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
   </search-wrapper>
   <div class="echart-wrapper">
-    <div class="echart-content">
+    <div class="echart-content" :class="$style['echart-content']">
       <div :ref="'echart' + item" v-for='item in echartNum' :class='$style.echartItem' />
     </div>
   </div>
@@ -141,6 +141,13 @@ export default {
 </style>
 
 <style lang="less" module>
+.echart-content {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
 .echartItem {
     padding-top: 12px;
     width: 50%;

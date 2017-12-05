@@ -2,7 +2,7 @@
 <div id="app">
   <router-view/>
   <template v-if='isSHowLoading'>
-    <div class="loading-wrapper" v-if='loading.isLoading'>
+    <div class="loading-wrapper" v-show='loading.isLoading'>
       <div class="loading-block">
         <Button style="position: absolute;right: -12px;top: -12px;" type="primary" shape="circle" icon="close-round" @click='handleClickClose' ></Button>
         <img style="width: 100%" src="./assets/Cube.gif" alt="">

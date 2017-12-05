@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     handleClickSearch() {
-      if (!this.areaName) {
+      if (!this.areaName && this.isArea) {
         this.$Message.error('您还没有选择行政区域')
         return
       }
@@ -168,8 +168,8 @@ export default {
       this.monthRange[0] = val
       if (this.monthRange[1] && this.monthRange[0]) {
         const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
-        if (monthIndex > this.monthRangePromise) {
-          this.$Message.error('最多查询5个月的是数据')
+        if (monthIndex >= this.monthRangePromise) {
+          this.$Message.error(`最多查询${this.monthRangePromise}个月的是数据`)
           this.$refs.monthPickerStart.currentValue = ''
           this.$refs.monthPickerEnd.currentValue = ''
           this.monthRange = []
@@ -182,8 +182,8 @@ export default {
       this.monthRange[1] = val
       if (this.monthRange[1] && this.monthRange[0]) {
         const monthIndex = getMct(this.monthRange[0], this.monthRange[1])
-        if (monthIndex > this.monthRangePromise) {
-          this.$Message.error('最多查询5个月的是数据')
+        if (monthIndex >= this.monthRangePromise) {
+          this.$Message.error(`最多查询${this.monthRangePromise}个月的是数据`)
           this.$refs.monthPickerStart.currentValue = ''
           this.$refs.monthPickerEnd.currentValue = ''
           this.monthRange = []

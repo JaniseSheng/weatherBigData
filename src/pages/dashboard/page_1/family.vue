@@ -1,6 +1,6 @@
 <template>
 <div>
-  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" monthRangePromise='3'>
     <div class="search-button" :class="$style['search-btns']">
       <Tabs :class='$style.tabsWrapper'>
         <TabPane label="PC" name="name1">
@@ -267,6 +267,14 @@ export default {
       this.type = params.type
       this.id = params.id
       this.tableName = `${params.typeName}(${params.type})` //设置execl的文件名
+
+      // swiper to slide
+      if (params.type = 'pc') {
+        this.swiperPc.slideTo(params.id)
+      }
+      if (params.type = 'iptv') {
+        this.swiperIptv.slideTo(params.id)
+      }
     },
     changeSearch(items) {
       const params = Object.assign({}, items, {

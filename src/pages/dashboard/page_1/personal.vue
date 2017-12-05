@@ -1,6 +1,6 @@
 <template>
 <div>
-  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" monthRangePromise='3'>
     <div class="search-button" :class="$style['search-btns']">
       <div :class='$style.tabsWrapper'>
         <div class="swiper-container swiper-container-mobile">
@@ -232,6 +232,8 @@ export default {
       this.id = params.id
       this.typeName = params.typeName
       this.tableName = params.typeName //设置execl的文件名
+      // swiper to slide
+      this.swiperMobile.slideTo(params.id)
     },
     changeSearch(items) {
       const params = Object.assign({}, items, {

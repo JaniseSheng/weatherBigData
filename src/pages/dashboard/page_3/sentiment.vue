@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <search-wrapper ref='searchWrapper' @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false >
-      <div class="search-button" slot-scope="props">
-        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
+    <search-wrapper ref='searchWrapper' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false >
+      <div class="search-button">
+        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -155,15 +155,9 @@ export default {
         })
       })
     },
-    searchInit(item){
-      const params = Object.assign({}, item, {type : 0})
-      this.api_search_date(params)
-    },
-    handleClickSearchType(props, item){
+    handleClickSearchType(item){
       this.tableName = `舆情流量(${item.name})`
-      console.log(this.tableName);
-      const params = Object.assign({}, props, {type : item.id})
-      this.api_search_date(params)
+      this.type = item.id
     },
     changeSearch(items) {
       const params = Object.assign({}, items, {
