@@ -1,12 +1,12 @@
 <template>
 <div>
   <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
-    <div class="search-button" :class="$style['search-btns']" slot-scope="props">
+    <div class="search-button" :class="$style['search-btns']">
       <Tabs :class='$style.tabsWrapper'>
         <TabPane label="PC" name="name1">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p style="font-size: 18px">{{item.name}}</p>
                 <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -20,7 +20,7 @@
         <TabPane label="IPTV" name="name2">
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType(props, {type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
@@ -67,8 +67,8 @@ export default {
     return {
       searchButtonsIptv: [],
       searchButtonsPc: [],
-      type: '',
-      id: '',
+      type: 'pc',
+      id: '2',
       typeName: '',
       tableColums: [],
       tableData: [],
@@ -247,9 +247,6 @@ export default {
     },
 
     api_search_date(params) {
-      this.type = params.type
-      this.id = params.id
-      this.tableName = `${params.typeName}(${params.type})` //设置execl的文件名
       api_action_family_echart(params).then(res => {
         let _tableColums = []
         let _tableData = {}
@@ -265,13 +262,13 @@ export default {
         this.chartInit(res.data, 'echart1')
       })
     },
-    handleClickSearchType(props, params) {
+    handleClickSearchType(params) {
       this.typeName = params.typeName
-      const _params = Object.assign({}, props, params)
-      this.api_search_date(_params)
+      this.type = params.type
+      this.id = params.id
+      this.tableName = `${params.typeName}(${params.type})` //设置execl的文件名
     },
     changeSearch(items) {
-      if(!this.type) return
       const params = Object.assign({}, items, {
         type: this.type,
         id: this.id

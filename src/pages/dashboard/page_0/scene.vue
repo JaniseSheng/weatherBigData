@@ -1,8 +1,8 @@
 <template>
 <div class="">
-  <search-wrapper @searchInit='searchInit' @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
     <div class="search-button" slot-scope="props">
-      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(props, item)">{{item.name}}</Button>
+      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
@@ -199,7 +199,7 @@ export default {
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
       })
     },
-    handleClickSearchType(props, item) {
+    handleClickSearchType(item) {
       this.tableName = `分场景(${item.name})`
       this.type = item.id
     },
