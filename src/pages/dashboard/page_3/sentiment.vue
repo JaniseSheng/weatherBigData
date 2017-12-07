@@ -30,7 +30,8 @@ export default {
     return {
       searchButtons: null,
       echartNum: 0,
-      type: 0,
+      cacheData: {}, //缓存数据
+      type: 999999,
       tableColums: [{title: '日期', key: 'date'}],
       tableData: [],
       tableName: '舆情流量(全部)'
@@ -147,19 +148,30 @@ export default {
         this.tableData = _tableData
         this.type = params.type
         const _datas = res.data
-        this.echartNum = _datas.length
-        this.$nextTick(() => {
-          _datas.forEach((item, index)=> {
-            this.chartInit(item.values, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
-          })
+        this.drawChart(_datas)
+        this.cacheData[params.type] = _datas
+      })
+    },
+    drawChart(data){
+      this.echartNum = data.length
+      this.$nextTick(() => {
+        data.forEach((item, index)=> {
+          this.chartInit(item.values, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
         })
       })
     },
     handleClickSearchType(item){
       this.tableName = `舆情流量(${item.name})`
       this.type = item.id
+      if (this.cacheData[item.id]) {
+        this.drawChart(this.cacheData[item.id])
+      }
     },
     changeSearch(items) {
+      if (this.type == 999999) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type
       })

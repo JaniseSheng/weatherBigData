@@ -60,7 +60,7 @@ export default {
       buttonActiveStyle: {
         color: '#19be6b'
       },
-      areaName: '', //选择的区域
+      areaName: '上海', //选择的区域
       monthRange: [], // 月范围
       dateRange: [], // 天范围
       areas,

@@ -51,7 +51,8 @@ export default {
     return {
       searchButtonsMobile: [],
       type: 'mobile',
-      id: '2',
+      id: 999999,
+      cacheData: {}, //缓存数据
       typeName: '',
       tableColums: [],
       tableData: [],
@@ -224,8 +225,12 @@ export default {
         })
         this.tableColums = _tableColums
         this.tableData = [_tableData]
-        this.chartInit(res.data, 'echart1')
+        this.drawChart(res.data)
+        this.cacheData[`${this.type}_${this.id}`] = res.data
       })
+    },
+    drawChart(data){
+      this.chartInit(data, 'echart1')
     },
     handleClickSearchType(params) {
       this.type = params.type
@@ -234,8 +239,15 @@ export default {
       this.tableName = params.typeName //设置execl的文件名
       // swiper to slide
       this.swiperMobile.slideTo(params.id)
+      if (this.cacheData[`${params.type}_${params.id}`]) {
+        this.drawChart(this.cacheData[`${params.type}_${params.id}`])
+      }
     },
     changeSearch(items) {
+      if (this.id == 999999) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type,
         id: this.id

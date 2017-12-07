@@ -2,11 +2,11 @@
 <div>
   <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" monthRangePromise='3'>
     <div class="search-button" :class="$style['search-btns']">
-      <Tabs :class='$style.tabsWrapper'>
-        <TabPane label="PC" name="name1">
+      <Tabs :class='$style.tabsWrapper' :value='type' @on-click='handleTabClick'>
+        <TabPane label="PC" name="pc">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'pc' && id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+              <div class="swiper-slide" :class="type == 'pc' && pcId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p style="font-size: 18px">{{item.name}}</p>
                 <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -17,10 +17,10 @@
             <div class="swiper-pagination swiper-pagination-pc"></div>
           </div>
         </TabPane>
-        <TabPane label="IPTV" name="name2">
+        <TabPane label="IPTV" name="iptv">
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'iptv' && id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+              <div class="swiper-slide" :class="type == 'iptv' && iptvId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
@@ -68,7 +68,10 @@ export default {
       searchButtonsIptv: [],
       searchButtonsPc: [],
       type: 'pc',
-      id: '2',
+      pcId: '999999',
+      iptvId: '999999',
+      id: 999999,
+      cacheData: {}, //缓存数据
       typeName: '',
       tableColums: [],
       tableData: [],
@@ -260,29 +263,49 @@ export default {
         })
         this.tableColums = _tableColums
         this.tableData = [_tableData]
-        this.chartInit(res.data, 'echart1')
+        this.drawChart(res.data)
+        this.cacheData[`${this.type}_${this.id}`] = res.data
       })
+    },
+    drawChart(data){
+      this.chartInit(data, 'echart1')
     },
     handleClickSearchType(params) {
       this.typeName = params.typeName
       this.type = params.type
       this.id = params.id
+      if (params.type == 'pc') {
+        this.pcId = params.id
+      }
+      if (params.type == 'iptv') {
+        this.iptvId = params.id
+      }
       this.tableName = `${params.typeName}(${params.type})` //设置execl的文件名
 
       // swiper to slide
-      if (params.type = 'pc') {
+      if (params.type == 'pc') {
         this.swiperPc.slideTo(params.id)
       }
-      if (params.type = 'iptv') {
+      if (params.type == 'iptv') {
         this.swiperIptv.slideTo(params.id)
+      }
+      if (this.cacheData[`${params.type}_${params.id}`]) {
+        this.drawChart(this.cacheData[`${params.type}_${params.id}`])
       }
     },
     changeSearch(items) {
+      if (this.id == 999999) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type,
         id: this.id
       })
       this.api_search_date(params)
+    },
+    handleTabClick(label){
+      this.type = label
     }
   },
   mounted() {

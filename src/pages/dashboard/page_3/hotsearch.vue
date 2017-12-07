@@ -4,16 +4,11 @@
   <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false>
     <div class="search-button">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
-      <!-- <div style="position: absolute;right: 0;top: 12px;">
-        缩放控制：
-        <Button type="primary" icon="minus"></Button>
-        <Button type="primary" icon="plus" style="margin-right: 0"></Button>
-      </div> -->
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
     <div class="echart-content" :class="$style['echart-content']">
-      <div ref='wordCloud' style="position: relative; width: 100%; height: 400px; backgroundColor: white">
+      <div ref='wordCloud' style="position: relative; width: 100%; height: 400px; backgroundColor: white" @wordcloudstop='wordcloudStop'>
       </div>
     </div>
   </div>
@@ -26,15 +21,14 @@ import {
   api_public_hot_getTypeNames
 } from '@/api'
 import color from '@/lib/color'
-import VueWordCloud from 'vuewordcloud';
 let WordCloud = require('../../../lib/wordcloud2.js')
 export default {
   data() {
     return {
       searchButtons: null,
-      cacheData: {},
+      cacheData: {}, //缓存数据
       echartNum: 0,
-      type: 0,
+      type: 999999,
       tableColums: [],
       tableData: [],
       tableName: '热点搜词'
@@ -54,7 +48,6 @@ export default {
       this.wordCloud = null
       api_public_hot(params).then(res => {
         this.drawChart(res.data)
-        this.cacheData[params.type] = res.data
       })
     },
     drawChart(data){
@@ -71,24 +64,25 @@ export default {
       })
     },
     changeSearch(items) {
+      if (this.type == 999999) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type
       })
       this.api_search_date(params)
     },
+    wordcloudStop(){
+      this.cacheData[this.type] = this.$refs.wordCloud.innerHTML
+    },
     handleClickSearchType(item) {
       this.tableName = `热点热词(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
-        this.drawChart(this.cacheData[item.id])
+        this.$refs.wordCloud.innerHTML = this.cacheData[this.type]
       }
-    },
-    rotation([, val]) {
-      return [0.25, 0, 0.75, 0.875][Math.round(Math.random() * 3)];
     }
-  },
-  components: {
-    VueWordCloud,
   }
 }
 </script>

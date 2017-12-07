@@ -40,8 +40,9 @@ export default {
   data(){
     return {
       searchButtons: null,
-      type: '',
+      type: 999999,
       stars: '',
+      cacheData: {}, //缓存数据
       tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}],
       tableData: [],
       tableName: ''
@@ -272,18 +273,25 @@ export default {
         })
         this.tableData = _tableData
         this.type = params.type
-        this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
-        this.chartInitLine(res.data.percentage, 'echart3')
-        this.stars = res.data.star
+        this.drawChart(res.data)
+        this.cacheData[params.type] = res.data
       })
+    },
+    drawChart(data){
+      this.chartInit(data.uv, 'echart1')
+      this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
+      this.chartInitLine(data.percentage, 'echart3')
+      this.stars = data.star
     },
     handleClickSearchType(item){
       this.tableName = `APP流量监控(${item.name})`
       this.type = item.id
+      if (this.cacheData[item.id]) {
+        this.drawChart(this.cacheData[item.id])
+      }
     },
     changeSearch(items) {
-      if (!this.type) {
+      if (this.type == 999999) {
         this.$Message.error('请选择查找类型！')
         return
       }

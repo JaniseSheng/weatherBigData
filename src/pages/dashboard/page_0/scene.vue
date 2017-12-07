@@ -33,7 +33,8 @@ export default {
   data() {
     return {
       searchButtons: null,
-      type: '',
+      type: 999999,
+      cacheData: {}, //缓存数据
       tableColums: [{
         title: '日期',
         key: 'date'
@@ -195,16 +196,23 @@ export default {
         })
         this.tableData = _tableData
         this.type = params.type
-        this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
+        this.drawChart(res.data)
+        this.cacheData[params.type] = res.data
       })
+    },
+    drawChart(data){
+      this.chartInit(data.uv, 'echart1')
+      this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
     },
     handleClickSearchType(item) {
       this.tableName = `分场景(${item.name})`
       this.type = item.id
+      if (this.cacheData[item.id]) {
+        this.drawChart(this.cacheData[item.id])
+      }
     },
     changeSearch(items) {
-      if (!this.type) {
+      if (this.type == 999999) {
         this.$Message.error('请选择查找类型！')
         return
       }
