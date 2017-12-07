@@ -9,7 +9,15 @@
       <div class="echart-content">
         <div ref='echart1' />
         <div ref='echart2' />
-        <div ref='echart3' />
+        <div style="position:relative">
+          <div ref='echart3' >
+          </div>
+          <p style='position: absolute; left: 76px; top: 0' class='star' v-if='stars'>
+            <span>权威星：</span>
+            <Icon type="ios-star" v-for="item in parseInt(stars.split('.')[0])" :key="'star' + item"></Icon>
+            <Icon type="ios-star-half" v-if="stars.split('.')[1]"></Icon>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -33,6 +41,7 @@ export default {
     return {
       searchButtons: null,
       type: 0,
+      stars: '',
       tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}],
       tableData: [],
       tableName: ''
@@ -61,6 +70,7 @@ export default {
         yAxisDataBar[index] = item.value
         yAxisDataLine[index] = item.perValue
       })
+      console.log(yAxisDataLine);
       var option = {
         xAxis: {
           data: xAxisData
@@ -266,6 +276,7 @@ export default {
         this.chartInit(res.data.uv, 'echart1')
         this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
         this.chartInitLine(res.data.percentage, 'echart3')
+        this.stars = res.data.star
       })
     },
     handleClickSearchType(item){
@@ -283,10 +294,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import '../../../style/mythemes.less';
   .search-button {
     padding: 12px 0;
     & button {
       margin-right: 6px;
+    }
+  }
+  .star {
+    span {
+      line-height: 24px;
+      vertical-align: top;
+    }
+    i {
+      font-size: 24px;
+      color: @error-color;
     }
   }
 </style>
