@@ -230,6 +230,7 @@ export default {
                               lineHeight: 33
                           },
                           per: {
+
                               color: '#eee',
                               backgroundColor: '#334455',
                               padding: [2, 4],

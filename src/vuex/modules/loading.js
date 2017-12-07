@@ -2,7 +2,7 @@ import axios from 'axios';
 import {SET_LOADING_STATE} from '../mutation-types'
 
 const state = {
-  isLoading: true
+  isLoading: false
 }
 
 const mutations = {

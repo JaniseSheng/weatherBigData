@@ -17,6 +17,7 @@
 返回数据： {
   "code" : 1,
   "data" : {
+    star: '2.5',
     // 预报准确率
     'percentage': [
       {

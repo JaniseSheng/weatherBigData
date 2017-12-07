@@ -104,6 +104,10 @@ export const api_public_flow_getTypeNames = (params) => {
 export const api_public_flow = (params) => {
   return axiosPost('public_flow', params)
 }
+// 热点热词 - 获取类型的名字
+export const api_public_hot_getTypeNames = (params) => {
+  return axiosPost('public_hot_getTypeNames', params)
+}
 // 热点热词
 export const api_public_hot = (params) => {
   return axiosPost('public_hot', params)
