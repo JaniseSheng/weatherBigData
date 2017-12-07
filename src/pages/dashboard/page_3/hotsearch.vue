@@ -32,8 +32,6 @@ export default {
   data() {
     return {
       searchButtons: null,
-      fontSizeRatio: 10,
-      maxFontSize: 200,
       cacheData: {},
       echartNum: 0,
       type: 0,
@@ -56,17 +54,19 @@ export default {
       this.wordCloud = null
       api_public_hot(params).then(res => {
         this.drawChart(res.data)
+        this.cacheData[params.type] = res.data
       })
     },
     drawChart(data){
       this.wordCloud = new WordCloud(this.$refs.wordCloud, {
         list: data,
-        color: () => {
-          return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][Math.round(Math.random() * 3)]
+        color: (a, size) => {
+          console.log(size);
+          return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][size % 4]
         },
         gridSize: Math.round(16 * 1000 / 1024),
         weightFactor: function(size) {
-          return Math.pow(size, 2.3) * 1000 / 1024;
+          return Math.pow(size, 2) * 1000 / 1024;
         }
       })
     },
@@ -79,6 +79,9 @@ export default {
     handleClickSearchType(item) {
       this.tableName = `热点热词(${item.name})`
       this.type = item.id
+      if (this.cacheData[item.id]) {
+        this.drawChart(this.cacheData[item.id])
+      }
     },
     rotation([, val]) {
       return [0.25, 0, 0.75, 0.875][Math.round(Math.random() * 3)];
