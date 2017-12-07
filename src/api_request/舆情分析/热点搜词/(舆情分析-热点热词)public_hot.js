@@ -11,114 +11,13 @@
     ‘2017 - 01 - 31 ’
   ],
   monthRange: ["2017-01", "2017-03"],
+  type : 0; // 根据  接口(public_hot_getTypeNames)返回的type
 }
 
 
-返回数据：
+返回数据(根据type 返回不同的数据)：
 {
   "code" : 1,
-  "data" : [
-    {
-      name: '全部',
-      id: 0,
-      values: [
-        {
-          value: '300',
-          name: '股票'
-        },
-        {
-          value: '130',
-          name: '教育'
-        },
-        {
-          value: '130',
-          name: '医疗'
-        },
-        {
-          value: '130',
-          name: '明星'
-        },
-        {
-          value: '130',
-          name: '游戏'
-        }
-      ]
-    }, {
-      name: '新闻',
-      id: 1,
-      values: [
-        {
-          value: '130',
-          name: '新闻1'
-        },
-        {
-          value: '130',
-          name: '新闻2'
-        },
-        {
-          value: '130',
-          name: '新闻3'
-        },
-        {
-          value: '130',
-          name: '新闻4'
-        },
-        {
-          value: '130',
-          name: '新闻5'
-        }
-      ]
-    }, {
-      name: '微博',
-      id: 2,
-      values: [
-        {
-          value: '130',
-          name: '微博1'
-        },
-        {
-          value: '130',
-          name: '微博2'
-        },
-        {
-          value: '130',
-          name: '微博3'
-        },
-        {
-          value: '130',
-          name: '微博4'
-        },
-        {
-          value: '130',
-          name: '微博5'
-        }
-      ]
-    }, {
-      name: '公众号',
-      id: 3,
-      values: [
-        {
-          value: '130',
-          name: '公众号1'
-        },
-        {
-          value: '130',
-          name: '公众号3'
-        },
-        {
-          value: '130',
-          name: '公众号3'
-        },
-        {
-          value: '130',
-          name: '公众号4'
-        },
-        {
-          value: '130',
-          name: '公众号5'
-        }
-      ]
-    }
-  ],
+  "data" : [['热词1', 12],['热词2', 24], ['热词3', 42], ['热词4', 21], ['热词5', 28], ['热词6', 42] .....],
   "success" : true
 }
