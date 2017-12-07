@@ -4,18 +4,16 @@
   <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
     <div class="search-button">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
+      <!-- <div style="position: absolute;right: 0;top: 12px;">
+        缩放控制：
+        <Button type="primary" icon="minus"></Button>
+        <Button type="primary" icon="plus" style="margin-right: 0"></Button>
+      </div> -->
     </div>
   </search-wrapper>
   <div class="echart-wrapper">
     <div class="echart-content" :class="$style['echart-content']">
-      <div ref='wordCloud' style="width: 100%; height: 400px; backgroundColor: white">
-        <vue-word-cloud
-          :words='words'
-          :maxFontSize= 'maxFontSize'
-          :color="wordColor"
-          :rotation= 'rotation'
-          font-family="Roboto"
-        ></vue-word-cloud>
+      <div ref='wordCloud' style="position: relative; width: 100%; height: 400px; backgroundColor: white">
       </div>
     </div>
   </div>
@@ -24,38 +22,21 @@
 
 <script>
 import {
-  api_public_hot, api_public_hot_getTypeNames
+  api_public_hot,
+  api_public_hot_getTypeNames
 } from '@/api'
 import color from '@/lib/color'
 import VueWordCloud from 'vuewordcloud';
-
+let WordCloud = require('../../../lib/wordcloud2.js')
 export default {
   data() {
     return {
       searchButtons: null,
       fontSizeRatio: 10,
-      maxFontSize: 100,
+      maxFontSize: 200,
       words: [
-        ['1', 12],
-        ['2', 3],
-        ['3', 7],
-        ['4', 3],
-        ['5', 19],
-        ['6', 3],
-        ['7', 7],
-        ['9', 3],
-        ['9', 19],
-        ['10', 3],
-        ['11', 7],
-        ['12', 3],
-        ['13', 19],
-        ['14', 3],
-        ['15', 7],
-        ['16', 3],
-        ['17', 19],
-        ['18', 3],
-        ['19', 7],
-        ['20', 3]
+        ['ggg', 12],
+        ['aaaa', 15]
       ],
       echartNum: 0,
       type: 0,
@@ -75,19 +56,33 @@ export default {
     api_search_date(params) {
       let _tableColums = []
       let _tableData = [{}]
+      this.wordCloud = null
       api_public_hot(params).then(res => {
         this.words = res.data
+        this.wordCloud = new WordCloud(this.$refs.wordCloud, {
+          list: res.data,
+          color: () => {
+            return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][Math.round(Math.random() * 3)]
+          },
+          gridSize: Math.round(16 * 1000 / 1024),
+          weightFactor: function(size) {
+            return Math.pow(size, 2.3) * 1000 / 1024;
+          }
+        })
       })
     },
     changeSearch(items) {
-      this.api_search_date(items)
+      const params = Object.assign({}, items, {
+        type: this.type
+      })
+      this.api_search_date(params)
     },
-    wordColor([, weight]) {
-      return weight > 10 ? '#2d8cf0' : weight > 5 ? '#19be6b' : '#ed3f14'
+    handleClickSearchType(item) {
+      this.tableName = `热点热词(${item.name})`
+      this.type = item.id
     },
     rotation([, val]) {
-      const _val = Math.random()
-      return [0.25, 0, 0.75, 0.875][Math.round(Math.random()*3)];
+      return [0.25, 0, 0.75, 0.875][Math.round(Math.random() * 3)];
     }
   },
   components: {
@@ -98,6 +93,7 @@ export default {
 
 <style lang="less" scoped>
 .search-button {
+    position: relative;
     padding: 12px 0;
     & button {
         margin-right: 6px;
