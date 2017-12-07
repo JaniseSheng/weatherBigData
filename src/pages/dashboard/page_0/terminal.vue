@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       searchButtons: null,
-      type: 0,
+      type: '',
       tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv变化率', key: 'changeUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv变化率', key: 'changePvValue'}],
       tableData: [],
       tableName: '分终端(全部)'
@@ -168,14 +168,14 @@ export default {
     api_search_date(params) {
       let _tableData = []
       api_total_terminal(params).then(res => {
-        res.data.uv.forEach((item, index)=> {
+        res.data.uv.values.forEach((item, index)=> {
           _tableData[index] = {
             "date": item.date,
             "uvValue": item.value,
             "changeUvValue": item.changeValue
           }
         })
-        res.data.pv.forEach((item, index)=> {
+        res.data.pv.values.forEach((item, index)=> {
           _tableData[index] = Object.assign({}, _tableData[index], {
             "date": item.date,
             "pvValue": item.value,
@@ -184,8 +184,8 @@ export default {
         })
         this.tableData = _tableData
         this.type = params.type
-        this.chartInit(res.data.uv, 'echart1')
-        this.chartInit(res.data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
+        this.chartInit(res.data.uv.values, 'echart1')
+        this.chartInit(res.data.pv.values, 'echart2', color.successColor, color.errorColor, ['page view', 'page view变化率'])
       })
     },
     handleClickSearchType(item) {
@@ -193,6 +193,10 @@ export default {
       this.type = item.id
     },
     changeSearch(items) {
+      if (!this.type) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type
       })

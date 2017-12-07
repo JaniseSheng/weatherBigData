@@ -40,7 +40,7 @@ export default {
   data(){
     return {
       searchButtons: null,
-      type: 0,
+      type: '',
       stars: '',
       tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}],
       tableData: [],
@@ -284,6 +284,10 @@ export default {
       this.type = item.id
     },
     changeSearch(items) {
+      if (!this.type) {
+        this.$Message.error('请选择查找类型！')
+        return
+      }
       const params = Object.assign({}, items, {
         type: this.type
       })

@@ -24,44 +24,28 @@
       values: [
         {
           "date": "2017-01-00",
-          "value": 132
+          "value": 132,
+          "changeValue": 100,
         }, ....... {
           "date": "2017-01-06",
-          "value": 404
+          "value": 404,
+          "changeValue": 100
         }
-      ],
-      // uv变化率
-      change: [
-        {
-          "date": "2017-01-00",
-          "value": 162
-        }, ....... {
-          "date": "2017-01-06",
-          "value": 304
-        }
-      ],
+      ]
     },
     "pv": {
       // pv值
       values: [
         {
           "date": "2017-01-00",
-          "value": 132
+          "value": 132,
+          "changeValue": 100
         }, ....... {
           "date": "2017-01-06",
-          "value": 404
+          "value": 404,
+          "changeValue": 100
         }
-      ],
-      // pv变化率
-      change: [
-        {
-          "date": "2017-01-00",
-          "value": 162
-        }, ....... {
-          "date": "2017-01-06",
-          "value": 304
-        }
-      ],
+      ]
     },
   },
   "success" : true

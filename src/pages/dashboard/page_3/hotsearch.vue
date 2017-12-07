@@ -1,7 +1,7 @@
 
 <template>
 <div class="">
-  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false>
     <div class="search-button">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
       <!-- <div style="position: absolute;right: 0;top: 12px;">
@@ -34,10 +34,7 @@ export default {
       searchButtons: null,
       fontSizeRatio: 10,
       maxFontSize: 200,
-      words: [
-        ['ggg', 12],
-        ['aaaa', 15]
-      ],
+      cacheData: {},
       echartNum: 0,
       type: 0,
       tableColums: [],
@@ -58,17 +55,19 @@ export default {
       let _tableData = [{}]
       this.wordCloud = null
       api_public_hot(params).then(res => {
-        this.words = res.data
-        this.wordCloud = new WordCloud(this.$refs.wordCloud, {
-          list: res.data,
-          color: () => {
-            return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][Math.round(Math.random() * 3)]
-          },
-          gridSize: Math.round(16 * 1000 / 1024),
-          weightFactor: function(size) {
-            return Math.pow(size, 2.3) * 1000 / 1024;
-          }
-        })
+        this.drawChart(res.data)
+      })
+    },
+    drawChart(data){
+      this.wordCloud = new WordCloud(this.$refs.wordCloud, {
+        list: data,
+        color: () => {
+          return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][Math.round(Math.random() * 3)]
+        },
+        gridSize: Math.round(16 * 1000 / 1024),
+        weightFactor: function(size) {
+          return Math.pow(size, 2.3) * 1000 / 1024;
+        }
       })
     },
     changeSearch(items) {
