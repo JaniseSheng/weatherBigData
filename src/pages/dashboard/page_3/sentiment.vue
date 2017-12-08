@@ -137,11 +137,11 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params){
-      let _tableColums = []
+      let _tableColums = [{title: '日期', key: 'date'}]
       let _tableData = [{}]
       api_public_flow(params).then(res=> {
         res.data.forEach((item, index)=> {
-          _tableColums[index] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
+          _tableColums[index + 1] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
           item.values.forEach((_item, _index)=> {
             let _obj = {}
             _obj.date = _item.date

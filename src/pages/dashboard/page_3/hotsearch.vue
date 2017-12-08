@@ -18,7 +18,7 @@
   <div class="echart-wrapper" style="overflow: hidden;">
     <div style="background-color: white;">
       <div class="echart-content" :class="$style['echart-content']" :style="'transform: translate3d(' + translateX + '%,' + translateY + '%,' + '0'">
-        <div ref='wordCloud' :class="$style.wordCloud" :style="'transform: scale(' + scale + '); position: relative; width: 100%; height: 400px; backgroundColor: white'" @wordcloudstop='wordcloudStop'>
+        <div ref='wordCloud' :class="$style.wordCloud" :style="'transform: scale(' + scale + '); position: relative; width: 100%; height: 700px; backgroundColor: white'" @wordcloudstop='wordcloudStop'>
         </div>
       </div>
     </div>
@@ -58,9 +58,17 @@ export default {
   methods: {
     api_search_date(params) {
       let _tableColums = []
-      let _tableData = [{}]
+      let _tableData = {}
       this.wordCloud = null
       api_public_hot(params).then(res => {
+        res.data.forEach((item, index)=> {
+          _tableColums[index] = {title: `${item[0]}`, key: `value${index}`}
+          let _obj = {}
+          _obj[`value${index}`] = item[1]
+          _tableData = Object.assign({}, _tableData, _obj)
+        })
+        this.tableColums = _tableColums
+        this.tableData = [_tableData]
         this.drawChart(res.data)
       })
     },

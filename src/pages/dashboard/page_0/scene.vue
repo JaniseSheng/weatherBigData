@@ -178,27 +178,30 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
-      let _tableData = []
       api_total_scene(params).then(res => {
-        res.data.uv.forEach((item, index) => {
-          _tableData[index] = {
-            "date": item.date,
-            "uvValue": item.value,
-            "changeUvValue": item.changeValue
-          }
-        })
-        res.data.pv.forEach((item, index) => {
-          _tableData[index] = Object.assign({}, _tableData[index], {
-            "date": item.date,
-            "pvValue": item.value,
-            "changePvValue": item.changeValue
-          })
-        })
-        this.tableData = _tableData
         this.type = params.type
+        this.exportExcel(res.data)
         this.drawChart(res.data)
         this.cacheData[params.type] = res.data
       })
+    },
+    exportExcel(data) {
+      let _tableData = []
+      data.uv.forEach((item, index) => {
+        _tableData[index] = {
+          "date": item.date,
+          "uvValue": item.value,
+          "changeUvValue": item.changeValue
+        }
+      })
+      data.pv.forEach((item, index) => {
+        _tableData[index] = Object.assign({}, _tableData[index], {
+          "date": item.date,
+          "pvValue": item.value,
+          "changePvValue": item.changeValue
+        })
+      })
+      this.tableData = _tableData
     },
     drawChart(data){
       this.chartInit(data.uv, 'echart1')

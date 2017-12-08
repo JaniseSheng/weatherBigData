@@ -6,7 +6,7 @@
       <div class="loading-block">
         <Button style="position: absolute;right: -12px;top: -12px;" type="primary" shape="circle" icon="close-round" @click='handleClickClose' ></Button>
         <img style="width: 100%" src="./assets/Cube.gif" alt="">
-        <p style="padding-top: 6px;">...</p>
+        <p style="padding-top: 6px;">数据正在加载中...</p>
       </div>
     </div>
   </template>

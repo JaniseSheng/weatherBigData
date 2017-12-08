@@ -52,7 +52,7 @@ export default {
     api_service_weather_getTypeNames().then(res => {
       next(vm => {
         vm.searchButtons = res.data
-        vm.tableName = res.data && `气象局自有栏目流量监控(${res.data[0].name})`
+        vm.tableName = res.data && `IPTV流量监控(${res.data[0].name})`
       })
     })
   },

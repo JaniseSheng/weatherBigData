@@ -17,8 +17,8 @@
         <Button type='success' icon='search' style="width: 120px" @click='handleClickSearch'>搜索</Button>
         <Button type='info' @click='handleClickExport'>导出excel</Button>
       </div>
-
     </div>
+    <p :class='$style.searchInfo' v-show='areaName_info || date_info'><Icon type="search"></Icon> <Tag v-if='areaName_info'>{{areaName_info}}</Tag>  <Tag v-if='date_info'>{{date_info}}</Tag> </p>
     <Modal v-model="modal1" width="1200" title="区域选择">
       <ul style='max-height: 500px; overflow: scroll'>
         <p>
@@ -61,6 +61,8 @@ export default {
         color: '#19be6b'
       },
       areaName: '上海', //选择的区域
+      areaName_info: '', // 当前已经选中的区域
+      date_info: '', //当前已经选中的时间
       monthRange: [], // 月范围
       dateRange: [], // 天范围
       areas,
@@ -142,10 +144,15 @@ export default {
         this.$Message.error('您还没有选择日期范围')
         return
       }
+      console.log(this.$refs.slot);
+      const dateRange = _Array.compact(this.dateRange)
+      const monthRange = _Array.compact(this.monthRange)
+      this.areaName_info = this.areaName
+      this.date_info = dateRange.length > 1 ? dateRange.toString().replace(',','-') : monthRange.toString('-').replace(',','-')
       this.$emit('changeSearch', {
         areaName: this.areaName,
-        dateRange: _Array.compact(this.dateRange),
-        monthRange: _Array.compact(this.monthRange)
+        dateRange,
+        monthRange
       })
     },
     handleOpenArea() {
@@ -221,6 +228,17 @@ export default {
 
 <style lang="less" module>
 @import "../style/mythemes.less";
+.searchInfo {
+  text-align: left;
+  padding-top: 6px;
+  & i {
+    color: @success-color;
+    font-size: 20px;
+    line-height: 32px;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+}
 .search-wrapper {
     padding: 12px;
 }

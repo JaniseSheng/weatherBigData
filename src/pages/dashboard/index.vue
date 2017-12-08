@@ -15,7 +15,7 @@
       <Menu theme="dark" :open-names="[$route.name.split('-')[0]]" :active-name="$route.name" accordion @on-select='handleSelectRoute'>
         <Submenu name="0">
           <template slot="title">
-                          <Icon type="ios-paper"></Icon>
+                          <Icon type="flag"></Icon>
                           整体分布
                       </template>
           <MenuItem name="0-1">分终端</MenuItem>
@@ -23,7 +23,7 @@
         </Submenu>
         <Submenu name="1">
           <template slot="title">
-                          <Icon type="ios-people"></Icon>
+                          <Icon type="arrow-graph-up-right"></Icon>
                           行为洞察
                       </template>
           <MenuItem name="1-1">家庭类人群分类</MenuItem>
@@ -32,16 +32,16 @@
         </Submenu>
         <Submenu name="2">
           <template slot="title">
-                          <Icon type="ios-people"></Icon>
+                          <Icon type="stats-bars"></Icon>
                           服务监控
                       </template>
           <MenuItem name="2-1">网站流量监测</MenuItem>
           <MenuItem name="2-2">APP流量监测</MenuItem>
-          <MenuItem name="2-3">气象局自有栏目流量监测</MenuItem>
+          <MenuItem name="2-3">IPTV流量监测</MenuItem>
         </Submenu>
         <Submenu name="3">
           <template slot="title">
-                          <Icon type="ios-people"></Icon>
+                          <Icon type="pie-graph"></Icon>
                           舆情分析
                       </template>
           <MenuItem name="3-1">舆情流量</MenuItem>

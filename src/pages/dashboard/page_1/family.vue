@@ -252,20 +252,23 @@ export default {
 
     api_search_date(params) {
       api_action_family_echart(params).then(res => {
-        let _tableColums = []
-        let _tableData = {}
-        res.data.forEach((item, index)=> {
-          _tableColums[index] = {
-            title: item.name,
-            key: 'value' + index
-          }
-          _tableData[`value${index}`] = item.value
-        })
-        this.tableColums = _tableColums
-        this.tableData = [_tableData]
+        this.exportExcel(res.data)
         this.drawChart(res.data)
         this.cacheData[`${this.type}_${this.id}`] = res.data
       })
+    },
+    exportExcel(data){
+      let _tableColums = []
+      let _tableData = {}
+      data.forEach((item, index)=> {
+        _tableColums[index] = {
+          title: item.name,
+          key: 'value' + index
+        }
+        _tableData[`value${index}`] = item.value
+      })
+      this.tableColums = _tableColums
+      this.tableData = [_tableData]
     },
     drawChart(data){
       this.chartInit(data, 'echart1')
@@ -290,6 +293,7 @@ export default {
         this.swiperIptv.slideTo(params.index)
       }
       if (this.cacheData[`${params.type}_${params.id}`]) {
+        this.exportExcel(this.cacheData[`${params.type}_${params.id}`])
         this.drawChart(this.cacheData[`${params.type}_${params.id}`])
       }
     },
