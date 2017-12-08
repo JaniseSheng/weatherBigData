@@ -6,7 +6,7 @@
         <div class="swiper-container swiper-container-mobile">
           <div class="swiper-wrapper">
             <div class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
-              <ui-icon size='96' :icon="'personal' + index" />
+              <ui-icon size='96' :icon="'personal' + item.id" />
               <p style="font-size: 18px">{{item.name}}</p>
               <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
               <p>{{item.data.name}}</p>
@@ -214,20 +214,23 @@ export default {
 
     api_search_date(params) {
       api_action_personal_echart(params).then(res => {
-        let _tableColums = []
-        let _tableData = {}
-        res.data.forEach((item, index)=> {
-          _tableColums[index] = {
-            title: item.name,
-            key: 'value' + index
-          }
-          _tableData[`value${index}`] = item.value
-        })
-        this.tableColums = _tableColums
-        this.tableData = [_tableData]
+        this.exportExcel(res.data)
         this.drawChart(res.data)
         this.cacheData[`${this.type}_${this.id}`] = res.data
       })
+    },
+    exportExcel(data) {
+      let _tableColums = []
+      let _tableData = {}
+      data.forEach((item, index)=> {
+        _tableColums[index] = {
+          title: item.name,
+          key: 'value' + index
+        }
+        _tableData[`value${index}`] = item.value
+      })
+      this.tableColums = _tableColums
+      this.tableData = [_tableData]
     },
     drawChart(data){
       this.chartInit(data, 'echart1')
@@ -240,6 +243,7 @@ export default {
       // swiper to slide
       this.swiperMobile.slideTo(params.index)
       if (this.cacheData[`${params.type}_${params.id}`]) {
+        this.exportExcel(this.cacheData[`${params.type}_${params.id}`])
         this.drawChart(this.cacheData[`${params.type}_${params.id}`])
       }
     },

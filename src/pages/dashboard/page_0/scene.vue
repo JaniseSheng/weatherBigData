@@ -211,6 +211,7 @@ export default {
       this.tableName = `分场景(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
+        this.exportExcel(this.cacheData[item.id])
         this.drawChart(this.cacheData[item.id])
       }
     },

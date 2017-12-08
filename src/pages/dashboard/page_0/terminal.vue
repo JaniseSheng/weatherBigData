@@ -167,27 +167,31 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
-      let _tableData = []
       api_total_terminal(params).then(res => {
-        res.data.uv.values.forEach((item, index)=> {
-          _tableData[index] = {
-            "date": item.date,
-            "uvValue": item.value,
-            "changeUvValue": item.changeValue
-          }
-        })
-        res.data.pv.values.forEach((item, index)=> {
-          _tableData[index] = Object.assign({}, _tableData[index], {
-            "date": item.date,
-            "pvValue": item.value,
-            "changePvValue": item.changeValue
-          })
-        })
-        this.tableData = _tableData
+
         this.type = params.type
+        this.exportExcel(res.data)
         this.drawChart(res.data)
         this.cacheData[params.type] = res.data
       })
+    },
+    exportExcel(data) {
+      let _tableData = []
+      data.uv.values.forEach((item, index)=> {
+        _tableData[index] = {
+          "date": item.date,
+          "uvValue": item.value,
+          "changeUvValue": item.changeValue
+        }
+      })
+      data.pv.values.forEach((item, index)=> {
+        _tableData[index] = Object.assign({}, _tableData[index], {
+          "date": item.date,
+          "pvValue": item.value,
+          "changePvValue": item.changeValue
+        })
+      })
+      this.tableData = _tableData
     },
     drawChart(data){
       this.chartInit(data.uv.values, 'echart1')
@@ -197,6 +201,7 @@ export default {
       this.tableName = `分终端(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
+        this.exportExcel(this.cacheData[item.id])
         this.drawChart(this.cacheData[item.id])
       }
     },

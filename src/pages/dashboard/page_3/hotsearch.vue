@@ -38,6 +38,7 @@ export default {
     return {
       searchButtons: null,
       cacheData: {}, //缓存数据
+      cachetableData: {}, //缓存数据
       echartNum: 0,
       type: 999999,
       translateX: 0,
@@ -57,20 +58,24 @@ export default {
   },
   methods: {
     api_search_date(params) {
-      let _tableColums = []
-      let _tableData = {}
       this.wordCloud = null
       api_public_hot(params).then(res => {
-        res.data.forEach((item, index)=> {
-          _tableColums[index] = {title: `${item[0]}`, key: `value${index}`}
-          let _obj = {}
-          _obj[`value${index}`] = item[1]
-          _tableData = Object.assign({}, _tableData, _obj)
-        })
-        this.tableColums = _tableColums
-        this.tableData = [_tableData]
+        this.exportExcel(res.data)
         this.drawChart(res.data)
+        this.cachetableData[params.type] = res.data
       })
+    },
+    exportExcel(data) {
+      let _tableColums = []
+      let _tableData = {}
+      data.forEach((item, index)=> {
+        _tableColums[index] = {title: `${item[0]}`, key: `value${index}`}
+        let _obj = {}
+        _obj[`value${index}`] = item[1]
+        _tableData = Object.assign({}, _tableData, _obj)
+      })
+      this.tableColums = _tableColums
+      this.tableData = [_tableData]
     },
     drawChart(data, verSize= 5000){
       this.wordCloud = new WordCloud(this.$refs.wordCloud, {
@@ -103,6 +108,9 @@ export default {
       this.type = item.id
       if (this.cacheData[item.id]) {
         this.$refs.wordCloud.innerHTML = this.cacheData[this.type]
+      }
+      if (this.cachetableData[item.id]) {
+        this.exportExcel(this.cachetableData[item.id])
       }
     },
     handletransformReturn() {

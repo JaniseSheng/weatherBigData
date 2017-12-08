@@ -137,25 +137,27 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params){
+      api_public_flow(params).then(res=> {
+        this.type = params.type
+        this.exportExcel(res.data)
+        this.drawChart(res.data)
+        this.cacheData[params.type] = res.data
+      })
+    },
+    exportExcel(data) {
       let _tableColums = [{title: '日期', key: 'date'}]
       let _tableData = [{}]
-      api_public_flow(params).then(res=> {
-        res.data.forEach((item, index)=> {
-          _tableColums[index + 1] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
-          item.values.forEach((_item, _index)=> {
-            let _obj = {}
-            _obj.date = _item.date
-            _obj[`value${index}`] = `${_item.value_uv}/${_item.value_pv}`
-            _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
-          })
+      data.forEach((item, index)=> {
+        _tableColums[index + 1] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
+        item.values.forEach((_item, _index)=> {
+          let _obj = {}
+          _obj.date = _item.date
+          _obj[`value${index}`] = `${_item.value_uv}/${_item.value_pv}`
+          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
         })
-        this.tableColums = _tableColums
-        this.tableData = _tableData
-        this.type = params.type
-        const _datas = res.data
-        this.drawChart(_datas)
-        this.cacheData[params.type] = _datas
       })
+      this.tableColums = _tableColums
+      this.tableData = _tableData
     },
     drawChart(data){
       this.echartNum = data.length
@@ -169,6 +171,7 @@ export default {
       this.tableName = `舆情流量(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
+        this.exportExcel(this.cacheData[item.id])
         this.drawChart(this.cacheData[item.id])
       }
     },

@@ -273,33 +273,36 @@ export default {
       this.myChart.setOption(option);
     },
     api_search_date(params) {
-      let _tableData = []
       api_service_web(params).then(res => {
-        res.data.uv.forEach((item, index) => {
-          _tableData[index] = {
-            "date": item.date,
-            "uvValue": item.value,
-            "perUvValue": item.perValue
-          }
-        })
-        res.data.pv.forEach((item, index) => {
-          _tableData[index] = Object.assign({}, _tableData[index], {
-            "date": item.date,
-            "pvValue": item.value,
-            "perPvValue": item.perValue
-          })
-        })
-        res.data.percentage.forEach((item, index) => {
-          _tableData[index] = Object.assign({}, _tableData[index], {
-            "date": item.date,
-            "percentage": item.value
-          })
-        })
-        this.tableData = _tableData
         this.type = params.type
+        this.exportExcel(res.data)
         this.drawChart(res.data)
         this.cacheData[params.type] = res.data
       })
+    },
+    exportExcel(data) {
+      let _tableData = []
+      data.uv.forEach((item, index) => {
+        _tableData[index] = {
+          "date": item.date,
+          "uvValue": item.value,
+          "perUvValue": item.perValue
+        }
+      })
+      data.pv.forEach((item, index) => {
+        _tableData[index] = Object.assign({}, _tableData[index], {
+          "date": item.date,
+          "pvValue": item.value,
+          "perPvValue": item.perValue
+        })
+      })
+      data.percentage.forEach((item, index) => {
+        _tableData[index] = Object.assign({}, _tableData[index], {
+          "date": item.date,
+          "percentage": item.value
+        })
+      })
+      this.tableData = _tableData
     },
     drawChart(data) {
       this.chartInit(data.uv, 'echart1')
@@ -311,6 +314,7 @@ export default {
       this.tableName = `网站流量监控(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
+        this.exportExcel(this.cacheData[item.id])
         this.drawChart(this.cacheData[item.id])
       }
     },
