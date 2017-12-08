@@ -4,11 +4,22 @@
   <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" :isArea= false>
     <div class="search-button">
       <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
+      <div :class="$style['button-cotrol']">
+        <Button type="success" size='small' icon="arrow-return-left" @click='handletransformReturn'>复位</Button>
+        <Button type="info" size='small' icon="arrow-up-b" @click='translateY -= 30'></Button>
+        <Button type="info" size='small' icon="arrow-down-b" @click='translateY += 30'></Button>
+        <Button type="info" size='small' icon="arrow-left-b" @click='translateX -= 20'></Button>
+        <Button type="info" size='small' icon="arrow-right-b" @click='translateX += 20'></Button>
+        <Button type="warning" shape="circle" icon="plus-round" @click='scale += 0.5'></Button>
+        <Button type="error" shape="circle" icon="minus" @click='scale -= 0.5'></Button>
+      </div>
     </div>
   </search-wrapper>
-  <div class="echart-wrapper">
-    <div class="echart-content" :class="$style['echart-content']">
-      <div ref='wordCloud' style="position: relative; width: 100%; height: 400px; backgroundColor: white" @wordcloudstop='wordcloudStop'>
+  <div class="echart-wrapper" style="overflow: hidden;">
+    <div style="background-color: white;">
+      <div class="echart-content" :class="$style['echart-content']" :style="'transform: translate3d(' + translateX + '%,' + translateY + '%,' + '0'">
+        <div ref='wordCloud' :class="$style.wordCloud" :style="'transform: scale(' + scale + '); position: relative; width: 100%; height: 400px; backgroundColor: white'" @wordcloudstop='wordcloudStop'>
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +40,9 @@ export default {
       cacheData: {}, //缓存数据
       echartNum: 0,
       type: 999999,
+      translateX: 0,
+      translateY: 0,
+      scale: 1,
       tableColums: [],
       tableData: [],
       tableName: '热点搜词'
@@ -50,7 +64,7 @@ export default {
         this.drawChart(res.data)
       })
     },
-    drawChart(data){
+    drawChart(data, verSize= 5000){
       this.wordCloud = new WordCloud(this.$refs.wordCloud, {
         list: data,
         color: (a, size) => {
@@ -59,7 +73,7 @@ export default {
         },
         gridSize: Math.round(16 * 1000 / 1024),
         weightFactor: function(size) {
-          return Math.pow(size, 2) * 1000 / 1024;
+          return Math.round(size / verSize)
         }
       })
     },
@@ -82,6 +96,11 @@ export default {
       if (this.cacheData[item.id]) {
         this.$refs.wordCloud.innerHTML = this.cacheData[this.type]
       }
+    },
+    handletransformReturn() {
+      this.translateY = 0
+      this.translateX = 0
+      this.scale = 1
     }
   }
 }
@@ -91,6 +110,13 @@ export default {
 .search-button {
     position: relative;
     padding: 12px 0;
+    display: inline-block;
+    width: 100%;
+    &:after {
+      display: table;
+      content: '';
+      clear: both;
+    }
     & button {
         margin-right: 6px;
     }
@@ -98,9 +124,18 @@ export default {
 </style>
 
 <style lang="less" module>
+.wordCloud {
+  transform-origin: center center;
+  transition: transform .5s ease;
+}
+.button-cotrol {
+  display: inline-block;
+  float: right;
+}
 .echart-content {
     width: 100%;
     display: inline-block;
+    transition: transform .5s ease;
     &:after {
         content: '';
         display: table;

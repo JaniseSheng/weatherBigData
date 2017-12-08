@@ -1,30 +1,33 @@
 <template>
-  <div class="">
-    <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
-      <div class="search-button">
-        <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
-      </div>
-    </search-wrapper>
-    <div class="echart-wrapper">
-      <div class="echart-content">
-        <div ref='echart1' />
-        <div ref='echart2' />
-        <div style="position:relative">
-          <div ref='echart3' >
-          </div>
-          <p style='position: absolute; left: 76px; top: 0' class='star' v-if='stars'>
-            <span>权威星：</span>
-            <Icon type="ios-star" v-for="item in parseInt(stars.split('.')[0])" :key="'star' + item"></Icon>
-            <Icon type="ios-star-half" v-if="stars.split('.')[1]"></Icon>
-          </p>
+<div class="">
+  <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName">
+    <div class="search-button">
+      <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
+    </div>
+  </search-wrapper>
+  <div class="echart-wrapper">
+    <div class="echart-content">
+      <div ref='echart1' />
+      <div ref='echart2' />
+      <div style="position:relative">
+        <div ref='echart3'>
         </div>
+        <p style='position: absolute; left: 76px; top: 0' class='star' v-if='stars'>
+          <span>权威星：</span>
+          <Icon type="ios-star" v-for="item in parseInt(stars.split('.')[0])" :key="'star' + item"></Icon>
+          <Icon type="ios-star-half" v-if="stars.split('.')[1]"></Icon>
+        </p>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-import {api_service_web, api_service_web_getTypeNames} from '@/api'
+import {
+  api_service_web,
+  api_service_web_getTypeNames
+} from '@/api'
 import color from '@/lib/color'
 import echartConfig from '@/lib/echartConfig'
 let echarts = require('echarts/lib/echarts')
@@ -37,13 +40,31 @@ require('echarts/lib/component/legend')
 require('echarts/lib/component/dataZoom')
 
 export default {
-  data(){
+  data() {
     return {
       searchButtons: null,
       type: 999999,
       stars: '',
       cacheData: {}, //缓存数据
-      tableColums: [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}],
+      tableColums: [{
+        title: '日期',
+        key: 'date'
+      }, {
+        title: 'uv',
+        key: 'uvValue'
+      }, {
+        title: 'uv占比',
+        key: 'perUvValue'
+      }, {
+        title: 'pv',
+        key: 'pvValue'
+      }, {
+        title: 'pv占比',
+        key: 'perPvValue'
+      }, {
+        title: '预报准确率',
+        key: 'percentage'
+      }],
       tableData: [],
       tableName: ''
     }
@@ -66,7 +87,7 @@ export default {
       let xAxisData = [] // X轴用户名
       let yAxisDataBar = [] // y轴数据
       let yAxisDataLine = [] // y轴数据
-      data.forEach((item, index)=> {
+      data.forEach((item, index) => {
         xAxisData[index] = item.date
         yAxisDataBar[index] = item.value
         yAxisDataLine[index] = item.perValue
@@ -180,13 +201,13 @@ export default {
       const legendData = [seriesName]
       let xAxisData = [] // X轴用户名
       let yAxisDataLine = [] // y轴数据
-      data.forEach((item, index)=> {
+      data.forEach((item, index) => {
         xAxisData[index] = item.date
         yAxisDataLine[index] = item.value
       })
       var option = {
         xAxis: {
-          boundaryGap : false,
+          boundaryGap: false,
           data: xAxisData
         },
         yAxis: {
@@ -235,9 +256,11 @@ export default {
               color: lineColor
             }
           },
-          areaStyle: {normal: {
-            opacity: .5
-          }},
+          areaStyle: {
+            normal: {
+              opacity: .5
+            }
+          },
           lineStyle: {
             normal: {
               width: echartConfig.lineWidth
@@ -249,24 +272,24 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-    api_search_date(params){
+    api_search_date(params) {
       let _tableData = []
-      api_service_web(params).then(res=> {
-        res.data.uv.forEach((item, index)=> {
+      api_service_web(params).then(res => {
+        res.data.uv.forEach((item, index) => {
           _tableData[index] = {
             "date": item.date,
             "uvValue": item.value,
             "perUvValue": item.perValue
           }
         })
-        res.data.pv.forEach((item, index)=> {
+        res.data.pv.forEach((item, index) => {
           _tableData[index] = Object.assign({}, _tableData[index], {
             "date": item.date,
             "pvValue": item.value,
             "perPvValue": item.perValue
           })
         })
-        res.data.percentage.forEach((item, index)=> {
+        res.data.percentage.forEach((item, index) => {
           _tableData[index] = Object.assign({}, _tableData[index], {
             "date": item.date,
             "percentage": item.value
@@ -278,13 +301,13 @@ export default {
         this.cacheData[params.type] = res.data
       })
     },
-    drawChart(data){
+    drawChart(data) {
       this.chartInit(data.uv, 'echart1')
       this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
       this.chartInitLine(data.percentage, 'echart3')
       this.stars = data.star
     },
-    handleClickSearchType(item){
+    handleClickSearchType(item) {
       this.tableName = `网站流量监控(${item.name})`
       this.type = item.id
       if (this.cacheData[item.id]) {
@@ -307,20 +330,20 @@ export default {
 
 <style lang="less" scoped>
 @import '../../../style/mythemes.less';
-  .search-button {
+.search-button {
     padding: 12px 0;
     & button {
-      margin-right: 6px;
+        margin-right: 6px;
     }
-  }
-  .star {
+}
+.star {
     span {
-      line-height: 24px;
-      vertical-align: top;
+        line-height: 24px;
+        vertical-align: top;
     }
     i {
-      font-size: 24px;
-      color: @error-color;
+        font-size: 24px;
+        color: @error-color;
     }
-  }
+}
 </style>

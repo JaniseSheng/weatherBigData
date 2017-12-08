@@ -6,7 +6,7 @@
         <TabPane label="PC" name="pc">
           <div class="swiper-container swiper-container-pc">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'pc' && pcId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'pc', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
+              <div class="swiper-slide" :class="type == 'pc' && pcId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'pc', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsPc" :key="'searchButtonsPc' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p style="font-size: 18px">{{item.name}}</p>
                 <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -20,7 +20,7 @@
         <TabPane label="IPTV" name="iptv">
           <div class="swiper-container swiper-container-iptv">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" :class="type == 'iptv' && iptvId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'iptv', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
+              <div class="swiper-slide" :class="type == 'iptv' && iptvId == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'iptv', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsIptv" :key="'searchButtonsIptv' + index">
                 <ui-icon size='96' :icon="'family' + item.id" />
                 <p>{{item.name}}</p>
                 <label>{{item.data.value}}</label>
@@ -284,10 +284,10 @@ export default {
 
       // swiper to slide
       if (params.type == 'pc') {
-        this.swiperPc.slideTo(params.id)
+        this.swiperPc.slideTo(params.index)
       }
       if (params.type == 'iptv') {
-        this.swiperIptv.slideTo(params.id)
+        this.swiperIptv.slideTo(params.index)
       }
       if (this.cacheData[`${params.type}_${params.id}`]) {
         this.drawChart(this.cacheData[`${params.type}_${params.id}`])

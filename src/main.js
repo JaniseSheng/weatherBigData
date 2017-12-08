@@ -15,7 +15,6 @@ Vue.use(iView)
 Vue.component('searchWrapper', searchWrapper)
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
-  console.log(storage.get('weatherIsLogin'));
   if ((to.name !== 'login') && !storage.get('weatherIsLogin')) {
     next({path: 'login'});
   } else {

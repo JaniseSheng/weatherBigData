@@ -6,7 +6,7 @@
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
-      <div class="echart-content">
+      <div class="echart-content" style='padding: 6px 12px'>
         <div :ref="'echart' + item" :class="'echart' + item" v-for='item in echartNum'/>
       </div>
     </div>
@@ -22,6 +22,7 @@ let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/bar')
 // 引入提示框和title组件
 require('echarts/lib/component/tooltip')
+require('echarts/lib/component/title')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/dataZoom')
 
@@ -52,17 +53,21 @@ export default {
       this.myChart = echarts.init(this.$refs[refName][0], '', {
         height: '280px'
       });
+      const _data = data.values
       // 指定图表的配置项和数据
       const legendData = seriesName
       let xAxisData = [] // X轴用户名
       let yAxisDataLineUv = [] // y轴数据
       let yAxisDataLinePv = [] // y轴数据
-      data.forEach((item, index)=> {
+      _data.forEach((item, index)=> {
         xAxisData[index] = item.date
         yAxisDataLineUv[index] = item.value_uv
         yAxisDataLinePv[index] = item.value_pv
       })
       var option = {
+        title: {
+          text: data.name
+        },
         xAxis: {
           data: xAxisData
         },
@@ -78,10 +83,10 @@ export default {
           }
         },
         dataZoom: {
-          show: !!data.length && data.length > 10,
+          show: !!_data.length && _data.length > 10,
           realtime: true,
           start: 0,
-          end: 10 * 100 / data.length,
+          end: 10 * 100 / _data.length,
           handleStyle: {
             color: color.color1
           },
@@ -156,7 +161,7 @@ export default {
       this.echartNum = data.length
       this.$nextTick(() => {
         data.forEach((item, index)=> {
-          this.chartInit(item.values, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
+          this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
         })
       })
     },

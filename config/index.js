@@ -16,7 +16,7 @@ module.exports = {
     proxyTable: {
     //proxy all requests starting with /api to jsonplaceholder
     '/api': {
-      target: 'http://localhost:8009', //http://192.168.101.74:8080  http://101.226.6.182:8082
+      target: 'http://101.226.6.182:8082', // 101.226.6.182:8082 localhost:8009
       changeOrigin: true,
       pathRewrite: { //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
         '^/api': ''

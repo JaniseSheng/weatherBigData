@@ -5,7 +5,7 @@
       <div :class='$style.tabsWrapper'>
         <div class="swiper-container swiper-container-mobile">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
+            <div class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
               <ui-icon size='96' :icon="'personal' + index" />
               <p style="font-size: 18px">{{item.name}}</p>
               <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
@@ -238,7 +238,7 @@ export default {
       this.typeName = params.typeName
       this.tableName = params.typeName //设置execl的文件名
       // swiper to slide
-      this.swiperMobile.slideTo(params.id)
+      this.swiperMobile.slideTo(params.index)
       if (this.cacheData[`${params.type}_${params.id}`]) {
         this.drawChart(this.cacheData[`${params.type}_${params.id}`])
       }
