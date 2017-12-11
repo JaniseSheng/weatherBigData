@@ -16,20 +16,22 @@
 
 返回数据： {
   "code" : 1,
-  "data" : [
-    {
-      "name": "web1",
-      "value": 132, // uv值
-    },
-    {
-      "name": "web2",
-      "value": 102, // uv值
-    },
-    ................
-    {
-      "name": "web10",
-      "value": 98, // uv值
-    }
-  ],
+  "data" : {
+    uv: [
+      {
+        "name": "web1",
+        "value": 132, // uv值
+      },
+      {
+        "name": "web2",
+        "value": 102, // uv值
+      },
+      ................
+      {
+        "name": "web10",
+        "value": 98, // uv值
+      }
+    ]
+  },
   "success" : true
 }

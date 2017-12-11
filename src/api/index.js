@@ -73,6 +73,10 @@ export const api_service_web_getTypeNames = (params) => {
 export const api_service_web = (params) => {
   return axiosPost('service_web', params)
 }
+// 网站监控_top
+export const api_service_web_top = (params) => {
+  return axiosPost('service_web_top', params)
+}
 
 // app监控 - 获取类型的名字
 export const api_service_app_getTypeNames = (params) => {
@@ -82,6 +86,10 @@ export const api_service_app_getTypeNames = (params) => {
 export const api_service_app = (params) => {
   return axiosPost('service_app', params)
 }
+// app监控-top
+export const api_service_app_top = (params) => {
+  return axiosPost('service_app_top', params)
+}
 
 // 气象局自有栏目监控 - 获取类型的名字
 export const api_service_weather_getTypeNames = (params) => {
@@ -90,6 +98,10 @@ export const api_service_weather_getTypeNames = (params) => {
 // 气象局自有栏目监控
 export const api_service_weather = (params) => {
   return axiosPost('service_weather', params)
+}
+// 气象局自有栏目监控-top
+export const api_service_weather_top = (params) => {
+  return axiosPost('service_weather_top', params)
 }
 
 /**

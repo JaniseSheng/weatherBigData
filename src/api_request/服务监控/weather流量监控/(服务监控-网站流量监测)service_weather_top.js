@@ -16,20 +16,22 @@
 
 返回数据： {
   "code" : 1,
-  "data" : [
-    {
-      "name": "weather1",
-      "value": 132, // uv值
-    },
-    {
-      "name": "weather2",
-      "value": 102, // uv值
-    },
-    ................
-    {
-      "name": "weather3",
-      "value": 98, // uv值
-    }
-  ],
+  "data" : {
+    uv: [
+      {
+        "name": "weather1",
+        "value": 132, // uv值
+      },
+      {
+        "name": "weather2",
+        "value": 102, // uv值
+      },
+      ................
+      {
+        "name": "weather3",
+        "value": 98, // uv值
+      }
+    ]
+  },
   "success" : true
 }
