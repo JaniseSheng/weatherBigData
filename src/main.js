@@ -22,6 +22,9 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+Vue.prototype.echartYAxisFontSize = 18
+Vue.prototype.legendFontSize = 18
+
 new Vue({
   el: '#app',
   router,

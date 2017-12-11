@@ -71,9 +71,16 @@ export default {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {},
+        yAxis: {
+          axisLabel: {
+            fontSize: this.echartYAxisFontSize
+          }
+        },
         legend: {
-          data: legendData
+          data: legendData,
+          textStyle: {
+            fontSize: this.legendFontSize
+          }
         },
         tooltip: {
           boundaryGap: '50%',

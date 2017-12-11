@@ -64,7 +64,7 @@ export default {
       areaName_info: '', // 当前已经选中的区域
       date_info: '', //当前已经选中的时间
       monthRange: [], // 月范围
-      dateRange: [], // 天范围
+      dateRange: ['2017-09-01', '2017-09-29'], // 天范围
       areas,
       modal1: false, //是否选择区域
       monthOptionStart: {

@@ -67,6 +67,7 @@ export default {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
+      console.log(this.echartYAxisFontSize);
       // 指定图表的配置项和数据
       const legendData = seriesName
       let xAxisData = [] // X轴用户名
@@ -79,11 +80,17 @@ export default {
       })
       var option = {
         xAxis: {
-          data: xAxisData
+          data: xAxisData,
+          axisLabel: {
+            formatter: '{value} %'
+          }
         },
         yAxis: [{
             type: 'value',
             name: seriesName[0],
+            nameTextStyle: {
+              fontSize: this.echartYAxisFontSize
+            },
             splitLine: {
               lineStyle: {
                 color: barColor,
@@ -95,10 +102,16 @@ export default {
                 color: barColor
               }
             },
+            axisLabel: {
+              fontSize: this.echartYAxisFontSize
+            }
           },
           {
             type: 'value',
             name: seriesName[1],
+            nameTextStyle: {
+              fontSize: this.echartYAxisFontSize
+            },
             position: 'right',
             splitLine: {
               show: false,
@@ -113,12 +126,16 @@ export default {
               }
             },
             axisLabel: {
+              fontSize: this.echartYAxisFontSize,
               formatter: '{value} %'
             }
           }
         ],
         legend: {
-          data: legendData
+          data: legendData,
+          textStyle: {
+            fontSize: this.legendFontSize
+          }
         },
         tooltip: {
           boundaryGap: '50%',

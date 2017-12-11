@@ -78,6 +78,9 @@ export default {
         yAxis: [{
             type: 'value',
             name: seriesName[0],
+            nameTextStyle: {
+              fontSize: this.echartYAxisFontSize
+            },
             splitLine: {
               lineStyle: {
                 color: barColor,
@@ -89,10 +92,16 @@ export default {
                 color: barColor
               }
             },
+            axisLabel: {
+              fontSize: this.echartYAxisFontSize
+            }
           },
           {
             type: 'value',
             name: seriesName[1],
+            nameTextStyle: {
+              fontSize: this.echartYAxisFontSize
+            },
             position: 'right',
             splitLine: {
               show: false,
@@ -107,12 +116,16 @@ export default {
               }
             },
             axisLabel: {
+              fontSize: this.echartYAxisFontSize,
               formatter: '{value} %'
             }
           }
         ],
         legend: {
-          data: legendData
+          data: legendData,
+          textStyle: {
+            fontSize: this.legendFontSize
+          }
         },
         tooltip: {
           boundaryGap: '50%',

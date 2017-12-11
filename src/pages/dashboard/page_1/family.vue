@@ -127,7 +127,7 @@ export default {
         this.myChart.dispose()
       }
       this.myChart = echarts.init(this.$refs[refName], '', {
-        height: '380px'
+        height: '420px'
       });
       // 指定图表的配置项和数据
       const legendData = [seriesName]
@@ -144,6 +144,9 @@ export default {
         yAxis: {
             type: 'value',
             name: seriesName + '(户数)',
+            nameTextStyle: {
+              fontSize: this.echartYAxisFontSize
+            },
             splitLine: {
               lineStyle: {
                 color: barColor
@@ -153,10 +156,16 @@ export default {
               lineStyle: {
                 color: barColor
               }
+            },
+            axisLabel: {
+              fontSize: this.echartYAxisFontSize
             }
           },
         legend: {
-          data: legendData
+          data: legendData,
+          textStyle: {
+            fontSize: this.legendFontSize
+          }
         },
         tooltip: {
           boundaryGap: '50%',
@@ -355,16 +364,17 @@ export default {
 .tabsWrapper {
     :global(.swiper-slide) {
         padding: 12px;
-        width: 300px;
-        height: 300px;
+        width: 200px;
+        height: 200px;
         background-color: @warning-color;
         color: white;
     }
     & svg {
       position: absolute;
+      width: 35%;
       left: 0;
       right: 0;
-      top: 0;
+      top: 45px;
       bottom: 0;
       margin: auto;
     }
