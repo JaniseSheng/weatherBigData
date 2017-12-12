@@ -84,7 +84,7 @@ export default {
         })
       })
     },
-    chartInit(data, refName, barColor = '#2d8cf0', seriesName = this.typeName) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = [this.typeName, this.typeName + '(占比)']) {
       if (this.myChart) {
         this.myChart.clear()
         this.myChart.dispose()
@@ -93,37 +93,62 @@ export default {
         height: '420px'
       });
       // 指定图表的配置项和数据
-      const legendData = [seriesName]
+      const legendData = seriesName
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
+      let yAxisDataLine = [] // y轴数据
       data.forEach((item, index) => {
         xAxisData[index] = item.name
         yAxisData[index] = item.value
+        yAxisDataLine[index] = item.perValue
       })
       var optionBar = {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {
-            type: 'value',
-            name: seriesName + '(户数)',
-            nameTextStyle: {
-              fontSize: this.echartYAxisFontSize
-            },
-            splitLine: {
-              lineStyle: {
-                color: barColor
-              }
-            },
-            axisLine: {
-              lineStyle: {
-                color: barColor
-              }
-            },
-            axisLabel: {
-              fontSize: this.echartYAxisFontSize
+        yAxis: [{
+          type: 'value',
+          name: seriesName[0] + '(户数)',
+          nameTextStyle: {
+            fontSize: this.echartYAxisFontSize
+          },
+          splitLine: {
+            lineStyle: {
+              color: barColor
             }
           },
+          axisLine: {
+            lineStyle: {
+              color: barColor
+            }
+          },
+          axisLabel: {
+            fontSize: this.echartYAxisFontSize
+          }
+        }, {
+          type: 'value',
+          name: seriesName[1],
+          nameTextStyle: {
+            fontSize: this.echartYAxisFontSize
+          },
+          position: 'right',
+          splitLine: {
+            show: false,
+            lineStyle: {
+              color: lineColor,
+              opacity: 0.6
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              color: lineColor
+            }
+          },
+          axisLabel: {
+            fontSize: this.echartYAxisFontSize,
+            formatter: '{value} %'
+          }
+        }],
         legend: {
           data: legendData,
           textStyle: {
@@ -135,7 +160,8 @@ export default {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+          },
+          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
@@ -143,16 +169,16 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: barColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: barColor
             }
           }
         },
         series: [{
-          name: seriesName,
+          name: seriesName[0],
           type: 'bar',
           barWidth: echartConfig.barWidth,
           barMinHeight: '8',
@@ -163,6 +189,24 @@ export default {
             }
           },
           data: yAxisData
+        }, {
+          name: seriesName[1],
+          type: 'line',
+          yAxisIndex: 1,
+          itemStyle: {
+            normal: {
+              borderWidth: 6,
+              color: lineColor,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10
+            }
+          },
+          lineStyle: {
+            normal: {
+              width: echartConfig.lineWidth
+            }
+          },
+          data: yAxisDataLine
         }]
       };
       var optionPie = {
@@ -177,44 +221,44 @@ export default {
           }
         },
         series: [{
-            name: this.typeName,
-              type:'pie',
-              radius: ['40%', '55%'],
-              color:['#2d8cf0', '#19be6b','#ff9900','#ed3f14', '#E406AD', '#4918EE'],
-              label: {
-                  normal: {
-                      formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-                      backgroundColor: '#eee',
-                      borderColor: '#aaa',
-                      borderWidth: 1,
-                      borderRadius: 4,
-                      rich: {
-                          a: {
-                              color: '#999',
-                              lineHeight: 22,
-                              align: 'center'
-                          },
-                          hr: {
-                              borderColor: '#aaa',
-                              width: '100%',
-                              borderWidth: 0.5,
-                              height: 0
-                          },
-                          b: {
-                              fontSize: 16,
-                              lineHeight: 33
-                          },
-                          per: {
-                              color: '#eee',
-                              backgroundColor: '#334455',
-                              padding: [2, 4],
-                              borderRadius: 2
-                          }
-                      }
-                  }
-              },
-              data
-          }]
+          name: this.typeName,
+          type: 'pie',
+          radius: ['40%', '55%'],
+          color: ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14', '#E406AD', '#4918EE'],
+          label: {
+            normal: {
+              formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+              backgroundColor: '#eee',
+              borderColor: '#aaa',
+              borderWidth: 1,
+              borderRadius: 4,
+              rich: {
+                a: {
+                  color: '#999',
+                  lineHeight: 22,
+                  align: 'center'
+                },
+                hr: {
+                  borderColor: '#aaa',
+                  width: '100%',
+                  borderWidth: 0.5,
+                  height: 0
+                },
+                b: {
+                  fontSize: 16,
+                  lineHeight: 33
+                },
+                per: {
+                  color: '#eee',
+                  backgroundColor: '#334455',
+                  padding: [2, 4],
+                  borderRadius: 2
+                }
+              }
+            }
+          },
+          data
+        }]
       };
       const option = data.length <= 6 ? optionPie : optionBar
       // 使用刚指定的配置项和数据显示图表。
@@ -231,7 +275,7 @@ export default {
     exportExcel(data) {
       let _tableColums = []
       let _tableData = {}
-      data.forEach((item, index)=> {
+      data.forEach((item, index) => {
         _tableColums[index] = {
           title: item.name,
           key: 'value' + index
@@ -241,7 +285,7 @@ export default {
       this.tableColums = _tableColums
       this.tableData = [_tableData]
     },
-    drawChart(data){
+    drawChart(data) {
       this.chartInit(data, 'echart1')
     },
     handleClickSearchType(params) {
@@ -316,16 +360,16 @@ export default {
         color: white;
     }
     & svg {
-      position: absolute;
-      width: 35%;
-      left: 0;
-      right: 0;
-      top: 45px;
-      bottom: 0;
-      margin: auto;
+        position: absolute;
+        width: 35%;
+        left: 0;
+        right: 0;
+        top: 45px;
+        bottom: 0;
+        margin: auto;
     }
 }
 .swiper_active {
-  background-color: @success-color !important;
+    background-color: @success-color !important;
 }
 </style>

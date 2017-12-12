@@ -121,7 +121,7 @@ export default {
         })
       })
     },
-    chartInit(data, refName, barColor = color.infoColor, seriesName = this.typeName) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = [this.typeName, this.typeName + '(占比)']) {
       if (this.myChart) {
         this.myChart.clear()
         this.myChart.dispose()
@@ -130,37 +130,65 @@ export default {
         height: '420px'
       });
       // 指定图表的配置项和数据
-      const legendData = [seriesName]
+      const legendData = seriesName
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
+      let yAxisDataLine = [] // y轴数据
       data.forEach((item, index) => {
         xAxisData[index] = item.name
         yAxisData[index] = item.value
+        yAxisDataLine[index] = item.perValue
       })
       var optionBar = {
         xAxis: {
           data: xAxisData
         },
-        yAxis: {
-            type: 'value',
-            name: seriesName + '(户数)',
-            nameTextStyle: {
-              fontSize: this.echartYAxisFontSize
-            },
-            splitLine: {
-              lineStyle: {
-                color: barColor
+        yAxis: [
+          {
+              type: 'value',
+              name: seriesName[0] + '(户数)',
+              nameTextStyle: {
+                fontSize: this.echartYAxisFontSize
+              },
+              splitLine: {
+                lineStyle: {
+                  color: barColor
+                }
+              },
+              axisLine: {
+                lineStyle: {
+                  color: barColor
+                }
+              },
+              axisLabel: {
+                fontSize: this.echartYAxisFontSize
               }
             },
-            axisLine: {
-              lineStyle: {
-                color: barColor
+            {
+                type: 'value',
+                name: seriesName[1],
+                nameTextStyle: {
+                  fontSize: this.echartYAxisFontSize
+                },
+                position: 'right',
+                splitLine: {
+                  show: false,
+                  lineStyle: {
+                    color: lineColor,
+                    opacity: 0.6
+                  }
+                },
+                axisLine: {
+                  lineStyle: {
+                    color: lineColor
+                  }
+                },
+                axisLabel: {
+                  fontSize: this.echartYAxisFontSize,
+                  formatter: '{value} %'
+                }
               }
-            },
-            axisLabel: {
-              fontSize: this.echartYAxisFontSize
-            }
-          },
+        ],
         legend: {
           data: legendData,
           textStyle: {
@@ -172,7 +200,8 @@ export default {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+          },
+          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
@@ -180,16 +209,16 @@ export default {
           start: 0,
           end: 10 * 100 / data.length,
           handleStyle: {
-            color: '#ff9900'
+            color: barColor
           },
           dataBackground: {
             areaStyle: {
-              color: '#ff9900'
+              color: barColor
             }
           }
         },
         series: [{
-          name: seriesName,
+          name: seriesName[0],
           type: 'bar',
           barWidth: echartConfig.barWidth,
           barMinHeight: '8',
@@ -200,6 +229,24 @@ export default {
             }
           },
           data: yAxisData
+        }, {
+          name: seriesName[1],
+          type: 'line',
+          yAxisIndex: 1,
+          itemStyle: {
+            normal: {
+              borderWidth: 6,
+              color: lineColor,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowBlur: 10
+            }
+          },
+          lineStyle: {
+            normal: {
+              width: echartConfig.lineWidth
+            }
+          },
+          data: yAxisDataLine
         }]
       };
       var optionPie = {
@@ -242,7 +289,6 @@ export default {
                               lineHeight: 33
                           },
                           per: {
-
                               color: '#eee',
                               backgroundColor: '#334455',
                               padding: [2, 4],
