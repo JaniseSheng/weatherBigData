@@ -3,7 +3,7 @@
     <search-wrapper @changeSearch='changeSearch' :tableColums="tableColums" :tableData="tableData" :tableName="tableName" >
       <div class="search-button">
         <Button :type="item.id == type ? 'success' : 'ghost'" v-for='(item , index) in searchButtons' :key="'searchButtons' + index" @click="handleClickSearchType(item)">{{item.name}}</Button>
-        <Button :type="type == 888888 ? 'success' : 'ghost'" @click="handleClickSearchType_top">Top 5</Button>
+        <Button :type="type == 888888 ? 'success' : 'ghost'" @click="handleClickSearchType_top">Top 10</Button>
       </div>
     </search-wrapper>
     <div class="echart-wrapper">
@@ -428,7 +428,7 @@ export default {
       }
     },
     handleClickSearchType_top() {
-      this.tableName = `APP流量监控Top5`
+      this.tableName = `APP流量监控Top10`
       this.type = 888888
       if (this.cacheData[888888]) {
         this.exportExcel_top(this.cacheData[888888])
