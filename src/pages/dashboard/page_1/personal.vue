@@ -52,6 +52,7 @@ export default {
       searchButtonsMobile: [],
       type: 'mobile',
       id: 999999,
+      index: 0,
       cacheData: {}, //缓存数据
       typeName: '',
       tableColums: [],
@@ -109,7 +110,7 @@ export default {
         yAxisData[index] = _value
         yAxisDataLine[index] = item.perValue
       })
-      this.searchButtonsMobile[this.id].data = maxObj
+      this.searchButtonsMobile[this.index].data = maxObj
       var optionBar = {
         xAxis: {
           data: xAxisData
@@ -299,6 +300,7 @@ export default {
     handleClickSearchType(params) {
       this.type = params.type
       this.id = params.id
+      this.index = params.index
       this.typeName = params.typeName
       this.tableName = params.typeName //设置execl的文件名
       // swiper to slide

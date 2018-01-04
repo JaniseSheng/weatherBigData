@@ -72,6 +72,7 @@ export default {
       pcId: '999999',
       iptvId: '999999',
       id: 999999,
+      index: 0,
       cacheData: {}, //缓存数据
       typeName: '',
       tableColums: [],
@@ -148,9 +149,9 @@ export default {
         yAxisDataLine[index] = item.perValue
       })
       if(this.type == 'pc') {
-        this.searchButtonsPc[this.id].data = maxObj
+        this.searchButtonsPc[this.index].data = maxObj
       } else {
-        this.searchButtonsIptv[this.id].data = maxObj
+        this.searchButtonsIptv[this.index].data = maxObj
       }
       var optionBar = {
         xAxis: {
@@ -345,6 +346,7 @@ export default {
       this.typeName = params.typeName
       this.type = params.type
       this.id = params.id
+      this.index = params.index
       if (params.type == 'pc') {
         this.pcId = params.id
       }
