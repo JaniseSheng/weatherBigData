@@ -97,11 +97,19 @@ export default {
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
       let yAxisDataLine = [] // y轴数据
+      let max_value = 0
+      let maxObj = {}
       data.forEach((item, index) => {
+        var _value = parseInt(item.value)
+        if ( _value> max_value) {
+          max_value = _value
+          maxObj = item
+        }
         xAxisData[index] = item.name
-        yAxisData[index] = item.value
+        yAxisData[index] = _value
         yAxisDataLine[index] = item.perValue
       })
+      this.searchButtonsMobile[this.id].data = maxObj
       var optionBar = {
         xAxis: {
           data: xAxisData
