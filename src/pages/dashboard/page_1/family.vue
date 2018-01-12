@@ -215,7 +215,7 @@ export default {
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
-          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
+          formatter: "<p style='text-align: left'>{a}({b})</br>{c}</p>"
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
