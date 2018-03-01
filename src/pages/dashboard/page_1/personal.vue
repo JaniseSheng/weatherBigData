@@ -7,7 +7,7 @@
           <div class="swiper-wrapper">
             <div v-if='item.id != 7' class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
               <ui-icon size='96' :icon="'personal' + item.id" />
-              <p style="font-size: 18px">{{item.name}} {{item.id}}</p>
+              <p style="font-size: 18px">{{item.name}}</p>
               <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
               <p>{{item.data.name}}</p>
             </div>
