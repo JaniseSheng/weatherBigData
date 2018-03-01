@@ -215,7 +215,13 @@ export default {
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
-          formatter: "<p style='text-align: left'>{a}({b})</br>{c}</p>"
+          formatter: function (params, ticket, callback) {
+                        const barData = params[0]
+                        const lineData = params[1]
+                        const barLabel = `${barData.seriesName}: ${barData.data}`
+                        const lineLabel = `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%`
+                          return `<p style='text-align: left'>${barLabel}<br />${lineLabel}</p>`
+                      }
         },
         dataZoom: {
           show: !!data.length && data.length > 10,

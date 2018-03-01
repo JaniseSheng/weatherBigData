@@ -5,9 +5,9 @@
       <div :class='$style.tabsWrapper'>
         <div class="swiper-container swiper-container-mobile">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
+            <div v-if='item.id != 7' class="swiper-slide" :class="id == item.id && $style.swiper_active" @click="handleClickSearchType({type: 'mobile', id: item.id, typeName: item.name, index: index})" v-for="(item, index) in searchButtonsMobile" :key="'searchButtonsMobile' + index">
               <ui-icon size='96' :icon="'personal' + item.id" />
-              <p style="font-size: 18px">{{item.name}}</p>
+              <p style="font-size: 18px">{{item.name}} {{item.id}}</p>
               <label style="margin-top: 6px; display:block;">{{item.data.value}}</label>
               <p>{{item.data.name}}</p>
             </div>
@@ -170,7 +170,13 @@ export default {
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           },
-          formatter: "<p style='text-align: left'>{a0}: {c0}<br />{a1}: {c1}%</p>"
+          formatter: function (params, ticket, callback) {
+                        const barData = params[0]
+                        const lineData = params[1]
+                        const barLabel = `${barData.seriesName}: ${barData.data}`
+                        const lineLabel = `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%`
+                          return `<p style='text-align: left'>${barLabel}<br />${lineLabel}</p>`
+                      }
         },
         dataZoom: {
           show: !!data.length && data.length > 10,

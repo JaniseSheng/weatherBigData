@@ -12,7 +12,7 @@
         <div v-else>
           <div ref='echart1' />
           <div ref='echart2' />
-          <div style="position:relative">
+          <div style="position:relative" v-if='false'>
             <div ref='echart3' >
             </div>
             <p style='position: absolute; left: 76px; top: 0' class='star' v-if='stars'>
