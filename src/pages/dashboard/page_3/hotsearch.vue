@@ -83,19 +83,28 @@ export default {
       this.wordCloud = new WordCloud(this.$refs.wordCloud, {
         list: _Collection.sampleSize(data, 200),
         color: (a, size) => {
-          console.log(size);
           return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][size % 4]
         },
         gridSize: Math.round(16 * 1000 / 1024),
         weightFactor: function(size) {
-          const customSize = parseInt(size)
-          if (customSize < 8) {
-            return 8;
+          // const customSize = parseInt(size)
+          // if (customSize < 8) {
+          //   return 8;
+          // }
+          // if (customSize > 120) {
+          //   return 120;
+          // }
+          // return customSize
+          var verSize = 100
+          const customSize = Math.round(size / verSize)
+          if (customSize < 12) {
+            return 12;
           }
           if (customSize > 120) {
             return 120;
           }
           return customSize
+
         }
       })
     },
