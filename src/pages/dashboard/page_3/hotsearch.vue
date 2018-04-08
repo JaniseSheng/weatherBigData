@@ -31,6 +31,7 @@ import {
   api_public_hot,
   api_public_hot_getTypeNames
 } from '@/api'
+import _Collection from 'lodash/Collection'
 import color from '@/lib/color'
 let WordCloud = require('../../../lib/wordcloud2.js')
 export default {
@@ -77,16 +78,24 @@ export default {
       this.tableColums = _tableColums
       this.tableData = [_tableData]
     },
-    drawChart(data, verSize= 5000){
+    drawChart(data){
+      console.log();
       this.wordCloud = new WordCloud(this.$refs.wordCloud, {
-        list: data,
+        list: _Collection.sampleSize(data, 200),
         color: (a, size) => {
           console.log(size);
           return ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14'][size % 4]
         },
         gridSize: Math.round(16 * 1000 / 1024),
         weightFactor: function(size) {
-          return Math.round(size / verSize)
+          const customSize = parseInt(size)
+          if (customSize < 8) {
+            return 8;
+          }
+          if (customSize > 120) {
+            return 120;
+          }
+          return customSize
         }
       })
     },
