@@ -170,7 +170,8 @@ export default {
       this.echartNum = data.length
       this.$nextTick(() => {
         data.forEach((item, index)=> {
-          this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index])
+          const seriesName = this.type == 0 ? ['unique view', 'page view'] : ['阅读数', '点赞数']
+          this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index], seriesName)
         })
       })
     },
