@@ -7,7 +7,7 @@
     </p>
     <p style="float: right">
       欢迎{{userName}}登陆!
-      <Button type="warning" icon="log-out" size='small' style="margin-left: 6px;" @click="$router.push('/login')">登出</Button>
+      <Button type="warning" icon="log-out" size='small' style="margin-left: 6px;" @click="loginOut">登出</Button>
     </p>
   </div>
   <div class="main-wrapper">
@@ -62,17 +62,28 @@
 </template>
 
 <script>
+import storage from '@/lib/storagejs'
 export default {
   data() {
     return {
       userName: 'admin'
     }
   },
+  created(){
+    this.userName = storage.get('mobile')
+    const loginClear = storage.get('loginClear')
+    if (loginClear) return
+    this.$router.push('/login')
+  },
   methods: {
     handleSelectRoute(name){
       this.$router.push({
           name: name
         })
+    },
+    loginOut(){
+      storage.remove('loginClear')
+      this.$router.push('/login')
     }
   }
 }

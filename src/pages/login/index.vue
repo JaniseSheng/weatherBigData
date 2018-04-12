@@ -44,24 +44,24 @@ export default {
         passWord: ''
       },
       userMenus: [{
-          userName: 'admin001',
-          passWord: '1234561'
+          userName: 'weather_a',
+          passWord: 'bigData@24129'
         },
         {
-          userName: 'admin002',
-          passWord: '1234562'
+          userName: 'weather_b',
+          passWord: 'bigData@13512'
         },
         {
-          userName: 'admin003',
-          passWord: '1234563'
+          userName: 'weather_c',
+          passWord: 'bigData@98881'
         },
         {
-          userName: 'admin004',
-          passWord: '1234564'
+          userName: 'weather_d',
+          passWord: 'bigData@66512'
         },
         {
-          userName: 'admin005',
-          passWord: '1234565'
+          userName: 'weather_e',
+          passWord: 'bigData@77615'
         }
       ],
       ruleforms: {
@@ -95,6 +95,7 @@ export default {
               storage.remove('mobile');
               storage.remove('passWord');
             }
+            storage.set('loginClear', true)
             this.$router.push({
               name: '0-1'
             })
