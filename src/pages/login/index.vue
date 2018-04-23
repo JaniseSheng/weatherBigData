@@ -13,8 +13,14 @@
               </Input>
             </Form-item>
             <Form-item prop="passWord">
-              <Input type="password" v-model="forms.passWord" placeholder="请输入密码" size='large' @on-enter="handleSubmit('forms')">
+              <Input type="password" v-model="forms.passWord" placeholder="请输入密码" size='large'>
               <Icon type="ios-locked-outline" slot="prepend" style='padding-right: 8px; padding-left: 8px' />
+              </Input>
+            </Form-item>
+            <Form-item prop="vCode">
+              <Input type="text" v-model="forms.vCode" placeholder="请输入验证码" size='large' @on-enter="handleSubmit('forms')">
+              <Icon type="android-star" slot="prepend" style='padding-right: 8px; padding-left: 8px'></Icon>
+              <span slot="append" style="cursor: pointer" @click='test'>{{vCode1}} + {{vCode2}} = ?</span>
               </Input>
             </Form-item>
             <Form-item style="text-align: left">
@@ -32,16 +38,26 @@
 
 <script>
 import {
-  empty
+  empty, validate
 } from '@/lib/validator'
 import storage from '@/lib/storagejs'
+let vCode1 = parseInt(Math.random(1)* 20)
+let vCode2 = parseInt(Math.random(1)* 20)
 export default {
+  beforeRouteEnter (to, from, next) {
+    vCode1 = parseInt(Math.random(1)* 20)
+    vCode2 = parseInt(Math.random(1)* 20)
+    next()
+  },
   data() {
     return {
       isRemember: false, //是否记住账号
+      vCode1,
+      vCode2,
       forms: {
         userName: '',
-        passWord: ''
+        passWord: '',
+        vCode: ''
       },
       userMenus: [{
           userName: 'weather_a',
@@ -66,7 +82,8 @@ export default {
       ],
       ruleforms: {
         userName: empty('账号不能为空'),
-        passWord: empty('密码不能为空')
+        passWord: empty('密码不能为空'),
+        vCode: validate(vCode1 + vCode2)
       }
     }
   },
@@ -79,12 +96,20 @@ export default {
   }
 },
   methods: {
+    test(){
+      var _code1 = parseInt(Math.random(1)* 20)
+      var _code2 = parseInt(Math.random(1)* 20)
+      this.vCode1 = _code1
+      this.vCode2 = _code2
+      this.ruleforms.vCode = validate(_code1 + _code2)
+    },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           const _filterObj = this.userMenus.find(item => {
             return item.userName == this.forms.userName && item.passWord == this.forms.passWord
           })
+          const isVCode = this.forms.vCode ==  this.vCode1 + this.vCode2
           if (_filterObj) {
             storage.set('weatherIsLogin', true);
             this.$Message.success('您好！欢迎来到气象服务大数据洞察平台!');
@@ -103,7 +128,11 @@ export default {
             this.$Message.error('账号密码错误');
           }
         } else {
-          this.$Message.error('请输入账号或密码');
+          if (!this.forms.userName || !this.forms.passWord) {
+            this.$Message.error('请输入账号或密码');
+          } else {
+            this.$Message.error('请输入正确的验证码');
+          }
         }
       })
     }
@@ -131,7 +160,7 @@ export default {
 }
 .login-block {
     display: inline-block;
-    height: 320px;
+    height: 350px;
     width: 406px;
     margin: auto;
     position: absolute;

@@ -21,6 +21,17 @@ export const empty = (text = '内容不能为空') => {
     }
   }
 }
+export const validate = (validateInt , text = '验证码错误') => {
+  return {
+    trigger: 'blur',
+    validator: (rule, value, callback) => {
+      if (value != validateInt) {
+        callback(new Error(text))
+      }
+      callback()
+    }
+  }
+}
 
 export const textLength = (args) => {
   return {
