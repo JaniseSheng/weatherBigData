@@ -190,7 +190,6 @@ export default {
           _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
         })
       })
-      console.log(_tableData);
       this.tableColums = _tableColums
       this.tableData = _tableData
     },
