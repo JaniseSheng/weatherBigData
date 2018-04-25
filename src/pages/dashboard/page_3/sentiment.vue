@@ -154,13 +154,20 @@ export default {
     exportExcel(data) {
       let _tableColums = [{title: '日期', key: 'date'}]
       let _tableData = [{}]
+      console.log(data);
       data.forEach((item, index)=> {
-        _tableColums[index + 1] = {title: `${item.name}(uv/pv)`, key: `value${index}`}
+        for (let i= 0; i < 2; i++) {
+          const colum_index = index * 2 + i
+          _tableColums[colum_index + 1] = {title: `${item.name}(${i == 0 ? 'uv' : 'pv'})`, key: `value${colum_index}`}
+          console.log(item.values);
+        }
+
         item.values.forEach((_item, _index)=> {
           let _obj = {}
           _obj.date = _item.date
           _obj[`value${index}`] = `${_item.value_uv}/${_item.value_pv}`
           _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+          console.log(123);
         })
       })
       this.tableColums = _tableColums
