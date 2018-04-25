@@ -187,7 +187,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-    chartInit_top(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = 'page view') {
+    chartInit_top(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = 'unique view') {
       this.myChart_top = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });

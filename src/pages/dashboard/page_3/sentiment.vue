@@ -153,7 +153,7 @@ export default {
     },
     exportExcel(data) {
       let _tableColums = [{title: '日期', key: 'date'}]
-      let _tableData_uv = [{}]
+      let _tableData = [{}]
       var _data = data.map(item => {
         return {
           name: item.name,
@@ -181,18 +181,16 @@ export default {
           let _obj = {}
           _obj.date = _item.date
           _obj[`value${index}_u`] = `${_item.value}`
-          _tableData_uv[_index] = Object.assign({}, _tableData_uv[_index], _obj)
+          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
         })
         item.values_pv.forEach((_item, _index)=> {
           let _obj = {}
           _obj.date = _item.date
           _obj[`value${index}_p`] = `${_item.value}`
-          _tableData_pv[_index] = Object.assign({}, _tableData_pv[_index], _obj)
+          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
         })
       })
-      const _tableData = [..._tableData_uv, ..._tableData_pv]
-      console.log(_tableColums);
-      console.log(_data);
+      console.log(_tableData);
       this.tableColums = _tableColums
       this.tableData = _tableData
     },

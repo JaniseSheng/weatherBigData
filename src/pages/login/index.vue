@@ -4,7 +4,7 @@
       <div class="login-block">
         <div class="login-box">
           <div class="login-title">
-            <p style='float: left; font-size: 18px'>气象服务大数据洞察平台</p>
+            <p style='float: left; font-size: 18px'>上海市气象服务大数据洞察平台</p>
           </div>
           <Form ref="forms" :model="forms" :rules="ruleforms">
             <Form-item prop="userName">
