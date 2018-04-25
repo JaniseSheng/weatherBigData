@@ -153,23 +153,46 @@ export default {
     },
     exportExcel(data) {
       let _tableColums = [{title: '日期', key: 'date'}]
-      let _tableData = [{}]
-      console.log(data);
-      data.forEach((item, index)=> {
+      let _tableData_uv = [{}]
+      var _data = data.map(item => {
+        return {
+          name: item.name,
+          values_uv: item.values.map(item2 => {
+            return {
+              value: item2.value_uv,
+              date: item2.date
+            }
+          }),
+          values_pv: item.values.map(item3 => {
+            return {
+              value: item3.value_pv,
+              date: item3.date
+            }
+          })
+        }
+      })
+      _data.forEach((item, index)=> {
         for (let i= 0; i < 2; i++) {
           const colum_index = index * 2 + i
-          _tableColums[colum_index + 1] = {title: `${item.name}(${i == 0 ? 'uv' : 'pv'})`, key: `value${colum_index}`}
-          console.log(item.values);
+          _tableColums[colum_index + 1] = {title: `${item.name}(${i == 0 ? '阅读数' : '点赞数'})`, key: `value${index}_${i == 0 ? 'u' : 'p'}`}
         }
 
-        item.values.forEach((_item, _index)=> {
+        item.values_uv.forEach((_item, _index)=> {
           let _obj = {}
           _obj.date = _item.date
-          _obj[`value${index}`] = `${_item.value_uv}/${_item.value_pv}`
-          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
-          console.log(123);
+          _obj[`value${index}_u`] = `${_item.value}`
+          _tableData_uv[_index] = Object.assign({}, _tableData_uv[_index], _obj)
+        })
+        item.values_pv.forEach((_item, _index)=> {
+          let _obj = {}
+          _obj.date = _item.date
+          _obj[`value${index}_p`] = `${_item.value}`
+          _tableData_pv[_index] = Object.assign({}, _tableData_pv[_index], _obj)
         })
       })
+      const _tableData = [..._tableData_uv, ..._tableData_pv]
+      console.log(_tableColums);
+      console.log(_data);
       this.tableColums = _tableColums
       this.tableData = _tableData
     },
