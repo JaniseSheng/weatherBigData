@@ -29,6 +29,10 @@ export const api_total_scene_getTypeNames = (params) => {
 export const api_total_scene = (params) => {
   return axiosPost('total_scene', params)
 }
+// 分时数据下载
+export const api_down_data_time = (params) => {
+  return axiosPost('down_data_time', params)
+}
 
 
 

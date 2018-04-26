@@ -20,6 +20,7 @@
                       </template>
           <MenuItem name="0-1">分终端</MenuItem>
           <MenuItem name="0-2">分场景</MenuItem>
+          <MenuItem name="0-3">分时数据下载</MenuItem>
         </Submenu>
         <Submenu name="1">
           <template slot="title">

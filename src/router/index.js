@@ -4,6 +4,7 @@ import login from '@/pages/login'
 import dashboard from '@/pages/dashboard'
 import terminal from '@/pages/dashboard/page_0/terminal'
 import scene from '@/pages/dashboard/page_0/scene'
+import dataDown from '@/pages/dashboard/page_0/dataDown'
 import family from '@/pages/dashboard/page_1/family'
 import personal from '@/pages/dashboard/page_1/personal'
 import user from '@/pages/dashboard/page_1/user'
@@ -34,43 +35,39 @@ export default new Router({
           path: '/scene',
           name: '0-2',
           component: scene
-        },
-        {
+        }, {
+          path: '/dataDown',
+          name: '0-3',
+          component: dataDown
+        }, {
           path: '/family',
           name: '1-1',
           component: family
-        },
-        {
+        }, {
           path: '/personal',
           name: '1-2',
           component: personal
-        },
-        {
+        }, {
           path: '/user',
           name: '1-3',
           component: user
-        },
-        {
+        }, {
           path: '/webtraffic',
           name: '2-1',
           component: webtraffic
-        },
-        {
+        }, {
           path: '/apptraffic',
           name: '2-2',
           component: apptraffic
-        },
-        {
+        }, {
           path: '/meteortraffic',
           name: '2-3',
           component: meteortraffic
-        },
-        {
+        }, {
           path: '/sentiment',
           name: '3-1',
           component: sentiment
-        },
-        {
+        }, {
           path: '/hotsearch',
           name: '3-2',
           component: hotsearch
