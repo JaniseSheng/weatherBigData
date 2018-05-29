@@ -65,7 +65,7 @@ export default {
     })
   },
   methods: {
-    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'unique view占比']) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'uv变化率']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -380,13 +380,13 @@ export default {
         title: 'uv',
         key: 'uvValue'
       }, {
-        title: 'uv占比',
+        title: 'uv变化率',
         key: 'perUvValue'
       }, {
         title: 'pv',
         key: 'pvValue'
       }, {
-        title: 'pv占比',
+        title: 'pv变化率',
         key: 'perPvValue'
       }, {
         title: '预报准确率',
@@ -434,7 +434,7 @@ export default {
     drawChart(data) {
       this.$nextTick(()=> {
         data.uv && this.chartInit(data.uv, 'echart1')
-        data.pv && this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
+        data.pv && this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'pv变化率'])
         data.percentage && this.chartInitLine(data.percentage, 'echart3')
         data.star && (this.stars = data.star)
       })

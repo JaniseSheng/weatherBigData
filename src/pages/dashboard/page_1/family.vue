@@ -123,7 +123,7 @@ export default {
         })
       })
     },
-    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = [this.typeName, this.typeName + '(占比)']) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = [this.typeName]) {
       if (this.myChart) {
         this.myChart.clear()
         this.myChart.dispose()
@@ -160,7 +160,7 @@ export default {
         yAxis: [
           {
               type: 'value',
-              name: seriesName[0] + '(户数)',
+              name: seriesName[0],
               nameTextStyle: {
                 fontSize: this.echartYAxisFontSize
               },
@@ -177,31 +177,7 @@ export default {
               axisLabel: {
                 fontSize: this.echartYAxisFontSize
               }
-            },
-            {
-                type: 'value',
-                name: seriesName[1],
-                nameTextStyle: {
-                  fontSize: this.echartYAxisFontSize
-                },
-                position: 'right',
-                splitLine: {
-                  show: false,
-                  lineStyle: {
-                    color: lineColor,
-                    opacity: 0.6
-                  }
-                },
-                axisLine: {
-                  lineStyle: {
-                    color: lineColor
-                  }
-                },
-                axisLabel: {
-                  fontSize: this.echartYAxisFontSize,
-                  formatter: '{value} %'
-                }
-              }
+            }
         ],
         legend: {
           data: legendData,
@@ -214,14 +190,14 @@ export default {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          },
-          formatter: function (params, ticket, callback) {
-                        const barData = params[0]
-                        const lineData = params[1]
-                        const barLabel = `${barData.seriesName}: ${barData.data}`
-                        const lineLabel = `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%`
-                          return `<p style='text-align: left'>${barLabel}<br />${lineLabel}</p>`
-                      }
+          }
+          // formatter: function (params, ticket, callback) {
+          //               const barData = params[0]
+          //               const lineData = params[1]
+          //               const barLabel = `${barData.seriesName}: ${barData.data}`
+          //               const lineLabel = `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%`
+          //                 return `<p style='text-align: left'>${barLabel}<br />${lineLabel}</p>`
+          //             }
         },
         dataZoom: {
           show: !!data.length && data.length > 10,
@@ -249,24 +225,6 @@ export default {
             }
           },
           data: yAxisData
-        }, {
-          name: seriesName[1],
-          type: 'line',
-          yAxisIndex: 1,
-          itemStyle: {
-            normal: {
-              borderWidth: 6,
-              color: lineColor,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-              shadowBlur: 10
-            }
-          },
-          lineStyle: {
-            normal: {
-              width: echartConfig.lineWidth
-            }
-          },
-          data: yAxisDataLine
         }]
       };
       var optionPie = {

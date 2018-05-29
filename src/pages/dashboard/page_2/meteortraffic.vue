@@ -61,7 +61,7 @@ export default {
     })
   },
   methods: {
-    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'unique view占比']) {
+    chartInit(data, refName, barColor = color.infoColor, lineColor = color.warningColor, seriesName = ['unique view', 'uv变化率']) {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '380px'
       });
@@ -363,7 +363,7 @@ export default {
     },
     exportExcel(data) {
       let _tableData = []
-      this.tableColums = [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv占比', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv占比', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}]
+      this.tableColums = [{title: '日期', key: 'date'}, {title: 'uv', key: 'uvValue'}, {title: 'uv变化率', key: 'perUvValue'}, {title: 'pv', key: 'pvValue'}, {title: 'pv变化率', key: 'perPvValue'}, {title: '预报准确率', key: 'percentage'}]
       data.uv.forEach((item, index)=> {
         _tableData[index] = {
           "date": item.date,
@@ -407,7 +407,7 @@ export default {
       this.$nextTick(()=> {
         console.log(data.star);
         data.uv && this.chartInit(data.uv, 'echart1')
-        data.pv && this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'page view占比'])
+        data.pv && this.chartInit(data.pv, 'echart2', color.successColor, color.errorColor, ['page view', 'pv变化率'])
         data.percentage && this.chartInitLine(data.percentage, 'echart3')
         data.star && (this.stars = data.star)
       })
