@@ -304,6 +304,7 @@ export default {
       this.tableData = [_tableData]
     },
     drawChart(data){
+      console.log(data);
       this.chartInit(data, 'echart1')
     },
     handleClickSearchType(params) {
