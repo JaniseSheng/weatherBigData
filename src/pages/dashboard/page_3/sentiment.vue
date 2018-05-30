@@ -20,6 +20,7 @@ import {
 } from '@/api'
 import color from '@/lib/color'
 import echartConfig from '@/lib/echartConfig'
+import _Math from 'lodash/Math'
 let echarts = require('echarts/lib/echarts')
 // 引入柱状图组件
 require('echarts/lib/chart/bar')
@@ -148,20 +149,26 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.myChart.setOption(option);
     },
-    XBarChartInit(refName) {
+    XBarChartInit(data, refName) {
+      const maxValue = _Math.max(data.values)
+      let maxArr = []
+      data.values.forEach((item,index)=>{
+        maxArr[index] = maxValue
+      })
       this.myChart = echarts.init(this.$refs[refName][0], '', {
         height: '280px'
       });
       const option = {
         title: {
-          text: '13'
+          text: data.date
         },
         tooltip: {
           show: true,
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+          },
+          formatter:'{b0}（UV）: {c0}'
         },
         xAxis: {
           type: 'value',
@@ -189,7 +196,7 @@ export default {
                 color: '#333333',
               }
             },
-            data: ['新闻1', '新闻2', '新闻3', '新闻4', '新闻5']
+            data: data.names
           },
           {
             type: 'category',
@@ -208,7 +215,7 @@ export default {
             splitLine: {
               show: false
             },
-            data: ['新闻1', '新闻2', '新闻3', '新闻4', '新闻5']
+            data: data.names
           },
 
         ],
@@ -227,7 +234,7 @@ export default {
             },
             barGap: '0%',
             barCategoryGap: '50%',
-            data: [120, 120, 120, 120, 120]
+            data: maxArr
           },
           {
             name: '钥匙量',
@@ -243,7 +250,7 @@ export default {
             },
             barGap: '0%',
             barCategoryGap: '50%',
-            data: [32, 52, 41, 64, 15]
+            data: data.values
           }
         ]
       };
@@ -312,7 +319,7 @@ export default {
         data.forEach((item, index) => {
           if (this.type == 0) {
             const seriesName = ['unique view', 'page view']
-            this.XBarChartInit(`echart${index + 1}`)
+            this.XBarChartInit(item, `echart${index + 1}`)
           } else {
             const seriesName = ['阅读数', '点赞数']
             this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index], seriesName)

@@ -5,6 +5,8 @@ import dashboard from '@/pages/dashboard'
 import terminal from '@/pages/dashboard/page_0/terminal'
 import scene from '@/pages/dashboard/page_0/scene'
 import dataDown from '@/pages/dashboard/page_0/dataDown'
+import weather_official from '@/pages/dashboard/page_0/weather_official'
+import weather_relative from '@/pages/dashboard/page_0/weather_relative'
 import family from '@/pages/dashboard/page_1/family'
 import personal from '@/pages/dashboard/page_1/personal'
 import user from '@/pages/dashboard/page_1/user'
@@ -39,6 +41,14 @@ export default new Router({
           path: '/dataDown',
           name: '0-3',
           component: dataDown
+        }, {
+          path: '/weather_official',
+          name: '0-4',
+          component: weather_official
+        }, {
+          path: '/weather_relative',
+          name: '0-5',
+          component: weather_relative
         }, {
           path: '/family',
           name: '1-1',
