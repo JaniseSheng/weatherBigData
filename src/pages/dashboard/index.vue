@@ -20,7 +20,7 @@
                       </template>
           <MenuItem name="0-1">分终端</MenuItem>
           <MenuItem name="0-2">分场景</MenuItem>
-          <MenuItem name="0-3">分时数据下载</MenuItem>
+          <MenuItem name="0-3">数据下载</MenuItem>
           <MenuItem name="0-4">官方气象网站占比分析</MenuItem>
           <MenuItem name="0-5">气象相关占比分析</MenuItem>
         </Submenu>

@@ -7,9 +7,9 @@
         <span style="display: inline-block" @click='handleOpenArea'>
             <Input :value="areaName" readonly :disabled='!isArea' icon="ios-location" placeholder="选择区域"  style="width: 200px"></Input>
         </span>
-        <DatePicker ref='monthPickerStart' :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
+        <DatePicker ref='monthPickerStart' :disabled='!isMonth' :value='monthRange[0]' :clearable=false @on-change='handleChangeMonthStart' type="month" :options="monthOptionStart" placeholder="开始月" style="width: 100px"></DatePicker>
         至
-        <DatePicker ref='monthPickerEnd' :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
+        <DatePicker ref='monthPickerEnd' :disabled='!isMonth' :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
         /
         <DatePicker :value='dateRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangedateRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </div>
@@ -129,6 +129,10 @@ export default {
       default: '',
       type: String
     },
+    limitDates: {
+      default: 31,
+      type: Number
+    },
     monthRangePromise: {
       default: 5,
       type: [String, Number]
@@ -138,6 +142,10 @@ export default {
       type: Boolean
     },
     isArea: {
+      default: true,
+      type: Boolean
+    },
+    isMonth: {
       default: true,
       type: Boolean
     },
@@ -219,8 +227,8 @@ export default {
     },
     handleChangedateRange(val) {
       const selectDatas = dateDiff(val[0], val[1])
-      if (selectDatas > 31) {
-        this.$Message.error('最大查询天数为31天')
+      if (selectDatas > this.limitDates) {
+        this.$Message.error(`最大查询天数为${this.limitDates}天`)
         this.dateRange = []
         return false
       }

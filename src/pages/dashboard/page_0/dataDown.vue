@@ -1,13 +1,13 @@
 <template>
 <div class="">
-  <search-wrapper ref='search' :isControlBtn=false :isArea='isArea' :show_area_level3=false>
+  <search-wrapper ref='search' :isControlBtn=false :isArea='isArea' :isMonth='isMonth' :show_area_level3=false :limitDates='limitDates'>
     <div style='padding: 12px 0;'>
       <Button :type="down_time_btn.id == type ? 'success' : 'ghost'" @click="handle_down_time" style="margin:12px 12px 12px 0">{{down_time_btn.name}}</Button>
       <Button :type="item.id == type ? 'success' : 'ghost'" @click="handle_down_others(item)" v-for='item in allDownBtns' style="margin:12px 12px 12px 0">{{item.name}}</Button>
     </div>
   </search-wrapper>
   <p>
-    <Button type="primary" shape="circle" icon="arrow-down-a" @click='handleClickDown'>
+    <Button type="primary" shape="circle" icon="arrow-down-a" @click='handleClickDown' style="margin-bottom: 20px">
       点我下载数据
     </Button>
   </p>
@@ -27,9 +27,11 @@ export default {
       type: 999999,
       down_item : {},
       isArea: true,
+      isMonth: true,
+      limitDates: 1000,
       down_time_btn: {
         id: '1',
-        name: '数据下载',
+        name: '分时数据下载',
         tableColums: [],
         tableData: [],
       },
@@ -87,6 +89,7 @@ export default {
     handle_down_time() {
       this.type = this.down_time_btn.id
       this.isArea = false
+      this.isMonth = true
       this.$refs.search.areaName = '上海'
     },
     // 其他分类数据下载
@@ -94,6 +97,7 @@ export default {
       this.type = item.id
       this.down_item = item
       this.isArea = true
+      this.isMonth = false
     },
 
     handleClickDown(){
