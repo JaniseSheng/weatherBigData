@@ -266,50 +266,80 @@ export default {
       })
     },
     exportExcel(data) {
-      let _tableColums = [{
-        title: '日期',
-        key: 'date'
-      }]
-      let _tableData = [{}]
-      var _data = data.map(item => {
-        return {
-          name: item.name,
-          values_uv: item.values.map(item2 => {
-            return {
-              value: item2.value_uv,
-              date: item2.date
-            }
-          }),
-          values_pv: item.values.map(item3 => {
-            return {
-              value: item3.value_pv,
-              date: item3.date
-            }
-          })
-        }
-      })
-      _data.forEach((item, index) => {
-        for (let i = 0; i < 2; i++) {
-          const colum_index = index * 2 + i
-          _tableColums[colum_index + 1] = {
-            title: `${item.name}(${i == 0 ? '阅读数' : '点赞数'})`,
-            key: `value${index}_${i == 0 ? 'u' : 'p'}`
-          }
-        }
+      let _tableColums = []
+      let _tableData = []
 
-        item.values_uv.forEach((_item, _index) => {
-          let _obj = {}
-          _obj.date = _item.date
-          _obj[`value${index}_u`] = `${_item.value}`
-          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+      if (this.type == 0) {
+        _tableColums = [{
+          title: '排名',
+          key: 'rank'
+        }, {
+          title: '日期',
+          key: 'date'
+        }, {
+          title: '名称',
+          key: 'name'
+        }, {
+          title: '数值',
+          key: 'value'
+        }]
+        data.forEach((item, index) => {
+          const date = item.date
+          item.values.forEach((_item, _index)=> {
+            let _obj = {}
+            _obj.rank = _index + 1;
+            _obj.date = date
+            _obj.name = item.names[_index]
+            _obj.value = _item
+            _tableData.push(_obj)
+          })
         })
-        item.values_pv.forEach((_item, _index) => {
-          let _obj = {}
-          _obj.date = _item.date
-          _obj[`value${index}_p`] = `${_item.value}`
-          _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+      } else {
+        _tableColums = [{
+          title: '日期',
+          key: 'date'
+        }]
+        var _data = data.map(item => {
+          return {
+            name: item.name,
+            values_uv: item.values.map(item2 => {
+              return {
+                value: item2.value_uv,
+                date: item2.date
+              }
+            }),
+            values_pv: item.values.map(item3 => {
+              return {
+                value: item3.value_pv,
+                date: item3.date
+              }
+            })
+          }
         })
-      })
+        _data.forEach((item, index) => {
+          for (let i = 0; i < 2; i++) {
+            const colum_index = index * 2 + i
+            _tableColums[colum_index + 1] = {
+              title: `${item.name}(${i == 0 ? '阅读数' : '点赞数'})`,
+              key: `value${index}_${i == 0 ? 'u' : 'p'}`
+            }
+          }
+
+          item.values_uv.forEach((_item, _index) => {
+            let _obj = {}
+            _obj.date = _item.date
+            _obj[`value${index}_u`] = `${_item.value}`
+            _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+          })
+          item.values_pv.forEach((_item, _index) => {
+            let _obj = {}
+            _obj.date = _item.date
+            _obj[`value${index}_p`] = `${_item.value}`
+            _tableData[_index] = Object.assign({}, _tableData[_index], _obj)
+          })
+        })
+      }
+
       this.tableColums = _tableColums
       this.tableData = _tableData
     },

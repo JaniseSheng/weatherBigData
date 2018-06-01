@@ -1,4 +1,5 @@
 import {axiosPost, axiosGet} from '@/lib/ajax'
+import {down_pub_url} from '@/lib/config'
 
 /**
 * -------------------------- 登录 ------------------------------
@@ -29,48 +30,19 @@ export const api_total_scene_getTypeNames = (params) => {
 export const api_total_scene = (params) => {
   return axiosPost('total_scene', params)
 }
-// 分时数据下载
-export const api_down_data_time = (params) => {
-  return axiosPost('down_data_time', params)
-}
 
 // 官方气象网站占比分析 - 获取类型名称
 export const api_weather_official_getTypeNames = (params) => {
-  //return axiosPost('weather_official_getTypeNames', params)
-  return new Promise((resolve, reject)=> {
-    resolve({
-      "code" : 1,
-      "data" : [
-        {
-          name: '网站',
-          id: '0'
-        }, {
-          name: 'APP',
-          id: '1'
-        }
-      ],
-      "success" : true
-    })
-  })
+  return axiosPost('weather_official_getTypeNames', params, false)
 }
 // 官方气象网站占比分析
 export const api_weather_official = (params) => {
-  // /return axiosPost('weather_official', params)
-  return new Promise((resolve, reject)=> {
-    resolve({
-        "code" : 1,
-        "data" : [
-          {value: parseInt(Math.random()*100), name:'官方'},
-          {value:parseInt(Math.random()*100), name:'非官方'}
-        ],
-        "success" : true
-      })
-  })
+  return axiosPost('weather_official', params)
 }
 
 // 气象相关占比分析 - 获取类型名称
 export const api_weather_relative_getTypeNames = (params) => {
-  // return axiosPost('weather_relative_getTypeNames', params)
+   //return axiosPost('weather_relative_getTypeNames', params)
   return new Promise((resolve, reject)=> {
     resolve({
       "code" : 1,
@@ -195,34 +167,7 @@ export const api_public_flow_getTypeNames = (params) => {
 }
 // 舆情流量
 export const api_public_flow = (params) => {
-  if (params.type == 0) {
-    return new Promise((resolve, reject)=> {
-      resolve({
-        "code" : 1,
-        "data" : [
-          {
-            date: '2018-01',
-            names: ['新闻1', '新闻2', '新闻3', '新闻4', '新闻5'],
-            values: [parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100)]
-          },
-          {
-            date: '2018-02',
-            names: ['测试1', '测试2', '测试3', '测试4', '测试5'],
-            values: [parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100)]
-          },
-          {
-            date: '2018-03',
-            names: ['数据1', '数据2', '数据3', '数据4', '数据5'],
-            values: [parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100),parseInt(Math.random()*100)]
-          }
-        ],
-        "success" : true
-      })
-    })
-  } else {
-    return axiosPost('public_flow', params)
-  }
-
+  return axiosPost('public_flow', params)
 }
 // 热点热词 - 获取类型的名字
 export const api_public_hot_getTypeNames = (params) => {
@@ -231,4 +176,60 @@ export const api_public_hot_getTypeNames = (params) => {
 // 热点热词
 export const api_public_hot = (params) => {
   return axiosPost('public_hot', params)
+}
+
+
+/**
+* -------------------------- 分时数据下载 ------------------------------
+**/
+
+
+// 分时数据下载
+export const api_down_data_time = (params) => {
+  return axiosPost('down_data_time', params)
+}
+
+// 分终端：
+export const down_Front_fzdDl = (params) => {
+  return `${down_pub_url}Front_fzdDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 分场景
+export const down_Front_fcjDl = (params) => {
+  return `${down_pub_url}Front_fcjDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 行为洞察-家庭
+export const down_Front_familyDl = (params) => {
+  return `${down_pub_url}Front_familyDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 行为洞察-个人
+export const down_Front_personDl = (params) => {
+  return `${down_pub_url}Front_personDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 服务监控-网站
+export const down_Front_websiteDl = (params) => {
+  return `${down_pub_url}Front_websiteDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 服务监控-APP
+export const down_Front_appDl = (params) => {
+  return `${down_pub_url}Front_appDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 服务监控-IPTV
+export const down_Front_iptvDl = (params) => {
+  return `${down_pub_url}Front_iptvDl.do?areaName=${params.areaName}&dateRange=${params.dateRange}`
+}
+
+// 舆情流量
+export const down_Front_yqllDl = (params) => {
+  return `${down_pub_url}Front_yqllDl.do?dateRange=${params.dateRange}`
+}
+
+// 热点热词
+export const down_Front_hotDl = (params) => {
+  return `${down_pub_url}Front_hotDl.do?dateRange=${params.dateRange}`
 }

@@ -13,7 +13,7 @@
         /
         <DatePicker :value='dateRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangedateRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
       </div>
-      <div style="float: right; text-align: right">
+      <div style="float: right; text-align: right" v-if='isControlBtn'>
         <Button type='success' icon='search' style="width: 120px" @click='handleClickSearch'>搜索</Button>
         <Button type='info' @click='handleClickExport'>导出excel</Button>
       </div>
@@ -28,8 +28,8 @@
           <p>
             <Button type="success" @click="handleClickArea(area.name)">{{area.name}}</Button>
           </p>
-          <p :class="$style['item-button']">
-            <Button type="text" v-for="(item, index) in area.childrens" :style="(area.name + '/' + item) == areaName ? buttonActiveStyle : ''" @click="handleClickAreaItem(area.name + '/' + item)" :key="'button' + index">{{item}}</Button>
+          <p :class="$style['item-button']" >
+            <Button type="text" :disabled='!show_area_level3' v-for="(item, index) in area.childrens" :style="(area.name + '/' + item) == areaName ? buttonActiveStyle : ''" @click="handleClickAreaItem(area.name + '/' + item)" :key="'button' + index">{{item}}</Button>
           </p>
         </li>
       </ul>
@@ -114,11 +114,15 @@ export default {
   },
   props: {
     tableColums: {
-      default: [],
+      default: ()=>{
+        return []
+      },
       type: Array
     },
     tableData: {
-      default: [],
+      default: ()=>{
+        return []
+      },
       type: Array
     },
     tableName: {
@@ -129,12 +133,27 @@ export default {
       default: 5,
       type: [String, Number]
     },
+    isControlBtn: {
+      default: true,
+      type: Boolean
+    },
     isArea: {
+      default: true,
+      type: Boolean
+    },
+    show_area_level3: {
       default: true,
       type: Boolean
     }
   },
   methods: {
+    handleReturnSearchData(){
+      return {
+        areaName: this.areaName,
+        dateRange: _Array.compact(this.dateRange),
+        monthRange: _Array.compact(this.monthRange)
+      }
+    },
     handleClickSearch() {
       if (!this.areaName && this.isArea) {
         this.$Message.error('您还没有选择行政区域')
@@ -144,7 +163,6 @@ export default {
         this.$Message.error('您还没有选择日期范围')
         return
       }
-      console.log(this.$refs.slot);
       const dateRange = _Array.compact(this.dateRange)
       const monthRange = _Array.compact(this.monthRange)
       this.areaName_info = this.areaName
@@ -220,6 +238,13 @@ export default {
         filename: this.tableName,
         columns: this.tableColums,
         data: this.tableData
+      });
+    },
+    handleExportScv(params){
+      this.$refs.table.exportCsv({
+        filename: params.tableName,
+        columns: params.tableColums,
+        data: params.tableData
       });
     }
   }
