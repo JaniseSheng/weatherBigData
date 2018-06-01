@@ -42,45 +42,45 @@ export const api_weather_official = (params) => {
 
 // 气象相关占比分析 - 获取类型名称
 export const api_weather_relative_getTypeNames = (params) => {
-   //return axiosPost('weather_relative_getTypeNames', params)
-  return new Promise((resolve, reject)=> {
-    resolve({
-      "code" : 1,
-      "data" : [
-        {
-          name: '全部',
-          id: '0'
-        }, {
-          name: 'PC',
-          id: '1'
-        }, {
-          name: 'Mobile',
-          id: '2'
-        }, {
-          name: 'IPTV',
-          id: '3'
-        }
-      ],
-      "success" : true
-    })
-  })
+  return axiosPost('weather_relative_getTypeNames', params)
+  // return new Promise((resolve, reject)=> {
+  //   resolve({
+  //     "code" : 1,
+  //     "data" : [
+  //       {
+  //         name: '全部',
+  //         id: '0'
+  //       }, {
+  //         name: 'PC',
+  //         id: '1'
+  //       }, {
+  //         name: 'Mobile',
+  //         id: '2'
+  //       }, {
+  //         name: 'IPTV',
+  //         id: '3'
+  //       }
+  //     ],
+  //     "success" : true
+  //   })
+  // })
 
 
 }
 
 // 气象相关占比分析
 export const api_weather_relative = (params) => {
-  // return axiosPost('weather_relative', params)
-  return new Promise((resolve, reject)=> {
-    resolve({
-      "code" : 1,
-      "data" : [
-        {value: parseInt(Math.random()*100), name:'官方'},
-        {value:parseInt(Math.random()*100), name:'非官方'}
-      ],
-      "success" : true
-    })
-  })
+   return axiosPost('weather_relative', params)
+  // return new Promise((resolve, reject)=> {
+  //   resolve({
+  //     "code" : 1,
+  //     "data" : [
+  //       {value: parseInt(Math.random()*100), name:'官方'},
+  //       {value:parseInt(Math.random()*100), name:'非官方'}
+  //     ],
+  //     "success" : true
+  //   })
+  // })
 }
 
 
