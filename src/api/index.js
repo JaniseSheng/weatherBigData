@@ -42,7 +42,7 @@ export const api_weather_official = (params) => {
 
 // 气象相关占比分析 - 获取类型名称
 export const api_weather_relative_getTypeNames = (params) => {
-  return axiosPost('weather_relative_getTypeNames', params)
+  return axiosPost('weather_relative_getTypeNames', params, false)
   // return new Promise((resolve, reject)=> {
   //   resolve({
   //     "code" : 1,

@@ -11,7 +11,6 @@
       点我下载数据
     </Button>
   </p>
-
 </div>
 </template>
 
@@ -91,6 +90,7 @@ export default {
       this.isArea = false
       this.isMonth = true
       this.$refs.search.areaName = '上海'
+      this.limitDates = 1000
     },
     // 其他分类数据下载
     handle_down_others(item) {
@@ -98,6 +98,12 @@ export default {
       this.down_item = item
       this.isArea = true
       this.isMonth = false
+      this.$refs.search.monthRange = []
+      if (['4','5'].indexOf(item.id) > -1) {
+          this.limitDates = 30
+      } else {
+          this.limitDates = 1000
+      }
     },
 
     handleClickDown(){

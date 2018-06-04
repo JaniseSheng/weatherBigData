@@ -11,7 +11,8 @@
         至
         <DatePicker ref='monthPickerEnd' :disabled='!isMonth' :value='monthRange[1]' :clearable=false @on-change='handleChangeMonthEnd' type="month" :options="monthOptionEnd" placeholder="结束月" style="width: 100px"></DatePicker>
         /
-        <DatePicker :value='dateRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangedateRange' type="daterange" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+        <DatePicker v-if="dateType == 'daterange'" :value='dateRange' ref='datePickerRange' id='datePickerRange' :clearable=false @on-change='handleChangedateRange' :type="dateType" :options="dateRangeOptions" placement="bottom-end" placeholder="时间区间选择" style="width: 240px"></DatePicker>
+        <DatePicker v-else @on-change='handleChangedatePoint' :type="dateType" :options="dateOptions" placement="bottom-end" placeholder="时间选择" style="width: 240px"></DatePicker>
       </div>
       <div style="float: right; text-align: right" v-if='isControlBtn'>
         <Button type='success' icon='search' style="width: 120px" @click='handleClickSearch'>搜索</Button>
@@ -77,6 +78,11 @@ export default {
           return date && (date.valueOf() > Date.now());
         }
       },
+      dateOptions: {
+        disabledDate: (date)=> {
+          return date && (date.valueOf() > Date.now())
+        }
+      },
       dateRangeOptions: {
         shortcuts: [{
             text: '一个星期',
@@ -106,13 +112,17 @@ export default {
             }
           }
         ],
-        disabledDate(date) {
-          return date && (date.valueOf() > Date.now());
+        disabledDate: (date)=> {
+          return date && (date.valueOf() > Date.now())
         }
       }
     }
   },
   props: {
+    dateType: {
+      default: 'daterange',
+      type: String
+    },
     tableColums: {
       default: ()=>{
         return []
@@ -236,6 +246,9 @@ export default {
       this.$refs.monthPickerStart.currentValue = ''
       this.$refs.monthPickerEnd.currentValue = ''
       this.monthRange = []
+    },
+    handleChangedatePoint(val){
+      this.dateRange = [val,val]
     },
     handleClickExport() {
       if (!this.tableData) {

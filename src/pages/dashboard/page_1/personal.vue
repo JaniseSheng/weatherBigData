@@ -100,6 +100,7 @@ export default {
       let yAxisDataLine = [] // y轴数据
       let max_value = 0
       let maxObj = {}
+
       data.forEach((item, index) => {
         var _value = parseInt(item.value)
         if ( _value> max_value) {
@@ -111,13 +112,14 @@ export default {
         yAxisDataLine[index] = item.perValue
       })
       this.searchButtonsMobile[this.index].data = maxObj
+
       var optionBar = {
         xAxis: {
           data: xAxisData
         },
         yAxis: [{
           type: 'value',
-          name: seriesName[0] + '(户数)',
+          name: seriesName[0] + '(人数)',
           nameTextStyle: {
             fontSize: this.echartYAxisFontSize
           },
@@ -137,6 +139,7 @@ export default {
         }, {
           type: 'value',
           name: seriesName[1],
+          show: this.id != 1,
           nameTextStyle: {
             fontSize: this.echartYAxisFontSize
           },
@@ -173,8 +176,8 @@ export default {
           formatter: function (params, ticket, callback) {
                         const barData = params[0]
                         const lineData = params[1]
-                        const barLabel = `${barData.seriesName}: ${barData.data}`
-                        const lineLabel = `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%`
+                        const barLabel = barData ? `${barData.seriesName}: ${barData.data}` : ''
+                        const lineLabel = lineData ? `${lineData.seriesName}: ${Number(lineData.data).toFixed(2)}%` : ''
                           return `<p style='text-align: left'>${barLabel}<br />${lineLabel}</p>`
                       }
         },

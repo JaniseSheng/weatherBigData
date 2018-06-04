@@ -155,7 +155,7 @@ export default {
       data.values.forEach((item,index)=>{
         maxArr[index] = maxValue
       })
-      this.myChart = echarts.init(this.$refs[refName][0], '', {
+      this.myXbarChart = echarts.init(this.$refs[refName][0], '', {
         height: '280px'
       });
       const option = {
@@ -255,7 +255,7 @@ export default {
         ]
       };
       // 使用刚指定的配置项和数据显示图表。
-      this.myChart.setOption(option);
+      this.myXbarChart.setOption(option);
     },
     api_search_date(params) {
       api_public_flow(params).then(res => {
@@ -344,18 +344,21 @@ export default {
       this.tableData = _tableData
     },
     drawChart(data) {
-      this.echartNum = data.length
-      this.$nextTick(() => {
-        data.forEach((item, index) => {
-          if (this.type == 0) {
-            const seriesName = ['unique view', 'page view']
-            this.XBarChartInit(item, `echart${index + 1}`)
-          } else {
-            const seriesName = ['阅读数', '点赞数']
-            this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index], seriesName)
-          }
+      this.echartNum = 0
+      setTimeout(()=>{
+        this.echartNum = data.length
+        this.$nextTick(() => {
+          data.forEach((item, index) => {
+            if (this.type == 0) {
+              const seriesName = ['unique view', 'page view']
+              this.XBarChartInit(item, `echart${index + 1}`)
+            } else {
+              const seriesName = ['阅读数', '点赞数']
+              this.chartInit(item, `echart${index + 1}`, [color.infoColor, color.successColor, color.warningColor, color.errorColor][index], [color.warningColor, color.errorColor, color.successColor, color.infoColor][index], seriesName)
+            }
+          })
         })
-      })
+      }, 1000)
     },
     handleClickSearchType(item) {
       this.tableName = `舆情流量(${item.name})`
