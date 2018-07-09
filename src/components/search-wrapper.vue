@@ -70,17 +70,23 @@ export default {
       modal1: false, //是否选择区域
       monthOptionStart: {
         disabledDate(date) {
-          return date && (date.valueOf() > Date.now());
+          const startTime = date.valueOf() < new Date().setFullYear(2017,7,31)
+          const endTime = date.valueOf() > Date.now()
+          return startTime || endTime
         }
       },
       monthOptionEnd: {
         disabledDate(date) {
-          return date && (date.valueOf() > Date.now());
+          const startTime = date.valueOf() < new Date().setFullYear(2017,7,31)
+          const endTime = date.valueOf() > Date.now()
+          return startTime || endTime
         }
       },
       dateOptions: {
         disabledDate: (date)=> {
-          return date && (date.valueOf() > Date.now())
+          const startTime = date.valueOf() < new Date().setFullYear(2017,7,31)
+          const endTime = date.valueOf() > Date.now()
+          return startTime || endTime
         }
       },
       dateRangeOptions: {
@@ -113,7 +119,9 @@ export default {
           }
         ],
         disabledDate: (date)=> {
-          return date && (date.valueOf() > Date.now())
+          const startTime = date.valueOf() < new Date().setFullYear(2017,7,31)
+          const endTime = date.valueOf() > Date.now()
+          return startTime || endTime
         }
       }
     }

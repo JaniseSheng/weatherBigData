@@ -93,8 +93,10 @@ export default {
       this.myChart = echarts.init(this.$refs[refName], '', {
         height: '420px'
       });
+      let perValueName = ''
+
       // 指定图表的配置项和数据
-      const legendData = seriesName
+
       let xAxisData = [] // X轴用户名
       let yAxisData = [] // y轴数据
       let yAxisDataLine = [] // y轴数据
@@ -110,16 +112,18 @@ export default {
         xAxisData[index] = item.name
         yAxisData[index] = _value
         yAxisDataLine[index] = item.perValue
+        if (item.perValue != undefined && perValueName == '' ) {
+          perValueName = this.typeName + '占比'
+        }
       })
       this.searchButtonsMobile[this.index].data = maxObj
-
       var optionBar = {
         xAxis: {
           data: xAxisData
         },
         yAxis: [{
           type: 'value',
-          name: seriesName[0] + '(人数)',
+          name: this.typeName + '(人数)',
           nameTextStyle: {
             fontSize: this.echartYAxisFontSize
           },
@@ -138,7 +142,7 @@ export default {
           }
         }, {
           type: 'value',
-          name: seriesName[1],
+          name: perValueName,
           show: this.id != 1,
           nameTextStyle: {
             fontSize: this.echartYAxisFontSize
@@ -162,7 +166,7 @@ export default {
           }
         }],
         legend: {
-          data: legendData,
+          data: [this.typeName, perValueName],
           textStyle: {
             fontSize: this.legendFontSize
           }
@@ -196,7 +200,7 @@ export default {
           }
         },
         series: [{
-          name: seriesName[0],
+          name: this.typeName,
           type: 'bar',
           barWidth: echartConfig.barWidth,
           barMinHeight: '8',
@@ -208,7 +212,7 @@ export default {
           },
           data: yAxisData
         }, {
-          name: seriesName[1],
+          name: perValueName,
           type: 'line',
           yAxisIndex: 1,
           itemStyle: {
@@ -229,7 +233,7 @@ export default {
       };
       var optionPie = {
         legend: {
-          data: legendData
+          data: [this.typeName, perValueName],
         },
         tooltip: {
           boundaryGap: '50%',
