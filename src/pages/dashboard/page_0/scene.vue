@@ -80,10 +80,7 @@ export default {
       })
       var option = {
         xAxis: {
-          data: xAxisData,
-          axisLabel: {
-            formatter: '{value} %'
-          }
+          data: xAxisData
         },
         yAxis: [{
             type: 'value',

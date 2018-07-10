@@ -48,12 +48,75 @@ export default {
         {
           id: '4',
           name: '行为洞察-家庭',
-          downUrl: down_Front_familyDl
+          downUrl: down_Front_familyDl,
+          extends: [
+            {
+              type: 'pc',
+              id: '0'
+            },
+            {
+              type: 'pc',
+              id: '1'
+            },
+            {
+              type: 'pc',
+              id: '2'
+            },
+            {
+              type: 'pc',
+              id: '3'
+            },
+            {
+              type: 'iptv',
+              id: '0'
+            },
+            {
+              type: 'iptv',
+              id: '1'
+            },
+            {
+              type: 'iptv',
+              id: '2'
+            },
+            {
+              type: 'iptv',
+              id: '3'
+            }
+          ]
         },
         {
           id: '5',
           name: '行为洞察-个人',
-          downUrl: down_Front_personDl
+          downUrl: down_Front_personDl,
+          extends: [
+            {
+              id: '0'
+            },
+            {
+              id: '1'
+            },
+            {
+              id: '2'
+            },
+            {
+              id: '3'
+            },
+            {
+              id: '4'
+            },
+            {
+              id: '5'
+            },
+            {
+              id: '6'
+            },
+            {
+              id: '7'
+            },
+            {
+              id: '8'
+            }
+          ]
         },
         {
           id: '6',
@@ -124,10 +187,20 @@ export default {
       } else {
         const dateRange = searchData.dateRange.length > 0 ? searchData.dateRange.toString() : searchData.monthRange.toString()
         this.$Message.success('正在下载中...')
-        window.open(this.down_item.downUrl({
+        const requestUrl = this.down_item.downUrl({
           areaName: searchData.areaName,
           dateRange
-        }))
+        })
+        if (this.down_item.extends) {
+          this.down_item.extends.forEach(item=>{
+            const _type = item.type ? `&type=${item.type}` : ''
+            const _id = '&id=' + item.id
+            const _requestUrl = requestUrl + _type + _id
+            window.open(_requestUrl)
+          })
+          return
+        }
+        window.open(requestUrl)
       }
     }
   }
