@@ -270,6 +270,7 @@ export default {
       });
     },
     handleExportScv(params){
+      console.log(params);
       this.$refs.table.exportCsv({
         filename: params.tableName,
         columns: params.tableColums,
